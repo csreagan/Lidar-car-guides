@@ -5,10 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LiDAR Car Guides</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .image-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .image-grid img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      padding: 5px;
+      flex: 1 1 300px;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>LiDAR Car Guides</h1>
+    <h1>LiDAR Car Project</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="parts.html">Parts List</a>
@@ -20,8 +35,26 @@
   </header>
 
   <main>
-    <h2>Welcome!</h2>
-    <p>This website will guide you step-by-step through building your own LiDAR-based autonomous vehicle. Start by checking out the parts list.</p>
+    <section>
+      <h2>About This Project</h2>
+      <p>
+        This project documents the design and construction of an autonomous LiDAR-based 4WD robot car using a Raspberry Pi 4B, ROS 2 Humble, USB/Arducam camera, and PS4 controller. The goal is to build a portable robotics platform capable of remote control and obstacle-aware navigation.
+      </p>
+      <p><strong>Team Members:</strong> Connor Reagan, Hugo, Seth</p>
+    </section>
+
+    <section>
+      <h2>Project Preview</h2>
+      <div class="image-grid">
+        <img src="media/20250520_194735.jpg" alt="LiDAR Car on couch">
+        <img src="media/20250520_194809.jpg" alt="LiDAR Car on carpet">
+      </div>
+    </section>
+
+    <section>
+      <h2>Start Building</h2>
+      <p>Use the navigation bar above to begin assembling your own LiDAR car.</p>
+    </section>
   </main>
 
   <footer>
@@ -31,3 +64,4 @@
   <script src="js/main.js"></script>
 </body>
 </html>
+
