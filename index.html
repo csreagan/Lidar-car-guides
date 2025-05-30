@@ -2,49 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LiDAR Car Guides</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiDAR Car Kit Guide</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <header>
-    <h1>LiDAR Car Project</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="parts.html">Parts List</a>
-      <a href="build.html">Step-by-Step Guide</a>
-      <a href="wiring.html">Wiring</a>
-      <a href="code.html">Code</a>
-      <a href="troubleshoot.html">Troubleshooting</a>
-    </nav>
+    <h1>LiDAR Car Kit Project Guide</h1>
   </header>
 
-  <main>
-    <h2>🚗 Project Overview</h2>
-    <p>This website will guide you through building a LiDAR-powered robotic car using a Raspberry Pi 4 and Slamtec RPLIDAR. You'll learn to:</p>
-    <ul>
-      <li>Wire and assemble the robot chassis</li>
-      <li>Install Ubuntu and ROS2</li>
-      <li>Use LiDAR and camera vision for navigation</li>
-      <li>Control the robot with a PS4 controller</li>
-    </ul>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="parts.html">Parts List</a>
+    <a href="lidar.html">LiDAR Car</a>
+    <a href="sensor.html">Sensor Setup</a>
+    <a href="troubleshoot.html">Troubleshooting</a>
+  </nav>
 
-    <h3>🔗 Quick Start</h3>
-    <ol>
-      <li><a href="parts.html">Check the parts list</a></li>
-      <li><a href="build.html">Follow the build guide</a></li>
-      <li><a href="wiring.html">Connect components</a></li>
-      <li><a href="code.html">Load the code</a></li>
-      <li><a href="troubleshoot.html">Fix common issues</a></li>
-    </ol>
+  <main>
+    <h2>Welcome to the LiDAR Car Capstone Guide</h2>
+    <p>This website will walk you through two distinct but related projects designed to introduce you to embedded systems, robotics, and autonomous navigation. Start with a simple GPIO sensor setup, then graduate to building and programming an autonomous LiDAR car.</p>
+
+    <div class="learning-path">
+      <div class="path beginner">
+        <h3>🚦 Sensor Learning Stage (Beginner)</h3>
+        <p>Start with Raspberry Pi OS and basic components like an ultrasonic sensor, LCD, and Arducam. Learn wiring, GPIO pins, and simple Python. This stage is ideal for building foundational skills.</p>
+        <a href="sensor.html" class="start-btn">Start with Sensor Setup →</a>
+      </div>
+
+      <div class="path advanced">
+        <h3>🚘 LiDAR Car Project (Advanced)</h3>
+        <p>After completing the beginner track, transition to Ubuntu and ROS 2 to integrate a motor HAT, USB camera, and 2D LiDAR into a fully programmable autonomous car. Ideal for intermediate to advanced learners.</p>
+        <a href="lidar.html" class="start-btn">Start with LiDAR Car →</a>
+      </div>
+    </div>
 
     <h3>📸 Project Photos</h3>
-    <img src="media/20250520_194735.jpg" alt="Front View" width="300" />
-    <img src="media/20250520_194809.jpg" alt="Top View" width="300" />
+    <div class="photo-gallery">
+      <img src="media/20250520_194735.jpg" alt="Front View" width="300" />
+      <img src="media/20250520_194809.jpg" alt="Top View" width="300" />
+    </div>
   </main>
 
   <footer>
-    <p>© 2025 Connor Reagan, Hugo, Seth</p>
+    <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
   </footer>
 
   <script src="js/main.js"></script>
