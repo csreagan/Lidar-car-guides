@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Build Guide</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    details summary {
+      cursor: pointer;
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    details[open] summary {
+      background-color: #ccc;
+    }
+    details pre {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LiDAR Car Build Guide</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="parts.html">Parts List</a>
+      <a href="build.html">Build Guide</a>
+      <a href="wiring.html">Wiring</a>
+      <a href="code.html">Code</a>
+      <a href="troubleshoot.html">Troubleshooting</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>This section walks you through the complete setup of your LiDAR car system.</p>
+
+    <details>
+      <summary><strong>1. Ubuntu 22.04.05 LTS Installation</strong></summary>
+      <ul>
+        <li>Download from <a href="https://ubuntu.com/download/raspberry-pi" target="_blank">ubuntu.com</a>.</li>
+        <li>Use Raspberry Pi Imager or Balena Etcher.</li>
+        <li>Create a blank file named <code>ssh</code> in boot partition.</li>
+        <li>Edit <code>network-config</code> for Wi-Fi (optional).</li>
+        <li>SSH in using user: <code>ubuntu</code>, password: <code>ubuntu</code>.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary><strong>2. GUI Setup (XFCE & LightDM)</strong></summary>
+      <pre><code>sudo apt update && sudo apt upgrade -y
+sudo apt install xfce4 lightdm -y
+sudo reboot</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>3. Remote Access with Tailscale</strong></summary>
+      <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+tailscale ip -4</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>4. VNC Setup</strong></summary>
+      <pre><code>sudo apt install x11vnc -y
+sudo nano /etc/lightdm/lightdm.conf
+# Paste:
+[Seat:*]
+autologin-user=ubuntu
+autologin-user-timeout=0
+user-session=xfce</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>5. ROS 2 Humble Installation</strong></summary>
+      <pre><code>sudo apt update && sudo apt upgrade -y
+sudo apt install locales -y
+sudo locale-gen en_US en_US.UTF-8
+...
+sudo apt install ros-humble-desktop -y
+source ~/.bashrc</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>6. Creating Workspace & Installing Colcon</strong></summary>
+      <pre><code>sudo apt install python3-colcon-common-extensions -y
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+colcon build
+source install/setup.bash</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>7. Mecanum Drive + PS4 Controller</strong></summary>
+      <pre><code>ros2 pkg create --build-type ament_python ps4_mecanum --dependencies rclpy sensor_msgs
+...
+ros2 run joy joy_node
+ros2 run ps4_mecanum mecanum_drive_node</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>8. Camera Setup (Arducam or USB)</strong></summary>
+      <pre><code>sudo apt install cheese ffmpeg
+ffplay /dev/video0
+ros2 launch my_camera_pkg camera_launch.py
+rqt_image_view</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>9. Headless Boot Setup & Dummy HDMI</strong></summary>
+      <pre><code>sudo touch /boot/firmware/ssh
+sudo nano /boot/firmware/config.txt
+# Add:
+hdmi_force_hotplug=1
+hdmi_group=2
+hdmi_mode=82</code></pre>
+    </details>
+
+    <details>
+      <summary><strong>10. Motor HAT Power and GPIO Wiring</strong></summary>
+      <ul>
+        <li>VIN: 7V–12.6V</li>
+        <li>5V: Pi power</li>
+        <li>IN1–IN4: Direction</li>
+        <li>ENA/ENB: Enable motors</li>
+        <li>Use PWM via RPi.GPIO</li>
+      </ul>
+    </details>
+  </main>
+
+  <footer>
+    <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
+  </footer>
+</body>
+</html>

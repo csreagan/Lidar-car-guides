@@ -5,63 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Parts List</title>
   <link rel="stylesheet" href="css/style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #333;
-      color: white;
-      padding: 1rem;
-    }
-    nav a {
-      color: white;
-      margin-right: 15px;
-      text-decoration: none;
-    }
-    main {
-      padding: 20px;
-    }
-    footer {
-      background-color: #f0f0f0;
-      padding: 1rem;
-      text-align: center;
-      margin-top: 40px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
-    input[type="checkbox"] {
-      transform: scale(1.2);
-    }
-    a {
-      color: blue;
-    }
-    details {
-      margin-bottom: 20px;
-    }
-    summary {
-      font-size: 1.2em;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 5px;
-      background: #ddd;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -182,18 +125,6 @@
     <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
   </footer>
 
-  <script>
-    function saveCheckboxState(checkbox) {
-      localStorage.setItem(checkbox.id, checkbox.checked);
-    }
-
-    window.onload = function () {
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach(checkbox => {
-        const saved = localStorage.getItem(checkbox.id);
-        if (saved !== null) checkbox.checked = (saved === 'true');
-      });
-    };
-  </script>
+  <script src="js/main.js"></script>
 </body>
 </html>
