@@ -25,22 +25,30 @@
     ul {
       margin-left: 20px;
     }
+    .code-block code {
+      font-family: 'Courier New', monospace;
+      background-color: #f0f0f0;
+      display: block;
+      padding: 10px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>LiDAR Car Build Guide</h1>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="parts.html">Parts List</a>
-      <a href="build.html">Build Guide</a>
-      <a href="wiring.html">Wiring</a>
-      <a href="code.html">Code</a>
-      <a href="troubleshoot.html">Troubleshooting</a>
+        <a href="index.html">Home</a>
+        <a href="parts.html">Parts List</a>
+        <a href="sensor.html">Sensor Setup</a>
+        <a href="lidar.html">LiDAR Car</a>
+        <a href="troubleshoot.html">Troubleshooting</a>
     </nav>
   </header>
 
   <main>
+    <p><em>This guide is part of the LiDAR Car Setup. If you’re not here yet, return to the <a href="index.html">Home</a> or start with <a href="sensor.html">Sensor Setup</a>.</em></p>
+
     <p>This section walks you through the complete setup of your LiDAR car system.</p>
 
     <details>
@@ -56,72 +64,74 @@
 
     <details>
       <summary><strong>2. GUI Setup (XFCE & LightDM)</strong></summary>
-      <pre><code>sudo apt update && sudo apt upgrade -y
+      <div class="code-block"><code>sudo apt update && sudo apt upgrade -y
 sudo apt install xfce4 lightdm -y
-sudo reboot</code></pre>
+sudo reboot</code></div>
     </details>
 
     <details>
       <summary><strong>3. Remote Access with Tailscale</strong></summary>
-      <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
+      <div class="code-block"><code>curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
-tailscale ip -4</code></pre>
+tailscale ip -4</code></div>
     </details>
 
     <details>
       <summary><strong>4. VNC Setup</strong></summary>
-      <pre><code>sudo apt install x11vnc -y
+      <div class="code-block"><code>sudo apt install x11vnc -y
 sudo nano /etc/lightdm/lightdm.conf
+
 # Paste:
 [Seat:*]
 autologin-user=ubuntu
 autologin-user-timeout=0
-user-session=xfce</code></pre>
+user-session=xfce</code></div>
     </details>
 
     <details>
       <summary><strong>5. ROS 2 Humble Installation</strong></summary>
-      <pre><code>sudo apt update && sudo apt upgrade -y
+      <div class="code-block"><code>sudo apt update && sudo apt upgrade -y
 sudo apt install locales -y
 sudo locale-gen en_US en_US.UTF-8
 ...
 sudo apt install ros-humble-desktop -y
-source ~/.bashrc</code></pre>
+source ~/.bashrc</code></div>
     </details>
 
     <details>
       <summary><strong>6. Creating Workspace & Installing Colcon</strong></summary>
-      <pre><code>sudo apt install python3-colcon-common-extensions -y
+      <div class="code-block"><code>sudo apt install python3-colcon-common-extensions -y
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws
 colcon build
-source install/setup.bash</code></pre>
+source install/setup.bash</code></div>
     </details>
 
     <details>
       <summary><strong>7. Mecanum Drive + PS4 Controller</strong></summary>
-      <pre><code>ros2 pkg create --build-type ament_python ps4_mecanum --dependencies rclpy sensor_msgs
+      <div class="code-block"><code>ros2 pkg create --build-type ament_python ps4_mecanum --dependencies rclpy sensor_msgs
 ...
 ros2 run joy joy_node
-ros2 run ps4_mecanum mecanum_drive_node</code></pre>
+ros2 run ps4_mecanum mecanum_drive_node</code></div>
     </details>
 
     <details>
       <summary><strong>8. Camera Setup (Arducam or USB)</strong></summary>
-      <pre><code>sudo apt install cheese ffmpeg
+      <div class="code-block"><code>sudo apt install cheese ffmpeg
 ffplay /dev/video0
 ros2 launch my_camera_pkg camera_launch.py
-rqt_image_view</code></pre>
+rqt_image_view</code></div>
     </details>
 
     <details>
       <summary><strong>9. Headless Boot Setup & Dummy HDMI</strong></summary>
-      <pre><code>sudo touch /boot/firmware/ssh
+      <div class="code-block"><code>sudo touch /boot/firmware/ssh
 sudo nano /boot/firmware/config.txt
+
 # Add:
 hdmi_force_hotplug=1
 hdmi_group=2
-hdmi_mode=82</code></pre>
+hdmi_mode=82</code></div>
     </details>
 
     <details>
