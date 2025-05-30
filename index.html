@@ -5,21 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LiDAR Car Guides</title>
   <link rel="stylesheet" href="css/style.css" />
-  <style>
-    .image-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .image-grid img {
-      max-width: 100%;
-      height: auto;
-      border: 1px solid #ccc;
-      padding: 5px;
-      flex: 1 1 300px;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -27,7 +12,7 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="parts.html">Parts List</a>
-      <a href="build.html">Build Guide</a>
+      <a href="build.html">Step-by-Step Guide</a>
       <a href="wiring.html">Wiring</a>
       <a href="code.html">Code</a>
       <a href="troubleshoot.html">Troubleshooting</a>
@@ -35,33 +20,33 @@
   </header>
 
   <main>
-    <section>
-      <h2>About This Project</h2>
-      <p>
-        This project documents the design and construction of an autonomous LiDAR-based 4WD robot car using a Raspberry Pi 4B, ROS 2 Humble, USB/Arducam camera, and PS4 controller. The goal is to build a portable robotics platform capable of remote control and obstacle-aware navigation.
-      </p>
-      <p><strong>Team Members:</strong> Connor Reagan,Hugo Acevedo,Dhruveen Sheth </p>
-    </section>
+    <h2>🚗 Project Overview</h2>
+    <p>This website will guide you through building a LiDAR-powered robotic car using a Raspberry Pi 4 and Slamtec RPLIDAR. You'll learn to:</p>
+    <ul>
+      <li>Wire and assemble the robot chassis</li>
+      <li>Install Ubuntu and ROS2</li>
+      <li>Use LiDAR and camera vision for navigation</li>
+      <li>Control the robot with a PS4 controller</li>
+    </ul>
 
-    <section>
-      <h2>Project Preview</h2>
-      <div class="image-grid">
-        <img src="media/20250520_194735.jpg" alt="LiDAR Car on couch">
-        <img src="media/20250520_194809.jpg" alt="LiDAR Car on carpet">
-      </div>
-    </section>
+    <h3>🔗 Quick Start</h3>
+    <ol>
+      <li><a href="parts.html">Check the parts list</a></li>
+      <li><a href="build.html">Follow the build guide</a></li>
+      <li><a href="wiring.html">Connect components</a></li>
+      <li><a href="code.html">Load the code</a></li>
+      <li><a href="troubleshoot.html">Fix common issues</a></li>
+    </ol>
 
-    <section>
-      <h2>Start Building</h2>
-      <p>Use the navigation bar above to begin assembling your own LiDAR car.</p>
-    </section>
+    <h3>📸 Project Photos</h3>
+    <img src="media/20250520_194735.jpg" alt="Front View" width="300" />
+    <img src="media/20250520_194809.jpg" alt="Top View" width="300" />
   </main>
 
   <footer>
-    <p>© 2025 Connor Reagan, Hugo Acevedo,Dhruveen Sheth </p>
+    <p>© 2025 Connor Reagan, Hugo, Seth</p>
   </footer>
 
   <script src="js/main.js"></script>
 </body>
 </html>
-
