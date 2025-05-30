@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Parts List</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
@@ -33,7 +33,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 10px;
     }
     th, td {
       border: 1px solid #ccc;
@@ -49,6 +49,18 @@
     a {
       color: blue;
     }
+    details {
+      margin-bottom: 20px;
+    }
+    summary {
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 5px;
+      background: #ddd;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -57,83 +69,113 @@
     <nav>
       <a href="index.html">Home</a>
       <a href="parts.html">Parts List</a>
-      <a href="build.html">Build Guide</a>
-      <a href="wiring.html">Wiring</a>
-      <a href="code.html">Code</a>
+      <a href="sensor.html">Sensor Setup</a>
+      <a href="lidar.html">LiDAR Car</a>
       <a href="troubleshoot.html">Troubleshooting</a>
     </nav>
   </header>
 
   <main>
     <h2>Parts List</h2>
-    <p>Check off items as you collect them. Links open in a new tab.</p>
+    <p>Start with the Sensor Setup and later add extra parts for the LiDAR Car. Check off items as you collect them. Links open in a new tab.</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Check box</th>
-          <th>Item</th>
-          <th>Price</th>
-          <th>Link</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><input type="checkbox" id="part1" onchange="saveCheckboxState(this)"></td>
-          <td>Raspberry Pi 4B (4GB)</td>
-          <td>$66.95</td>
-          <td><a href="https://www.amazon.com/dp/B09TTNF8BT" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part2" onchange="saveCheckboxState(this)"></td>
-          <td>Adafruit Stepper Motor HAT</td>
-          <td>$26.36</td>
-          <td><a href="https://www.amazon.com/dp/B00TIY5JM8" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part3" onchange="saveCheckboxState(this)"></td>
-          <td>RPLIDAR C1 Scanner</td>
-          <td>$71.90</td>
-          <td><a href="https://www.amazon.com/dp/B0923RYT8V" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part4" onchange="saveCheckboxState(this)"></td>
-          <td>Logitech USB Webcam</td>
-          <td>$39.99</td>
-          <td><a href="https://www.amazon.com/dp/B0BXGCRRLW" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part5" onchange="saveCheckboxState(this)"></td>
-          <td>HC-SR04 Ultrasonic Sensor</td>
-          <td>$1.91</td>
-          <td><a href="https://www.amazon.com/dp/B07KNTQ4C2" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part6" onchange="saveCheckboxState(this)"></td>
-          <td>18650 Batteries</td>
-          <td>$11.99</td>
-          <td><a href="https://www.amazon.com/dp/B0DKNPT8RT" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part7" onchange="saveCheckboxState(this)"></td>
-          <td>Mecanum Wheel Chassis</td>
-          <td>$36.99</td>
-          <td><a href="https://www.amazon.com/dp/B093WDD9N5" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part8" onchange="saveCheckboxState(this)"></td>
-          <td>32GB SanDisk MicroSD</td>
-          <td>$12.49</td>
-          <td><a href="https://www.amazon.com/dp/B0B7NXBM6P" target="_blank">Buy</a></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="part9" onchange="saveCheckboxState(this)"></td>
-          <td>Breadboard & Jumper Kit</td>
-          <td>$7.99</td>
-          <td><a href="https://www.amazon.com/dp/B0CM5VMW8Z" target="_blank">Buy</a></td>
-        </tr>
-      </tbody>
-    </table>
+    <details open>
+      <summary>🧪 Sensor Setup Components</summary>
+      <table>
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" id="part1" onchange="saveCheckboxState(this)"></td>
+            <td>Raspberry Pi 4B (4GB)</td>
+            <td>$66.95</td>
+            <td><a href="https://www.amazon.com/dp/B09TTNF8BT" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part5" onchange="saveCheckboxState(this)"></td>
+            <td>HC-SR04 Ultrasonic Sensor</td>
+            <td>$1.91</td>
+            <td><a href="https://www.amazon.com/dp/B07KNTQ4C2" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part10" onchange="saveCheckboxState(this)"></td>
+            <td>1602 LCD Display</td>
+            <td>$4.99</td>
+            <td><a href="https://www.amazon.com/dp/B0D17DKPW7" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part11" onchange="saveCheckboxState(this)"></td>
+            <td>RGB LED Kit (Assorted)</td>
+            <td>$6.25</td>
+            <td><a href="https://www.amazon.com/dp/B06XPV4CSH" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part8" onchange="saveCheckboxState(this)"></td>
+            <td>32GB SanDisk MicroSD</td>
+            <td>$12.49</td>
+            <td><a href="https://www.amazon.com/dp/B0B7NXBM6P" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part9" onchange="saveCheckboxState(this)"></td>
+            <td>Breadboard & Jumper Kit</td>
+            <td>$7.99</td>
+            <td><a href="https://www.amazon.com/dp/B0CM5VMW8Z" target="_blank">Buy</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details>
+      <summary>🚗 LiDAR Car Additional Components</summary>
+      <table>
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" id="part2" onchange="saveCheckboxState(this)"></td>
+            <td>Adafruit Stepper Motor HAT</td>
+            <td>$26.36</td>
+            <td><a href="https://www.amazon.com/dp/B00TIY5JM8" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part3" onchange="saveCheckboxState(this)"></td>
+            <td>RPLIDAR C1 Scanner</td>
+            <td>$71.90</td>
+            <td><a href="https://www.amazon.com/dp/B0923RYT8V" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part4" onchange="saveCheckboxState(this)"></td>
+            <td>Logitech USB Webcam</td>
+            <td>$39.99</td>
+            <td><a href="https://www.amazon.com/dp/B0BXGCRRLW" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part6" onchange="saveCheckboxState(this)"></td>
+            <td>18650 Batteries</td>
+            <td>$11.99</td>
+            <td><a href="https://www.amazon.com/dp/B0DKNPT8RT" target="_blank">Buy</a></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" id="part7" onchange="saveCheckboxState(this)"></td>
+            <td>Mecanum Wheel Chassis</td>
+            <td>$36.99</td>
+            <td><a href="https://www.amazon.com/dp/B093WDD9N5" target="_blank">Buy</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </details>
   </main>
 
   <footer>
