@@ -8,9 +8,7 @@ function saveCheckboxState(checkbox) {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
       const saved = localStorage.getItem(checkbox.id);
-      if (saved !== null) {
-        checkbox.checked = (saved === 'true');
-      }
+      if (saved !== null) checkbox.checked = (saved === 'true');
     });
   };
   

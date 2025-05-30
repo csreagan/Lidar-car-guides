@@ -1,59 +1,157 @@
-<h2>Parts List</h2>
-<p>Check off items as you collect them. Links open in a new tab.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parts List</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+    }
+    nav a {
+      color: white;
+      margin-right: 15px;
+      text-decoration: none;
+    }
+    main {
+      padding: 20px;
+    }
+    footer {
+      background-color: #f0f0f0;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    input[type="checkbox"] {
+      transform: scale(1.2);
+    }
+    a {
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LiDAR Car Parts List</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="parts.html">Parts List</a>
+      <a href="build.html">Build Guide</a>
+      <a href="wiring.html">Wiring</a>
+      <a href="code.html">Code</a>
+      <a href="troubleshoot.html">Troubleshooting</a>
+    </nav>
+  </header>
 
-<div class="parts-grid">
-  <div class="part-item">
-    <input type="checkbox" id="part1" onchange="saveCheckboxState(this)">
-    <span>Raspberry Pi 4B (4GB)</span>
-    <span>$66.95</span>
-    <a href="https://www.amazon.com/dp/B09TTNF8BT" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part2" onchange="saveCheckboxState(this)">
-    <span>Adafruit Stepper Motor HAT</span>
-    <span>$26.36</span>
-    <a href="https://www.amazon.com/dp/B00TIY5JM8" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part3" onchange="saveCheckboxState(this)">
-    <span>RPLIDAR C1 Scanner</span>
-    <span>$71.90</span>
-    <a href="https://www.amazon.com/dp/B0923RYT8V" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part4" onchange="saveCheckboxState(this)">
-    <span>Logitech USB Webcam</span>
-    <span>$39.99</span>
-    <a href="https://www.amazon.com/dp/B0BXGCRRLW" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part5" onchange="saveCheckboxState(this)">
-    <span>HC-SR04 Ultrasonic Sensor</span>
-    <span>$1.91</span>
-    <a href="https://www.amazon.com/dp/B07KNTQ4C2" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part6" onchange="saveCheckboxState(this)">
-    <span>18650 Batteries</span>
-    <span>$11.99</span>
-    <a href="https://www.amazon.com/dp/B0DKNPT8RT" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part7" onchange="saveCheckboxState(this)">
-    <span>Mecanum Wheel Chassis</span>
-    <span>$36.99</span>
-    <a href="https://www.amazon.com/dp/B093WDD9N5" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part8" onchange="saveCheckboxState(this)">
-    <span>32GB SanDisk MicroSD</span>
-    <span>$12.49</span>
-    <a href="https://www.amazon.com/dp/B0B7NXBM6P" target="_blank">Buy</a>
-  </div>
-  <div class="part-item">
-    <input type="checkbox" id="part9" onchange="saveCheckboxState(this)">
-    <span>Breadboard & Jumper Kit</span>
-    <span>$7.99</span>
-    <a href="https://www.amazon.com/dp/B0CM5VMW8Z" target="_blank">Buy</a>
-  </div>
-</div>
+  <main>
+    <h2>Parts List</h2>
+    <p>Check off items as you collect them. Links open in a new tab.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Check box</th>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" id="part1" onchange="saveCheckboxState(this)"></td>
+          <td>Raspberry Pi 4B (4GB)</td>
+          <td>$66.95</td>
+          <td><a href="https://www.amazon.com/dp/B09TTNF8BT" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part2" onchange="saveCheckboxState(this)"></td>
+          <td>Adafruit Stepper Motor HAT</td>
+          <td>$26.36</td>
+          <td><a href="https://www.amazon.com/dp/B00TIY5JM8" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part3" onchange="saveCheckboxState(this)"></td>
+          <td>RPLIDAR C1 Scanner</td>
+          <td>$71.90</td>
+          <td><a href="https://www.amazon.com/dp/B0923RYT8V" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part4" onchange="saveCheckboxState(this)"></td>
+          <td>Logitech USB Webcam</td>
+          <td>$39.99</td>
+          <td><a href="https://www.amazon.com/dp/B0BXGCRRLW" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part5" onchange="saveCheckboxState(this)"></td>
+          <td>HC-SR04 Ultrasonic Sensor</td>
+          <td>$1.91</td>
+          <td><a href="https://www.amazon.com/dp/B07KNTQ4C2" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part6" onchange="saveCheckboxState(this)"></td>
+          <td>18650 Batteries</td>
+          <td>$11.99</td>
+          <td><a href="https://www.amazon.com/dp/B0DKNPT8RT" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part7" onchange="saveCheckboxState(this)"></td>
+          <td>Mecanum Wheel Chassis</td>
+          <td>$36.99</td>
+          <td><a href="https://www.amazon.com/dp/B093WDD9N5" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part8" onchange="saveCheckboxState(this)"></td>
+          <td>32GB SanDisk MicroSD</td>
+          <td>$12.49</td>
+          <td><a href="https://www.amazon.com/dp/B0B7NXBM6P" target="_blank">Buy</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="part9" onchange="saveCheckboxState(this)"></td>
+          <td>Breadboard & Jumper Kit</td>
+          <td>$7.99</td>
+          <td><a href="https://www.amazon.com/dp/B0CM5VMW8Z" target="_blank">Buy</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
+  </footer>
+
+  <script>
+    function saveCheckboxState(checkbox) {
+      localStorage.setItem(checkbox.id, checkbox.checked);
+    }
+
+    window.onload = function () {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        const saved = localStorage.getItem(checkbox.id);
+        if (saved !== null) checkbox.checked = (saved === 'true');
+      });
+    };
+  </script>
+</body>
+</html>
