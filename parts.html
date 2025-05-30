@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Parts List | LiDAR Car Guides</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parts List</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .parts-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .parts-table th, .parts-table td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    .parts-table th {
+      background-color: #f5f5f5;
+    }
+    label input {
+      margin-right: 8px;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Parts List</h1>
+    <h1>LiDAR Car Parts List</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="parts.html">Parts List</a>
@@ -20,54 +38,94 @@
   </header>
 
   <main>
-    <h2>Core Processing & Control Units</h2>
-    <ul>
-      <li><strong>Raspberry Pi 4 Model B</strong> – Sensor data processing, motor control, image data</li>
-      <li><strong>Adafruit Motor HAT</strong> – Motor driver for independent wheel control</li>
-    </ul>
-
-    <h2>Sensors & Peripherals</h2>
-    <ul>
-      <li><strong>RPLIDAR A1</strong> – 2D LiDAR for mapping and obstacle detection</li>
-      <li><strong>Logitech Brio 100 Camera</strong> – Vision-based navigation</li>
-      <li><strong>Ultrasonic Sensors (optional)</strong> – Proximity detection</li>
-    </ul>
-
-    <h2>Power System</h2>
-    <ul>
-      <li><strong>18650 Batteries (x2)</strong> – Power for motors and HAT</li>
-      <li><strong>Power Bank (optional)</strong> – For Raspberry Pi</li>
-    </ul>
-
-    <h2>Mechanical Components</h2>
-    <ul>
-      <li><strong>Chassis Frame</strong></li>
-      <li><strong>Brushless DC Motors</strong> – Efficient and durable</li>
-      <li><strong>Mecanum or Regular Wheels</strong></li>
-    </ul>
-
-    <h2>Storage</h2>
-    <ul>
-      <li><strong>64GB microSD Cards</strong> – OS and logging</li>
-    </ul>
-
-    <h2>Software & Frameworks</h2>
-    <ul>
-      <li><strong>Python</strong> – Main programming language</li>
-      <li><strong>ROS2 Humble</strong> – Real-time mapping and control</li>
-      <li><strong>Custom Python Scripts</strong> – Motor control logic</li>
-    </ul>
-
-    <h2>Miscellaneous</h2>
-    <ul>
-      <li><strong>Breadboard & Jumper Wires</strong> – For prototyping</li>
-      <li><strong>Mounts & Brackets</strong> – For camera, sensors, and boards</li>
-      <li><strong>Screws, Spacers, Bolts</strong> – For structural assembly</li>
-    </ul>
+    <h2>Checklist of Required Parts</h2>
+    <table class="parts-table">
+      <thead>
+        <tr>
+          <th>✔</th>
+          <th>Part</th>
+          <th>Price</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" id="rpi"></td>
+          <td>Raspberry Pi 4B (4GB)</td>
+          <td>$66.95</td>
+          <td><a href="https://www.amazon.com/dp/B09TTNF8BT" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="hat"></td>
+          <td>Adafruit Motor HAT</td>
+          <td>$26.36</td>
+          <td><a href="https://www.amazon.com/dp/B00TIY5JM8" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="rplidar"></td>
+          <td>Slamtec RPLIDAR A1</td>
+          <td>$89.00</td>
+          <td><a href="https://www.amazon.com/dp/B0CXHP3R5C" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="rplidar2"></td>
+          <td>youyeetoo RPLIDAR Alternative</td>
+          <td>$71.90</td>
+          <td><a href="https://www.amazon.com/dp/B0CNXLJJ61" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="camera"></td>
+          <td>Logitech USB Webcam</td>
+          <td>$39.99</td>
+          <td><a href="https://www.amazon.com/dp/B0BXGCRRLW" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="ultrasonic"></td>
+          <td>Ultrasonic Sensor (HC-SR04)</td>
+          <td>$1.91</td>
+          <td><a href="https://www.amazon.com/dp/B07KNTQ4C2" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="batteries"></td>
+          <td>2x 18650 Batteries</td>
+          <td>$11.99</td>
+          <td><a href="https://www.amazon.com/dp/B0DKNPT8RT" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="chassis"></td>
+          <td>Mecanum Wheel Chassis Kit</td>
+          <td>$36.99</td>
+          <td><a href="https://www.amazon.com/dp/B093WDD9N5" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="sdcard"></td>
+          <td>SanDisk microSD Card (64GB)</td>
+          <td>$12.49</td>
+          <td><a href="https://www.amazon.com/dp/B0B7NXBM6P" target="_blank">Amazon</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" id="breadboard"></td>
+          <td>Breadboard + Jumper Wires</td>
+          <td>$7.99</td>
+          <td><a href="https://www.amazon.com/dp/B0CM5VMW8Z" target="_blank">Amazon</a></td>
+        </tr>
+      </tbody>
+    </table>
   </main>
 
   <footer>
-    <p>© 2025 Connor Reagan</p>
+    <p>© 2025 Connor Reagan, Hugo Acevedo,Dhruveen Sheth </p>
   </footer>
+
+  <script>
+    // Save checkbox states using localStorage
+    document.querySelectorAll('input[type="checkbox"]').forEach(box => {
+      const key = 'checkbox_' + box.id;
+      box.checked = localStorage.getItem(key) === 'true';
+      box.addEventListener('change', () => {
+        localStorage.setItem(key, box.checked);
+      });
+    });
+  </script>
 </body>
 </html>
