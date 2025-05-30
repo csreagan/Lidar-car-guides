@@ -48,9 +48,33 @@
       max-width: 100%;
       height: auto;
     }
+    nav {
+      width: 100%;
+      background-color: #333;
+      padding: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+    main {
+      margin-top: 60px;
+    }
   </style>
 </head>
 <body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="parts.html">Parts List</a>
+    <a href="sensor.html">Sensor Setup</a>
+    <a href="lidar.html">LiDAR Car</a>
+    <a href="troubleshoot.html">Troubleshooting</a>
+  </nav>
   <main>
     <h1>Sensor Capstone: Comprehensive Integration Guide (Raspberry Pi OS)</h1>
     <details open>
