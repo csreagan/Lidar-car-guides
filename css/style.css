@@ -168,3 +168,35 @@
     display: block;
     overflow-x: auto;
   }
+  .card {
+    background: var(--white);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+  
+  body.dark-mode .card {
+    background: #2e2e2e;
+  }
+  
+  details summary {
+    background-color: #eee;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  body.dark-mode details summary {
+    background-color: #444;
+    color: var(--text-dark);
+  }
+  
+  details[open] summary {
+    background-color: #ccc;
+  }
+  
+  body.dark-mode details[open] summary {
+    background-color: #555;
+  }
+  

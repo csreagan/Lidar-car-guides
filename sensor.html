@@ -8,110 +8,113 @@
 </head>
 <body>
   <header>
-    <h1>Sensor Setup Guide</h1>
+    <h1>Sensor Capstone: Comprehensive Integration Guide (Raspberry Pi OS)</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="parts.html">Parts List</a>
+      <a href="sensor.html">Sensor Setup</a>
+      <a href="lidar.html">LiDAR Car</a>
+      <a href="troubleshoot.html">Troubleshooting</a>
+    </nav>
+    <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   </header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="parts.html">Parts List</a>
-    <a href="sensor.html">Sensor Setup</a>
-    <a href="lidar.html">LiDAR Car</a>
-    <a href="troubleshoot.html">Troubleshooting</a>
-  </nav>
-
   <main>
-    <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+    <section class="card">
+      <details open>
+        <summary>📋 Overview & Setup</summary>
+        <p>This guide walks you through building a robust, multi-sensor demo system using a Raspberry Pi 4B running Raspberry Pi OS. Each component is tested individually and then combined into one working system. This document is written to be accessible for beginners, complete with fallback advice and troubleshooting context.</p>
+        <h3>Hardware Components</h3>
+        <ul>
+          <li>Ultrasonic Sensor (HC-SR04)</li>
+          <li>LCD Display (1602 Parallel)</li>
+          <li>ArduCam Camera Module (IMX708 with PiCamera2)</li>
+        </ul>
+        <h3>You’ll learn:</h3>
+        <ul>
+          <li>GPIO wiring and hardware setup</li>
+          <li>Library installation</li>
+          <li>Full commented Python scripts</li>
+          <li>How to use the terminal for testing</li>
+          <li>How to troubleshoot common issues</li>
+        </ul>
+      </details>
+    </section>
 
-    <h1>Sensor Capstone: Comprehensive Integration Guide (Raspberry Pi OS)</h1>
-
-    <details open class="section-box">
-      <summary>📋 Overview & Setup</summary>
-      <p>This guide walks you through building a robust, multi-sensor demo system using a Raspberry Pi 4B running Raspberry Pi OS...</p>
-      <h3>Hardware Components</h3>
-      <ul>
-        <li>Ultrasonic Sensor (HC-SR04)</li>
-        <li>LCD Display (1602 Parallel)</li>
-        <li>ArduCam Camera Module (IMX708 with PiCamera2)</li>
-      </ul>
-      <h3>You’ll learn:</h3>
-      <ul>
-        <li>GPIO wiring and hardware setup</li>
-        <li>Library installation</li>
-        <li>Full commented Python scripts</li>
-        <li>How to use the terminal for testing</li>
-        <li>How to troubleshoot common issues</li>
-      </ul>
-    </details>
-
-    <details class="section-box">
-      <summary>🛠️ Raspberry Pi OS Setup & Remote Access</summary>
-      <h3>1. Raspberry Pi OS Installation</h3>
-      <ul>
-        <li>Download and install Raspberry Pi Imager: <a href="https://www.raspberrypi.com/software">raspberrypi.com/software</a></li>
-        <li>Select Raspberry Pi OS (64-bit), enable SSH, set Wi-Fi credentials.</li>
-        <li>Insert SD card into Pi and boot.</li>
-      </ul>
-      <h3>2. Tailscale VPN Access</h3>
-      <div class="code-block"><code>curl -fsSL https://tailscale.com/install.sh | sh
+    <section class="card">
+      <details>
+        <summary>🛠️ Raspberry Pi OS Setup & Remote Access</summary>
+        <h3>1. Raspberry Pi OS Installation</h3>
+        <ul>
+          <li>Download from <a href="https://www.raspberrypi.com/software" target="_blank">raspberrypi.com/software</a></li>
+          <li>Select Raspberry Pi OS (64-bit), enable SSH, set Wi-Fi credentials.</li>
+          <li>Insert SD card into Pi and boot.</li>
+        </ul>
+        <h3>2. Tailscale VPN Access</h3>
+        <div class="code-block"><code>curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up</code></div>
-      <h3>3. Raspberry Pi Connect (GUI from browser)</h3>
-      <div class="code-block"><code>sudo apt update
+        <h3>3. Raspberry Pi Connect</h3>
+        <div class="code-block"><code>sudo apt update
 sudo apt install -y rpi-connect
 rpi-connect enable</code></div>
-    </details>
-
-    <details class="section-box">
-      <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
-      <p>The HC-SR04 sensor sends out ultrasonic pulses...</p>
-      <div class="code-block"><code>distance (cm) = time (s) * 17150</code></div>
-      <h4>Wiring</h4>
-      <ul>
-        <li>VCC → 5V</li>
-        <li>GND → GND</li>
-        <li>TRIG → GPIO 5</li>
-        <li>ECHO → GPIO 6</li>
-      </ul>
-      <h4>Install GPIO Library</h4>
-      <div class="code-block"><code>sudo apt update
-sudo apt install python3-rpi.gpio</code></div>
-      <details>
-        <summary>📜 Python Code</summary>
-        <div class="code-block"><code>[Insert your Python code here]</code></div>
       </details>
-    </details>
+    </section>
 
-    <details class="section-box">
-      <summary>📺 LCD Display (1602)</summary>
-      <p>Uses parallel connection via GPIO to display text...</p>
+    <section class="card">
       <details>
-        <summary>📜 Python Code</summary>
-        <div class="code-block"><code>[Insert your LCD code here]</code></div>
-      </details>
-    </details>
+        <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
+        <p>The HC-SR04 sends pulses and times the echo to measure distance:</p>
+        <div class="code-block"><code>distance (cm) = time (s) * 17150</code></div>
+        <ul>
+          <li>VCC → 5V</li>
+          <li>GND → GND</li>
+          <li>TRIG → GPIO 5</li>
+          <li>ECHO → GPIO 6</li>
+        </ul>
+        <div class="code-block"><code>sudo apt install python3-rpi.gpio</code></div>
+        <details>
+          <summary>📜 Python Code</summary>
+          <div class="code-block"><code>import RPi.GPIO as GPIO
+import time
 
-    <details class="section-box">
-      <summary>📷 ArduCam Setup</summary>
-      <p>Uses Picamera2 and OpenCV to stream a live feed.</p>
-      <div class="code-block"><code>sudo apt install -y libcamera-dev libopencv-dev</code></div>
-      <details>
-        <summary>📜 Python Code</summary>
-        <div class="code-block"><code>[Insert your ArduCam code here]</code></div>
-      </details>
-    </details>
+TRIG = 5
+ECHO = 6
 
-    <details class="section-box">
-      <summary>🤖 Full Integration</summary>
-      <details>
-        <summary>📜 Python Code (All Components)</summary>
-        <div class="code-block"><code>[Insert full integration code here]</code></div>
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(ECHO, GPIO.IN)
+
+try:
+    while True:
+        GPIO.output(TRIG, True)
+        time.sleep(0.00001)
+        GPIO.output(TRIG, False)
+        while GPIO.input(ECHO) == 0:
+            pulse_start = time.time()
+        while GPIO.input(ECHO) == 1:
+            pulse_end = time.time()
+        distance = (pulse_end - pulse_start) * 17150
+        print(f"Distance: {distance:.2f} cm")
+        time.sleep(1)
+except:
+    GPIO.cleanup()</code></div>
+        </details>
       </details>
-    </details>
+    </section>
+
+    <!-- You can repeat similar <section class="card">...</section> wrappers for the LCD and Full Integration -->
+    
   </main>
 
   <aside>
     <h3>🔌 GPIO Reference</h3>
-    <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" />
+    <img src="media/gpio-diagram.png" alt="GPIO Pinout" />
   </aside>
+
+  <footer>
+    <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
+  </footer>
 
   <script src="js/main.js"></script>
 </body>
