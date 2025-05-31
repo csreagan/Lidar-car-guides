@@ -191,4 +191,65 @@
     left: 10px;
     z-index: 999;
   }
+/* Layout for body */
+body {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
   
+  /* Main content takes up most of the width */
+  main {
+    flex: 3;
+    padding: 20px;
+  }
+  
+  /* Sidebar stays on the side */
+  aside {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-left: 1px solid #ccc;
+  }
+  
+  /* Make image responsive in sidebar */
+  aside img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Header spans full width and remains on top */
+  header, footer {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #2e2e2e;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  header nav a {
+    margin-right: 15px;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .toggle-dark-btn {
+    margin-top: 10px;
+  }
+  
+  /* Responsive design for small screens */
+  @media screen and (max-width: 768px) {
+    body {
+      flex-direction: column;
+    }
+    aside {
+      order: 2;
+    }
+    main {
+      order: 1;
+    }
+  }
+    
