@@ -16,7 +16,8 @@
     --border-light: #555555;
     --hover-dark: #eeeeee;
   }
-
+  
+  /* Global Styles */
   body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -25,72 +26,93 @@
     color: var(--text-dark);
   }
   
-  /* Header */
   header {
     background-color: var(--primary-bg);
     color: var(--text-dark);
     padding: 1rem;
     text-align: center;
   }
-
-  /* Navigation */
+  
+  header h1 {
+    margin: 0;
+    padding-bottom: 0.5rem;
+  }
+  
   nav {
     background-color: #a0c4ff;
     padding: 0.5rem;
     text-align: center;
   }
-
+  
   nav a {
     color: var(--text-dark);
     margin: 0 10px;
     text-decoration: none;
     font-weight: bold;
   }
-
+  
   nav a:hover {
     text-decoration: underline;
   }
-
-  /* Main Content */
+  
+  /* Main Layout */
   main {
     background-color: var(--white);
     padding: 20px;
     max-width: 1000px;
     margin: auto;
     border-radius: 8px;
+    border: 1px solid var(--border-light);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
   }
-
-  /* Section Card Box */
-  details, .section-box {
-    background-color: var(--white);
+  
+  /* Cards + Sections */
+  .card, .section-box, details {
+    background: var(--white);
     border: 2px solid var(--border-light);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 10px;
     margin-top: 20px;
-    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   }
-
+  
+  body.dark-mode .card,
+  body.dark-mode .section-box,
+  body.dark-mode details {
+    background: var(--white);
+  }
+  
+  /* Detail Summaries */
   details summary {
-    cursor: pointer;
     background-color: #eee;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
   }
-
+  
   details[open] summary {
     background-color: #ccc;
   }
-
+  
+  body.dark-mode details summary {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  body.dark-mode details[open] summary {
+    background-color: #444;
+    color: #fff;
+  }
+  
   /* Learning Path Cards */
   .learning-path {
     display: flex;
+    flex-wrap: wrap;
     gap: 40px;
     margin-top: 20px;
-    flex-wrap: wrap;
   }
-
+  
   .path {
     flex: 1;
     padding: 20px;
@@ -99,18 +121,12 @@
     background: var(--white);
     min-width: 300px;
   }
-
-  .beginner {
-    border-color: #4caf50;
-  }
-
-  .advanced {
-    border-color: #2196f3;
-  }
-
+  
+  .beginner { border-color: #4caf50; }
+  .advanced { border-color: #2196f3; }
+  
   /* Buttons */
-  .start-btn,
-  button {
+  .start-btn, button {
     display: inline-block;
     margin-top: 10px;
     padding: 10px 20px;
@@ -122,13 +138,12 @@
     font-weight: bold;
     cursor: pointer;
   }
-
-  .start-btn:hover,
-  button:hover {
+  
+  .start-btn:hover, button:hover {
     background: var(--hover-dark);
     color: white;
   }
-
+  
   /* Footer */
   footer {
     background-color: #eef;
@@ -137,8 +152,8 @@
     margin-top: 40px;
     color: var(--text-dark);
   }
-
-  /* Project Photos Section */
+  
+  /* Project Photos */
   .photo-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -146,7 +161,7 @@
     justify-content: center;
     margin-top: 20px;
   }
-
+  
   .photo-gallery img {
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -154,13 +169,13 @@
     height: auto;
     transition: transform 0.2s ease;
   }
-
+  
   .photo-gallery img:hover {
     transform: scale(1.05);
   }
-
-  .code-block code,
-  details pre {
+  
+  /* Code Blocks */
+  .code-block code, details pre {
     background-color: #f9f9f9;
     padding: 10px;
     border-radius: 5px;
@@ -168,35 +183,12 @@
     display: block;
     overflow-x: auto;
   }
-  .card {
-    background: var(--white);
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
-  }
   
-  body.dark-mode .card {
-    background: #2e2e2e;
-  }
-  
-  details summary {
-    background-color: #eee;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  body.dark-mode details summary {
-    background-color: #444;
-    color: var(--text-dark);
-  }
-  
-  details[open] summary {
-    background-color: #ccc;
-  }
-  
-  body.dark-mode details[open] summary {
-    background-color: #555;
+  /* Dark Mode Toggle Button */
+  .toggle-dark-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
   }
   
