@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Build Guide</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiDAR Setup & Integration</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<script src="js/main.js"></script>
-<button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
-
 <body>
   <header>
-    <h1>LiDAR Car Build Guide</h1>
+    <h1>LiDAR System Guide (Raspberry Pi + ROS 2 Humble)</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="parts.html">Parts List</a>
@@ -19,114 +16,128 @@
       <a href="lidar.html">LiDAR Car</a>
       <a href="troubleshoot.html">Troubleshooting</a>
     </nav>
+    <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   </header>
 
   <main>
-    <p>
-      <em>This guide is part of the LiDAR Car Setup. If you’re not here yet, return to the
-        <a href="index.html">Home</a> or start with <a href="sensor.html">Sensor Setup</a>.
-      </em>
-    </p>
+    <section class="card">
+      <details open>
+        <summary>📷 USB Camera Setup on ROS 2</summary>
+        <p>This guide will help you install and run a USB camera (like the Logitech Brio 100) using ROS 2 and Ubuntu.</p>
+        <ol>
+          <li><b>Plug in the USB Camera:</b><br>Check with <code>ls /dev/video*</code></li>
+          <li><b>Install ROS 2 Camera Packages:</b><br><code>sudo apt update</code><br><code>sudo apt install ros-humble-image-tools ros-humble-v4l2-camera</code></li>
+          <li><b>Launch Raw Image Publisher:</b><br><code>ros2 run v4l2_camera v4l2_camera_node</code></li>
+          <li><b>Check Topic:</b><br><code>ros2 topic list</code></li>
+          <li><b>Launch Compressed Publisher:</b><br><code>ros2 run image_transport republish raw in:=/image_raw compressed:=/image_raw/compressed</code></li>
+          <li><b>View Output:</b><br><code>ros2 topic echo /image_raw</code></li>
+          <li><b>View in RViz2:</b>
+            <ul>
+              <li><code>rviz2</code></li>
+              <li>Add <i>Image</i> display. Set topic to <code>/image_raw</code>.</li>
+            </ul>
+          </li>
+          <li><b>Install RViz2 if missing:</b><br><code>sudo apt install ros-humble-rviz2</code></li>
+          <li><b>Fix Permissions:</b><br><code>sudo chmod 777 /dev/video0</code></li>
+        </ol>
+      </details>
+    </section>
 
-    <p>This section walks you through the complete setup of your LiDAR car system.</p>
+    <section class="card">
+      <details>
+        <summary>🛰️ What is LiDAR?</summary>
+        <p>LiDAR uses lasers to measure the distance of objects, like a radar but with light. It lets robots "see" walls, furniture, and people by detecting reflections of light pulses.</p>
+      </details>
+    </section>
 
-    <details>
-      <summary><strong>1. Ubuntu 22.04.05 LTS Installation</strong></summary>
-      <ul>
-        <li>Download from <a href="https://ubuntu.com/download/raspberry-pi" target="_blank">ubuntu.com</a>.</li>
-        <li>Use Raspberry Pi Imager or Balena Etcher.</li>
-        <li>Create a blank file named <code>ssh</code> in boot partition.</li>
-        <li>Edit <code>network-config</code> for Wi-Fi (optional).</li>
-        <li>SSH in using user: <code>ubuntu</code>, password: <code>ubuntu</code>.</li>
-      </ul>
-    </details>
+    <section class="card">
+      <details>
+        <summary>🌀 How to Set Up RPLIDAR C1 on ROS 2</summary>
+        <ol>
+          <li>Source environment:<br><code>source /opt/ros/humble/setup.bash</code></li>
+          <li>Create workspace:<br><code>mkdir -p ~/ws_lidar/src</code></li>
+          <li>Clone repo:<br><code>git clone https://github.com/Slamtec/sllidar_ros2.git</code></li>
+          <li>Build:<br><code>cd ~/ws_lidar && colcon build --symlink-install</code></li>
+          <li>Source overlay:<br><code>source install/setup.bash</code></li>
+          <li>Connect USB, check:<br><code>ls -la /dev | grep USB</code></li>
+          <li>Grant permissions:<br><code>sudo chmod 777 /dev/ttyUSB0</code></li>
+          <li>Launch:<br><code>ros2 launch sllidar_ros2 view_sllidar_c1_launch.py</code></li>
+          <li>Open RViz2:<br><code>rviz2</code></li>
+          <li>Set display: <code>Add → LaserScan</code>, topic: <code>/scan</code>, frame: <code>laser</code></li>
+        </ol>
+      </details>
+    </section>
 
-    <details>
-      <summary><strong>2. GUI Setup (XFCE & LightDM)</strong></summary>
-      <div class="code-block"><code>sudo apt update && sudo apt upgrade -y
-sudo apt install xfce4 lightdm -y
-sudo reboot</code></div>
-    </details>
+    <section class="card">
+      <details>
+        <summary>🧠 Raspberry Pi + ROS 2: Full Setup</summary>
+        <ol>
+          <li>Flash Ubuntu 22.04 to SD</li>
+          <li>Enable SSH, Wi-Fi, boot the Pi</li>
+          <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
+          <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
+          <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
+          <li>Install ROS 2 Humble, source in bashrc</li>
+          <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
+          <li>Install `colcon`, `joy`, `rpi.gpio`</li>
+          <li>Create mecanum drive package</li>
+          <li>Pair PS4 controller with `bluetoothctl`</li>
+          <li>Headless HDMI settings for Pi</li>
+        </ol>
+      </details>
+    </section>
 
-    <details>
-      <summary><strong>3. Remote Access with Tailscale</strong></summary>
-      <div class="code-block"><code>curl -fsSL https://tailscale.com/install.sh | sh
-sudo tailscale up
-tailscale ip -4</code></div>
-    </details>
+    <section class="card">
+      <details>
+        <summary>⚙️ Motor HAT Setup (Cokoino 4WD)</summary>
+        <ul>
+          <li>7V–12.6V power input</li>
+          <li>Regulates 5V to Pi GPIO</li>
+          <li>IN1–IN4, ENA/ENB, PWM controlled via GPIO</li>
+          <li>Motor map:
+            <ul>
+              <li>Motor 1 – Front Left</li>
+              <li>Motor 2 – Front Right</li>
+              <li>Motor 3 – Rear Left</li>
+              <li>Motor 4 – Rear Right</li>
+            </ul>
+          </li>
+        </ul>
+      </details>
+    </section>
 
-    <details>
-      <summary><strong>4. VNC Setup</strong></summary>
-      <div class="code-block"><code>sudo apt install x11vnc -y
-sudo nano /etc/lightdm/lightdm.conf
+    <section class="card">
+        <details open>
+          <summary>📎 Download Project Files (Word Format)</summary>
+          <p>You can download the full setup guides and step-by-step documentation as Word files using the links below:</p>
+          <ul>
+            <li>
+              <a href="files/Lidar.docx" download>📄 LiDAR Setup Guide (DOCX)</a>
+            </li>
+            <li>
+              <a href="files/Logitech Cam.docx" download>📷 USB Camera Setup Guide (DOCX)</a>
+            </li>
+            <li>
+              <a href="files/Step by step guide(1).docx" download>📝 Complete Step-by-Step Guide (DOCX)</a>
+            </li>
+          </ul>
+          <p>📌 You can print these out and scan the QR code (see below) to come back to the website any time!</p>
+        </details>
+      </section>
 
-# Paste:
-[Seat:*]
-autologin-user=ubuntu
-autologin-user-timeout=0
-user-session=xfce</code></div>
-    </details>
-
-    <details>
-      <summary><strong>5. ROS 2 Humble Installation</strong></summary>
-      <div class="code-block"><code>sudo apt update && sudo apt upgrade -y
-sudo apt install locales -y
-sudo locale-gen en_US en_US.UTF-8
-...
-sudo apt install ros-humble-desktop -y
-source ~/.bashrc</code></div>
-    </details>
-
-    <details>
-      <summary><strong>6. Creating Workspace & Installing Colcon</strong></summary>
-      <div class="code-block"><code>sudo apt install python3-colcon-common-extensions -y
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws
-colcon build
-source install/setup.bash</code></div>
-    </details>
-
-    <details>
-      <summary><strong>7. Mecanum Drive + PS4 Controller</strong></summary>
-      <div class="code-block"><code>ros2 pkg create --build-type ament_python ps4_mecanum --dependencies rclpy sensor_msgs
-...
-ros2 run joy joy_node
-ros2 run ps4_mecanum mecanum_drive_node</code></div>
-    </details>
-
-    <details>
-      <summary><strong>8. Camera Setup (Arducam or USB)</strong></summary>
-      <div class="code-block"><code>sudo apt install cheese ffmpeg
-ffplay /dev/video0
-ros2 launch my_camera_pkg camera_launch.py
-rqt_image_view</code></div>
-    </details>
-
-    <details>
-      <summary><strong>9. Headless Boot Setup & Dummy HDMI</strong></summary>
-      <div class="code-block"><code>sudo touch /boot/firmware/ssh
-sudo nano /boot/firmware/config.txt
-
-# Add:
-hdmi_force_hotplug=1
-hdmi_group=2
-hdmi_mode=82</code></div>
-    </details>
-
-    <details>
-      <summary><strong>10. Motor HAT Power and GPIO Wiring</strong></summary>
-      <ul>
-        <li>VIN: 7V–12.6V</li>
-        <li>5V: Pi power</li>
-        <li>IN1–IN4: Direction</li>
-        <li>ENA/ENB: Enable motors</li>
-        <li>Use PWM via RPi.GPIO</li>
-      </ul>
-    </details>
+    <section class="card">
+      <details>
+        <summary>🔗 Quick Access via QR Code</summary>
+        <p>Scan this QR code on printed materials to return to this page:</p>
+        <img src="media/qrcode_website.png" alt="QR Code" style="max-width: 300px; border-radius: 8px;" />
+      </details>
+    </section>
   </main>
 
   <footer>
     <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
   </footer>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
