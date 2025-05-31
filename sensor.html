@@ -5,68 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sensor Setup Guide</title>
   <link rel="stylesheet" href="css/style.css" />
-  <style>
-    body {
-      display: flex;
-      flex-direction: row;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-    }
-    main {
-      flex: 3;
-      padding: 20px;
-    }
-    aside {
-      flex: 1;
-      background-color: #f0f0f0;
-      padding: 10px;
-      border-left: 1px solid #ccc;
-    }
-    details summary {
-      cursor: pointer;
-      background-color: #eee;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-    details[open] summary {
-      background-color: #ccc;
-    }
-    pre {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      padding: 10px;
-      overflow-x: auto;
-      border-radius: 5px;
-    }
-    h1, h2 {
-      color: #222;
-    }
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-    nav {
-      width: 100%;
-      background-color: #333;
-      padding: 10px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 999;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-right: 15px;
-    }
-    main {
-      margin-top: 60px;
-    }
-  </style>
 </head>
+<script src="js/main.js"></script>
+<button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+
 <body>
   <nav>
     <a href="index.html">Home</a>
@@ -75,8 +17,10 @@
     <a href="lidar.html">LiDAR Car</a>
     <a href="troubleshoot.html">Troubleshooting</a>
   </nav>
+
   <main>
     <h1>Sensor Capstone: Comprehensive Integration Guide (Raspberry Pi OS)</h1>
+
     <details open>
       <summary>📋 Overview & Setup</summary>
       <p>This guide walks you through building a robust, multi-sensor demo system using a Raspberry Pi 4B running Raspberry Pi OS. Each component is tested individually and then combined into one working system. This document is written to be accessible for beginners, complete with fallback advice and troubleshooting context.</p>
@@ -105,18 +49,18 @@
         <li>Insert SD card into Pi and boot.</li>
       </ul>
       <h3>2. Tailscale VPN Access</h3>
-      <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
-sudo tailscale up</code></pre>
+      <div class="code-block"><code>curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up</code></div>
       <h3>3. Raspberry Pi Connect (GUI from browser)</h3>
-      <pre><code>sudo apt update
+      <div class="code-block"><code>sudo apt update
 sudo apt install -y rpi-connect
-rpi-connect enable</code></pre>
+rpi-connect enable</code></div>
     </details>
 
     <details>
       <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
       <p>The HC-SR04 sensor sends out ultrasonic pulses. By timing how long it takes for the pulse to reflect and return, it calculates distance using:</p>
-      <pre><code>distance (cm) = time (s) * 17150</code></pre>
+      <div class="code-block"><code>distance (cm) = time (s) * 17150</code></div>
       <h4>Wiring</h4>
       <ul>
         <li>VCC → 5V</li>
@@ -125,11 +69,11 @@ rpi-connect enable</code></pre>
         <li>ECHO → GPIO 6</li>
       </ul>
       <h4>Install GPIO Library</h4>
-      <pre><code>sudo apt update
-sudo apt install python3-rpi.gpio</code></pre>
+      <div class="code-block"><code>sudo apt update
+sudo apt install python3-rpi.gpio</code></div>
       <details>
         <summary>📜 Python Code</summary>
-        <pre><code>import RPi.GPIO as GPIO
+        <div class="code-block"><code>import RPi.GPIO as GPIO
 import time
 
 TRIG = 5
@@ -156,7 +100,7 @@ try:
 except Exception as e:
     print(f"Error: {e}")
 finally:
-    GPIO.cleanup()</code></pre>
+    GPIO.cleanup()</code></div>
       </details>
     </details>
 
@@ -171,7 +115,7 @@ finally:
       </ul>
       <details>
         <summary>📜 Python Code</summary>
-        <pre><code>from RPLCD import CharLCD
+        <div class="code-block"><code>from RPLCD import CharLCD
 import time
 
 lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
@@ -184,17 +128,17 @@ time.sleep(2)
 for i in range(5):
     lcd.clear()
     lcd.write_string(f"Count: {i}")
-    time.sleep(1)</code></pre>
+    time.sleep(1)</code></div>
       </details>
     </details>
 
     <details>
       <summary>📷 ArduCam Setup</summary>
       <p>Uses Picamera2 and OpenCV to stream a live feed.</p>
-      <pre><code>sudo apt install -y libcamera-dev libopencv-dev</code></pre>
+      <div class="code-block"><code>sudo apt install -y libcamera-dev libopencv-dev</code></div>
       <details>
         <summary>📜 Python Code</summary>
-        <pre><code>from picamera2 import Picamera2
+        <div class="code-block"><code>from picamera2 import Picamera2
 import cv2
 
 picam2 = Picamera2()
@@ -209,7 +153,7 @@ while True:
         break
 
 picam2.stop()
-cv2.destroyAllWindows()</code></pre>
+cv2.destroyAllWindows()</code></div>
       </details>
     </details>
 
@@ -217,7 +161,7 @@ cv2.destroyAllWindows()</code></pre>
       <summary>🤖 Full Integration</summary>
       <details>
         <summary>📜 Python Code (All Components)</summary>
-        <pre><code>import threading, time, cv2
+        <div class="code-block"><code>import threading, time, cv2
 import RPi.GPIO as GPIO
 from RPLCD import CharLCD
 from picamera2 import Picamera2
@@ -265,7 +209,7 @@ threads = [
 ]
 
 for t in threads: t.start()
-for t in threads: t.join()</code></pre>
+for t in threads: t.join()</code></div>
       </details>
     </details>
   </main>
