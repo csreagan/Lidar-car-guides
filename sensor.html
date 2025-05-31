@@ -6,10 +6,11 @@
   <title>Sensor Setup Guide</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<script src="js/main.js"></script>
-<button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
-
 <body>
+  <header>
+    <h1>Sensor Setup Guide</h1>
+  </header>
+
   <nav>
     <a href="index.html">Home</a>
     <a href="parts.html">Parts List</a>
@@ -19,11 +20,13 @@
   </nav>
 
   <main>
+    <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+
     <h1>Sensor Capstone: Comprehensive Integration Guide (Raspberry Pi OS)</h1>
 
-    <details open>
+    <details open class="section-box">
       <summary>📋 Overview & Setup</summary>
-      <p>This guide walks you through building a robust, multi-sensor demo system using a Raspberry Pi 4B running Raspberry Pi OS. Each component is tested individually and then combined into one working system. This document is written to be accessible for beginners, complete with fallback advice and troubleshooting context.</p>
+      <p>This guide walks you through building a robust, multi-sensor demo system using a Raspberry Pi 4B running Raspberry Pi OS...</p>
       <h3>Hardware Components</h3>
       <ul>
         <li>Ultrasonic Sensor (HC-SR04)</li>
@@ -40,7 +43,7 @@
       </ul>
     </details>
 
-    <details>
+    <details class="section-box">
       <summary>🛠️ Raspberry Pi OS Setup & Remote Access</summary>
       <h3>1. Raspberry Pi OS Installation</h3>
       <ul>
@@ -57,9 +60,9 @@ sudo apt install -y rpi-connect
 rpi-connect enable</code></div>
     </details>
 
-    <details>
+    <details class="section-box">
       <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
-      <p>The HC-SR04 sensor sends out ultrasonic pulses. By timing how long it takes for the pulse to reflect and return, it calculates distance using:</p>
+      <p>The HC-SR04 sensor sends out ultrasonic pulses...</p>
       <div class="code-block"><code>distance (cm) = time (s) * 17150</code></div>
       <h4>Wiring</h4>
       <ul>
@@ -73,143 +76,34 @@ rpi-connect enable</code></div>
 sudo apt install python3-rpi.gpio</code></div>
       <details>
         <summary>📜 Python Code</summary>
-        <div class="code-block"><code>import RPi.GPIO as GPIO
-import time
-
-TRIG = 5
-ECHO = 6
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(TRIG, GPIO.OUT)
-GPIO.setup(ECHO, GPIO.IN)
-
-try:
-    while True:
-        GPIO.output(TRIG, True)
-        time.sleep(0.00001)
-        GPIO.output(TRIG, False)
-        while GPIO.input(ECHO) == 0:
-            pulse_start = time.time()
-        while GPIO.input(ECHO) == 1:
-            pulse_end = time.time()
-        pulse_duration = pulse_end - pulse_start
-        distance = pulse_duration * 17150
-        print(f"Distance: {distance:.2f} cm")
-        time.sleep(1)
-except Exception as e:
-    print(f"Error: {e}")
-finally:
-    GPIO.cleanup()</code></div>
+        <div class="code-block"><code>[Insert your Python code here]</code></div>
       </details>
     </details>
 
-    <details>
+    <details class="section-box">
       <summary>📺 LCD Display (1602)</summary>
-      <p>Uses parallel connection via GPIO to display text on 16x2 LCD.</p>
-      <ul>
-        <li>RS → GPIO 25</li>
-        <li>E → GPIO 24</li>
-        <li>D4-D7 → GPIO 23,17,18,22</li>
-        <li>VSS → GND, VDD → 5V</li>
-      </ul>
+      <p>Uses parallel connection via GPIO to display text...</p>
       <details>
         <summary>📜 Python Code</summary>
-        <div class="code-block"><code>from RPLCD import CharLCD
-import time
-
-lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
-              pins_data=[23,17,18,22], numbering_mode='BCM')
-
-lcd.clear()
-lcd.write_string("LCD is working!")
-time.sleep(2)
-
-for i in range(5):
-    lcd.clear()
-    lcd.write_string(f"Count: {i}")
-    time.sleep(1)</code></div>
+        <div class="code-block"><code>[Insert your LCD code here]</code></div>
       </details>
     </details>
 
-    <details>
+    <details class="section-box">
       <summary>📷 ArduCam Setup</summary>
       <p>Uses Picamera2 and OpenCV to stream a live feed.</p>
       <div class="code-block"><code>sudo apt install -y libcamera-dev libopencv-dev</code></div>
       <details>
         <summary>📜 Python Code</summary>
-        <div class="code-block"><code>from picamera2 import Picamera2
-import cv2
-
-picam2 = Picamera2()
-picam2.configure(picam2.create_preview_configuration(
-    main={"size": (640, 480), "format": "RGB888"}))
-picam2.start()
-
-while True:
-    frame = picam2.capture_array()
-    cv2.imshow("Live Feed", frame)
-    if cv2.waitKey(1) == ord('q'):
-        break
-
-picam2.stop()
-cv2.destroyAllWindows()</code></div>
+        <div class="code-block"><code>[Insert your ArduCam code here]</code></div>
       </details>
     </details>
 
-    <details>
+    <details class="section-box">
       <summary>🤖 Full Integration</summary>
       <details>
         <summary>📜 Python Code (All Components)</summary>
-        <div class="code-block"><code>import threading, time, cv2
-import RPi.GPIO as GPIO
-from RPLCD import CharLCD
-from picamera2 import Picamera2
-
-TRIG, ECHO = 5, 6
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(TRIG, GPIO.OUT)
-GPIO.setup(ECHO, GPIO.IN)
-
-lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
-              pins_data=[23,17,18,22], numbering_mode='BCM')
-
-def get_distance():
-    GPIO.output(TRIG, True)
-    time.sleep(0.00001)
-    GPIO.output(TRIG, False)
-    while GPIO.input(ECHO) == 0: pulse_start = time.time()
-    while GPIO.input(ECHO) == 1: pulse_end = time.time()
-    return round((pulse_end - pulse_start) * 17150, 2)
-
-def distance_task():
-    while True:
-        dist = get_distance()
-        lcd.clear()
-        lcd.write_string(f"Dist: {dist:.1f}cm")
-        time.sleep(1)
-
-def camera_task():
-    cam = Picamera2()
-    cam.configure(cam.create_preview_configuration(
-        main={"size": (640, 480), "format": "RGB888"}))
-    cam.start()
-    while True:
-        frame = cam.capture_array()
-        cv2.imshow("Camera", frame)
-        if cv2.waitKey(1) == ord('q'):
-            break
-    cam.stop()
-    cv2.destroyAllWindows()
-
-threads = [
-    threading.Thread(target=distance_task),
-    threading.Thread(target=camera_task)
-]
-
-for t in threads: t.start()
-for t in threads: t.join()</code></div>
+        <div class="code-block"><code>[Insert full integration code here]</code></div>
       </details>
     </details>
   </main>
@@ -218,5 +112,7 @@ for t in threads: t.join()</code></div>
     <h3>🔌 GPIO Reference</h3>
     <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" />
   </aside>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
