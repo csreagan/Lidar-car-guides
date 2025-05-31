@@ -8,7 +8,7 @@
 </head>
 <body>
   <header>
-    <h1>Sensor Capstone: Comprehensive Integration Guide (Raspberry Pi OS)</h1>
+    <h1>Sensor Setup Guide</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="parts.html">Parts List</a>
@@ -16,7 +16,7 @@
       <a href="lidar.html">LiDAR Car</a>
       <a href="troubleshoot.html">Troubleshooting</a>
     </nav>
-    <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+    <button class="toggle-dark-btn" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   </header>
 
   <main>
@@ -103,13 +103,52 @@ except:
       </details>
     </section>
 
-    <!-- You can repeat similar <section class="card">...</section> wrappers for the LCD and Full Integration -->
-    
+    <section class="card">
+      <details>
+        <summary>📺 LCD Display (1602)</summary>
+        <ul>
+          <li>RS → GPIO 25</li>
+          <li>E → GPIO 24</li>
+          <li>D4–D7 → GPIO 23, 17, 18, 22</li>
+        </ul>
+        <div class="code-block"><code>from RPLCD import CharLCD
+import time
+
+lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
+              pins_data=[23, 17, 18, 22], numbering_mode='BCM')
+
+lcd.write_string("LCD works!")
+time.sleep(2)</code></div>
+      </details>
+    </section>
+
+    <section class="card">
+      <details>
+        <summary>📷 ArduCam with Picamera2</summary>
+        <div class="code-block"><code>sudo apt install -y libcamera-dev libopencv-dev</code></div>
+        <div class="code-block"><code>from picamera2 import Picamera2
+import cv2
+
+picam2 = Picamera2()
+picam2.configure(picam2.create_preview_configuration(
+    main={"size": (640, 480), "format": "RGB888"}))
+picam2.start()
+
+while True:
+    frame = picam2.capture_array()
+    cv2.imshow("Camera", frame)
+    if cv2.waitKey(1) == ord('q'):
+        break
+
+picam2.stop()
+cv2.destroyAllWindows()</code></div>
+      </details>
+    </section>
   </main>
 
   <aside>
     <h3>🔌 GPIO Reference</h3>
-    <img src="media/gpio-diagram.png" alt="GPIO Pinout" />
+    <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" />
   </aside>
 
   <footer>
