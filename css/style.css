@@ -1,28 +1,39 @@
-/* General Layout */
-body {
+/* 🎨 Color Variables */
+:root {
+    --primary-bg: #cceeff;
+    --accent-yellow: #ffdd57;
+    --text-dark: #333333;
+    --white: #ffffff;
+    --border-light: #cccccc;
+    --hover-dark: #555555;
+  }
+  
+  /* General Layout */
+  body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: var(--primary-bg);
+    color: var(--text-dark);
   }
   
   /* Header */
   header {
-    background-color: #333;
-    color: white;
+    background-color: var(--primary-bg);
+    color: var(--text-dark);
     padding: 1rem;
     text-align: center;
   }
   
   /* Navigation */
   nav {
-    background-color: #444;
+    background-color: #a0c4ff;
     padding: 0.5rem;
     text-align: center;
   }
   
   nav a {
-    color: white;
+    color: var(--text-dark);
     margin: 0 10px;
     text-decoration: none;
     font-weight: bold;
@@ -34,11 +45,15 @@ body {
   
   /* Main Content */
   main {
+    background-color: var(--white);
     padding: 20px;
     max-width: 1000px;
     margin: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   }
   
+  /* Learning Path Cards */
   .learning-path {
     display: flex;
     gap: 40px;
@@ -49,9 +64,9 @@ body {
   .path {
     flex: 1;
     padding: 20px;
-    border: 2px solid #ccc;
+    border: 2px solid var(--border-light);
     border-radius: 10px;
-    background: #fff;
+    background: var(--white);
     min-width: 300px;
   }
   
@@ -63,29 +78,34 @@ body {
     border-color: #2196f3;
   }
   
+  /* Buttons */
   .start-btn {
     display: inline-block;
     margin-top: 10px;
     padding: 10px 20px;
-    background: #333;
-    color: #fff;
+    background: var(--accent-yellow);
+    color: var(--text-dark);
     text-decoration: none;
     border-radius: 5px;
+    font-weight: bold;
   }
   
   .start-btn:hover {
-    background: #555;
+    background: var(--hover-dark);
+    color: white;
   }
   
   /* Footer */
   footer {
-    background-color: #f0f0f0;
+    background-color: #eef;
     padding: 1rem;
     text-align: center;
     margin-top: 40px;
+    color: var(--text-dark);
   }
+  
   /* Project Photos Section */
-.photo-gallery {
+  .photo-gallery {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
