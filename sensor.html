@@ -72,34 +72,113 @@ rpi-connect enable</code></div>
           <li>ECHO → GPIO 6</li>
         </ul>
         <div class="code-block"><code>sudo apt install python3-rpi.gpio</code></div>
-        <details>
-          <summary>📜 Python Code</summary>
-          <div class="code-block"><code>import RPi.GPIO as GPIO
-import time
 
-TRIG = 5
-ECHO = 6
+        <h3>🔁 Version 1: Single Reading (No Averaging)</h3>
+        <p>This version takes a single measurement per loop. Use this when you want quick feedback without delay.</p>
+        <div class="code-block"><code>iimport RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
+          import time                  # Import time library for delays and timing
+          
+          TRIG = 5                     # Define GPIO pin 5 as the trigger pin
+          ECHO = 6                     # Define GPIO pin 6 as the echo pin
+          
+          GPIO.setmode(GPIO.BCM)       # Use BCM pin numbering (GPIO numbers instead of board numbers)
+          GPIO.setwarnings(False)      # Disable GPIO warnings (prevents duplicate warning messages)
+          GPIO.setup(TRIG, GPIO.OUT)   # Set TRIG pin as output to send ultrasonic pulse
+          GPIO.setup(ECHO, GPIO.IN)    # Set ECHO pin as input to receive echo signal
+          
+          def get_distance():
+              GPIO.output(TRIG, True)       # Send a high pulse (start signal)
+              time.sleep(0.00001)           # Wait for 10 microseconds (pulse duration)
+              GPIO.output(TRIG, False)      # Turn off the trigger (pulse end)
+          
+              while GPIO.input(ECHO) == 0:  # Wait until echo signal goes high
+                  pulse_start = time.time() # Record the start time
+          
+              while GPIO.input(ECHO) == 1:  # Wait until echo signal goes low
+                  pulse_end = time.time()   # Record the end time
+          
+              # Calculate distance: (time × speed of sound) / 2
+              return round((pulse_end - pulse_start) * 17150, 2)  # Return distance in cm, rounded to 2 decimal places
+          
+          try:
+              while True:  # Infinite loop to continuously measure distance
+                  print(f"Distance: {get_distance()} cm")  # Display measured distance
+                  time.sleep(1)  # Wait 1 second before the next measurement
+          except KeyboardInterrupt:
+              GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting
+          </code></div>
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(TRIG, GPIO.OUT)
-GPIO.setup(ECHO, GPIO.IN)
+        <h3>📊 Version 2: Averaged Readings</h3>
+        <p>This version collects multiple measurements and averages them. Ideal for smoothing out inconsistent readings in noisy environments.</p>
+        <div class="code-block"><code>iimport RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
+          import time                    # Import time module for timing and delays
+          
+          # GPIO pins (BCM numbering)
+          TRIG = 23                      # TRIG pin connected to GPIO 23
+          ECHO = 24                      # ECHO pin connected to GPIO 24
+          
+          # Setup
+          GPIO.setmode(GPIO.BCM)         # Use Broadcom (BCM) pin numbering
+          GPIO.setwarnings(False)        # Disable GPIO warnings
+          GPIO.setup(TRIG, GPIO.OUT)     # Set TRIG pin as an output
+          GPIO.setup(ECHO, GPIO.IN)      # Set ECHO pin as an input
+          
+          def get_distance():
+              """Get a single distance measurement from the ultrasonic sensor."""
+              GPIO.output(TRIG, True)           # Send HIGH pulse to trigger the sensor
+              time.sleep(0.00001)               # Wait 10 microseconds
+              GPIO.output(TRIG, False)          # Set TRIG to LOW
+          
+              timeout = time.time() + 1         # Timeout to prevent getting stuck in loop
+              while GPIO.input(ECHO) == 0:      # Wait for ECHO to go HIGH
+                  if time.time() > timeout:     # Exit if timeout is reached
+                      return None
+              pulse_start = time.time()         # Record start time of echo pulse
+          
+              timeout = time.time() + 1         # Reset timeout
+              while GPIO.input(ECHO) == 1:      # Wait for ECHO to go LOW
+                  if time.time() > timeout:     # Exit if timeout is reached
+                      return None
+              pulse_end = time.time()           # Record end time of echo pulse
+          
+              pulse_duration = pulse_end - pulse_start             # Calculate duration of the echo pulse
+              distance = pulse_duration * 17150                    # Convert time to distance in cm
+              return round(distance, 2)                            # Return rounded distance
+          
+          def get_average_distance(samples=5, delay=0.05):
+              """Get average of multiple distance readings."""
+              readings = []                                       # List to store valid readings
+              for _ in range(samples):                            # Loop to take multiple readings
+                  dist = get_distance()                           # Take a single measurement
+                  if dist is not None:                            # Only store if valid
+                      readings.append(dist)
+                  time.sleep(delay)                               # Wait briefly between readings
+          
+              if readings:                                        # If we got valid readings
+                  average = round(sum(readings) / len(readings), 2)  # Compute average
+                  return average
+              else:
+                  return None                                     # Return None if all readings failed
+          
+          try:
+              while True:                                         # Main loop
+                  avg_distance = get_average_distance(samples=5)  # Get average distance over 5 samples
+                  if avg_distance is not None:
+                      print(f"Average Distance: {avg_distance} cm")  # Print average distance
+                  else:
+                      print("Failed to read distance")               # Fallback if no valid reading
+                  time.sleep(1)                                     # Delay before next reading
+          
+          except KeyboardInterrupt:
+              print("\nMeasurement stopped by user")               # Graceful shutdown message
+              GPIO.cleanup()                                       # Reset GPIO pins to safe state
+          </code></div>
 
-try:
-    while True:
-        GPIO.output(TRIG, True)
-        time.sleep(0.00001)
-        GPIO.output(TRIG, False)
-        while GPIO.input(ECHO) == 0:
-            pulse_start = time.time()
-        while GPIO.input(ECHO) == 1:
-            pulse_end = time.time()
-        distance = (pulse_end - pulse_start) * 17150
-        print(f"Distance: {distance:.2f} cm")
-        time.sleep(1)
-except:
-    GPIO.cleanup()</code></div>
-        </details>
+        <h4>✅ When to Use Each Version</h4>
+        <ul>
+          <li><strong>Version 1</strong>: For rapid readings, simple debugging, or low-latency needs.</li>
+          <li><strong>Version 2</strong>: For smoother output when sensor noise or jitter is noticeable.</li>
+        </ul>
       </details>
     </section>
 
@@ -111,14 +190,34 @@ except:
           <li>E → GPIO 24</li>
           <li>D4–D7 → GPIO 23, 17, 18, 22</li>
         </ul>
-        <div class="code-block"><code>from RPLCD import CharLCD
-import time
+        <div class="code-block"><code>import time
+import RPi.GPIO as GPIO
+from RPLCD import CharLCD
 
+# GPIO setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+# LCD pin config (using 4-bit mode)
 lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
-              pins_data=[23, 17, 18, 22], numbering_mode='BCM')
+              pins_data=[23, 17, 18, 22],
+              numbering_mode=GPIO.BCM)
 
-lcd.write_string("LCD works!")
-time.sleep(2)</code></div>
+try:
+    lcd.clear()
+    lcd.write_string("LCD is working!")
+    time.sleep(2)
+
+    counter = 0
+    while True:
+        lcd.clear()
+        lcd.write_string(f"Count: {counter}")
+        counter += 1
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    lcd.clear()
+    GPIO.cleanup()</code></div>
       </details>
     </section>
 
@@ -150,13 +249,13 @@ cv2.destroyAllWindows()</code></div>
     <h3>🔌 GPIO Reference</h3>
     <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" />
   </aside>
-  
+
   <section class="qr-section">
     <h3>📱 Quick Access</h3>
     <p>Scan this QR code to return to the LiDAR Car Project website.</p>
     <img src="media/QRcode.jpg" alt="QR code to project website" class="qr-code" />
   </section>
-  
+
   <footer>
     <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
   </footer>
