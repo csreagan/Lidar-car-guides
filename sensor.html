@@ -46,8 +46,7 @@
         <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
         <h4>🔁 Version 1: Single Reading (No Averaging)</h4>
         <div class="code-block">
-          <pre><code>
-import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
+          <pre><code>import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
 import time                  # Import time library for delays and timing
 
 TRIG = 5                     # Define GPIO pin 5 as the trigger pin
@@ -77,12 +76,13 @@ try:
         print(f"Distance: {get_distance()} cm")  # Display measured distance
         time.sleep(1)  # Wait 1 second before the next measurement
 except KeyboardInterrupt:
-    GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting</code></div>
+    GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting
+  </code></pre>
+  </div>
 
         <h4>📊 Version 2: Averaged Readings</h4>
         <div class="code-block">
-        <pre><code>
-          import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
+        <pre><code>import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
           import time                    # Import time module for timing and delays
           
           # GPIO pins (BCM numbering)
@@ -144,10 +144,17 @@ except KeyboardInterrupt:
           except KeyboardInterrupt:
               print("\nMeasurement stopped by user")               # Graceful shutdown message
               GPIO.cleanup()                                       # Reset GPIO pins to safe state
-          </code></div>
+            </code></pre>
+       </div>
       </details>
     </section>
-
+    <h4>✅ When to Use Each Version</h4>
+    <ul>
+      <li><strong>Version 1</strong>: For rapid readings, simple debugging, or low-latency needs.</li>
+      <li><strong>Version 2</strong>: For smoother output when sensor noise or jitter is noticeable.</li>
+    </ul>
+  </details>
+</section>
     <section class="card">
       <details>
         <summary>📺 LCD Display (1602)</summary>
