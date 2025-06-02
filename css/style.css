@@ -266,4 +266,11 @@
     display: block;
     border-radius: 8px;
   }
-  
+  .tip-box {
+    background: #fffbe6;
+    border-left: 6px solid #ffcc00;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+    

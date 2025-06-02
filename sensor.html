@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sensor Setup Guide</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    aside img {
+      width: 100%;
+      max-width: 300px; /* Increase size for better visibility */
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -44,6 +51,39 @@
     <section class="card">
       <details>
         <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
+        <p>
+          The HC-SR04 is an ultrasonic distance sensor that uses sound waves to measure how far away an object is. It works by emitting a very short ultrasonic pulse (at 40 kHz) from its "TRIG" pin, which bounces off nearby objects and returns to the "ECHO" pin. The time it takes for the echo to return is directly proportional to the distance of the object.
+        </p>
+        
+        <p>
+          Internally, it performs what's called "Time of Flight" measurement — it records how long the sound takes to go out, bounce off an object, and come back. This time is then converted into distance using the formula:
+        </p>
+        
+        <div class="code-block"><code>distance (cm) = time (seconds) × 17150</code></div>
+        
+        <ul>
+          <li><strong>TRIG pin</strong> — Sends out a 10µs HIGH pulse to start the measurement.</li>
+          <li><strong>ECHO pin</strong> — Goes HIGH as soon as the echo is detected and LOW when it's done. The time this pin stays HIGH is the duration of the echo travel.</li>
+        </ul>
+        
+        <h4>🧠 When to Use an Ultrasonic Sensor</h4>
+        <p>
+          Ultrasonic sensors are great for non-contact distance measurement in environments where light sensors (like infrared) may fail. They’re commonly used in:
+        </p>
+        <ul>
+          <li>Obstacle detection and avoidance (robots, drones, cars)</li>
+          <li>Distance measurement in automation or industrial settings</li>
+          <li>Liquid level sensing in tanks</li>
+          <li>Basic object detection for prototyping (e.g., motion-triggered lights or counters)</li>
+        </ul>
+        
+        <p>
+          Use the HC-SR04 when you need a cost-effective and reliable way to measure distances between ~2 cm and 400 cm in indoor or semi-controlled environments. It performs best on flat, solid surfaces like walls, doors, or boxes.
+        </p>
+        <p>
+          📄 <a href="https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf" target="_blank">Download HC-SR04 Datasheet (PDF)</a>
+        </p>
+        
         <h4>🔁 Version 1: Single Reading (No Averaging)</h4>
         <div class="code-block">
           <pre><code>import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
@@ -146,14 +186,16 @@ except KeyboardInterrupt:
               GPIO.cleanup()                                       # Reset GPIO pins to safe state
             </code></pre>
        </div>
-      </details>
-    </section>
     <h4>✅ When to Use Each Version</h4>
     <ul>
       <li><strong>Version 1</strong>: For rapid readings, simple debugging, or low-latency needs.</li>
       <li><strong>Version 2</strong>: For smoother output when sensor noise or jitter is noticeable.</li>
     </ul>
   </details>
+  <div class="tip-box">
+    <strong>💡 Tip:</strong> If you consistently get a distance of “0.0 cm” or “None”, double-check the wiring, and ensure the sensor has at least 5V and a good ground.
+  </div>
+  
 </section>
     <section class="card">
       <details>
