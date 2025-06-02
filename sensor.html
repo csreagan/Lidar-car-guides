@@ -47,6 +47,69 @@
         </ul>
       </details>
     </section>
+    <section class="card">
+      <details open>
+        <summary>🍓 Raspberry Pi Setup</summary>
+    
+        <h3>📦 What You Need</h3>
+        <ul>
+          <li>Raspberry Pi 4B (or 3B+)</li>
+          <li>MicroSD Card (16GB or more, Class 10 recommended)</li>
+          <li>MicroSD Card Reader</li>
+          <li>Power Supply (5V 3A)</li>
+          <li>HDMI Monitor, USB Keyboard and Mouse (for first-time setup)</li>
+        </ul>
+    
+        <h3>🖥️ Step 1: Install Raspberry Pi OS</h3>
+        <ol>
+          <li>Download and install <a href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi Imager</a> on your PC.</li>
+          <li>Insert the SD card into your reader.</li>
+          <li>Launch the Imager, select:
+            <ul>
+              <li><strong>OS:</strong> Raspberry Pi OS (32-bit)</li>
+              <li><strong>Storage:</strong> Your SD card</li>
+            </ul>
+          </li>
+          <li>Click "Next", enable SSH (if offered), and set username/password.</li>
+          <li>Click "Write" and wait for it to finish.</li>
+        </ol>
+    
+        <img src="media/imager.jpg" alt="Raspberry Pi Imager setup" />
+    
+        <h3>⚙️ Step 2: First Boot Setup</h3>
+        <ol>
+          <li>Insert SD card into the Pi and power it on.</li>
+          <li>Follow the on-screen wizard to set up Wi-Fi and localization.</li>
+          <li>Open Terminal and run system updates:</li>
+        </ol>
+    
+        <div class="code-block">
+          <pre><code>sudo apt update
+    sudo apt upgrade -y
+    sudo reboot</code></pre>
+        </div>
+    
+        <img src="media/pi-setup.jpg" alt="Raspberry Pi desktop interface" />
+    
+        <h3>🌐 Step 3: Remote Access with Tailscale (Optional)</h3>
+        <p>If you want to access your Pi from any device securely:</p>
+        <ol>
+          <li>Run the following in Terminal:</li>
+        </ol>
+        <div class="code-block">
+          <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
+    sudo tailscale up</code></pre>
+        </div>
+        <p>Log in via browser when prompted. Now you can SSH into the Pi from anywhere on your network.</p>
+    
+        <img src="media/tailscale-login.jpg" alt="Tailscale login browser screen" />
+    
+        <div class="tip-box">
+          <strong>💡 Tip:</strong> You can also use <strong>Raspberry Pi Connect</strong> (in Imager) for browser-based remote access.
+        </div>
+      </details>
+    </section>
+    
 
     <section class="card">
       <details>
@@ -86,7 +149,7 @@
         
         <h4>🔁 Version 1: Single Reading (No Averaging)</h4>
         <div class="code-block">
-          <pre><code>import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
+          <pre><code class="language-python">import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
 import time                  # Import time library for delays and timing
 
 TRIG = 5                     # Define GPIO pin 5 as the trigger pin
