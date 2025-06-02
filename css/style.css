@@ -29,7 +29,7 @@
   
   header {
     background-color: var(--primary-bg);
-    color: var(--text-light);
+    color: var(--text-header-light);
     padding: 1rem;
     text-align: center;
   }
