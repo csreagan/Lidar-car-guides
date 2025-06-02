@@ -29,9 +29,15 @@
   
   header {
     background-color: var(--primary-bg);
-    color: var(--text-header-light);
+    color: var(--header-light);
     padding: 1rem;
     text-align: center;
+  }
+  header h1 {
+    margin: 0;
+    padding-bottom: 0.5rem;
+    color: var(--header-light);
+    text-shadow: 1px 1px 2px #00000088; /* Adds depth */
   }
   
   header h1 {
