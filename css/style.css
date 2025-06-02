@@ -238,4 +238,32 @@
     margin-bottom: 10px;
     color: var(--text-dark);
   }
-    
+  .main-layout {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  main {
+    flex: 3;
+  }
+  
+  .gpio-sidebar {
+    flex: 1;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    background-color: var(--white);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    max-width: 300px;
+  }
+  
+  .gpio-sidebar img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+  

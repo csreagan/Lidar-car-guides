@@ -43,74 +43,42 @@
 
     <section class="card">
       <details>
-        <summary>🛠️ Raspberry Pi OS Setup & Remote Access</summary>
-        <h3>1. Raspberry Pi OS Installation</h3>
-        <ul>
-          <li>Download from <a href="https://www.raspberrypi.com/software" target="_blank">raspberrypi.com/software</a></li>
-          <li>Select Raspberry Pi OS (64-bit), enable SSH, set Wi-Fi credentials.</li>
-          <li>Insert SD card into Pi and boot.</li>
-        </ul>
-        <h3>2. Tailscale VPN Access</h3>
-        <div class="code-block"><code>curl -fsSL https://tailscale.com/install.sh | sh
-sudo tailscale up</code></div>
-        <h3>3. Raspberry Pi Connect</h3>
-        <div class="code-block"><code>sudo apt update
-sudo apt install -y rpi-connect
-rpi-connect enable</code></div>
-      </details>
-    </section>
-
-    <section class="card">
-      <details>
         <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
-        <p>The HC-SR04 sends pulses and times the echo to measure distance:</p>
-        <div class="code-block"><code>distance (cm) = time (s) * 17150</code></div>
-        <ul>
-          <li>VCC → 5V</li>
-          <li>GND → GND</li>
-          <li>TRIG → GPIO 5</li>
-          <li>ECHO → GPIO 6</li>
-        </ul>
-        <div class="code-block"><code>sudo apt install python3-rpi.gpio</code></div>
+        <h4>🔁 Version 1: Single Reading (No Averaging)</h4>
+        <div class="code-block"><code>import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
+import time                  # Import time library for delays and timing
 
-        <h3>🔁 Version 1: Single Reading (No Averaging)</h3>
-        <p>This version takes a single measurement per loop. Use this when you want quick feedback without delay.</p>
-        <div class="code-block"><code>iimport RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
-          import time                  # Import time library for delays and timing
-          
-          TRIG = 5                     # Define GPIO pin 5 as the trigger pin
-          ECHO = 6                     # Define GPIO pin 6 as the echo pin
-          
-          GPIO.setmode(GPIO.BCM)       # Use BCM pin numbering (GPIO numbers instead of board numbers)
-          GPIO.setwarnings(False)      # Disable GPIO warnings (prevents duplicate warning messages)
-          GPIO.setup(TRIG, GPIO.OUT)   # Set TRIG pin as output to send ultrasonic pulse
-          GPIO.setup(ECHO, GPIO.IN)    # Set ECHO pin as input to receive echo signal
-          
-          def get_distance():
-              GPIO.output(TRIG, True)       # Send a high pulse (start signal)
-              time.sleep(0.00001)           # Wait for 10 microseconds (pulse duration)
-              GPIO.output(TRIG, False)      # Turn off the trigger (pulse end)
-          
-              while GPIO.input(ECHO) == 0:  # Wait until echo signal goes high
-                  pulse_start = time.time() # Record the start time
-          
-              while GPIO.input(ECHO) == 1:  # Wait until echo signal goes low
-                  pulse_end = time.time()   # Record the end time
-          
-              # Calculate distance: (time × speed of sound) / 2
-              return round((pulse_end - pulse_start) * 17150, 2)  # Return distance in cm, rounded to 2 decimal places
-          
-          try:
-              while True:  # Infinite loop to continuously measure distance
-                  print(f"Distance: {get_distance()} cm")  # Display measured distance
-                  time.sleep(1)  # Wait 1 second before the next measurement
-          except KeyboardInterrupt:
-              GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting
-          </code></div>
+TRIG = 5                     # Define GPIO pin 5 as the trigger pin
+ECHO = 6                     # Define GPIO pin 6 as the echo pin
 
-        <h3>📊 Version 2: Averaged Readings</h3>
-        <p>This version collects multiple measurements and averages them. Ideal for smoothing out inconsistent readings in noisy environments.</p>
-        <div class="code-block"><code>iimport RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
+GPIO.setmode(GPIO.BCM)       # Use BCM pin numbering (GPIO numbers instead of board numbers)
+GPIO.setwarnings(False)      # Disable GPIO warnings (prevents duplicate warning messages)
+GPIO.setup(TRIG, GPIO.OUT)   # Set TRIG pin as output to send ultrasonic pulse
+GPIO.setup(ECHO, GPIO.IN)    # Set ECHO pin as input to receive echo signal
+
+def get_distance():
+    GPIO.output(TRIG, True)       # Send a high pulse (start signal)
+    time.sleep(0.00001)           # Wait for 10 microseconds (pulse duration)
+    GPIO.output(TRIG, False)      # Turn off the trigger (pulse end)
+
+    while GPIO.input(ECHO) == 0:  # Wait until echo signal goes high
+        pulse_start = time.time() # Record the start time
+
+    while GPIO.input(ECHO) == 1:  # Wait until echo signal goes low
+        pulse_end = time.time()   # Record the end time
+
+    # Calculate distance: (time × speed of sound) / 2
+    return round((pulse_end - pulse_start) * 17150, 2)  # Return distance in cm, rounded to 2 decimal places
+
+try:
+    while True:  # Infinite loop to continuously measure distance
+        print(f"Distance: {get_distance()} cm")  # Display measured distance
+        time.sleep(1)  # Wait 1 second before the next measurement
+except KeyboardInterrupt:
+    GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting</code></div>
+
+        <h4>📊 Version 2: Averaged Readings</h4>
+        <div class="code-block"><code>import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
           import time                    # Import time module for timing and delays
           
           # GPIO pins (BCM numbering)
@@ -173,12 +141,6 @@ rpi-connect enable</code></div>
               print("\nMeasurement stopped by user")               # Graceful shutdown message
               GPIO.cleanup()                                       # Reset GPIO pins to safe state
           </code></div>
-
-        <h4>✅ When to Use Each Version</h4>
-        <ul>
-          <li><strong>Version 1</strong>: For rapid readings, simple debugging, or low-latency needs.</li>
-          <li><strong>Version 2</strong>: For smoother output when sensor noise or jitter is noticeable.</li>
-        </ul>
       </details>
     </section>
 
@@ -245,9 +207,9 @@ cv2.destroyAllWindows()</code></div>
     </section>
   </main>
 
-  <aside>
+  <aside style="position: absolute; right: 10px; top: 100px; width: 220px;">
     <h3>🔌 GPIO Reference</h3>
-    <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" />
+    <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" style="width: 100%; border-radius: 8px;" />
   </aside>
 
   <section class="qr-section">
