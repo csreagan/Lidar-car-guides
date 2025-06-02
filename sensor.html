@@ -45,7 +45,9 @@
       <details>
         <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
         <h4>🔁 Version 1: Single Reading (No Averaging)</h4>
-        <div class="code-block"><code>import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
+        <div class="code-block">
+          <pre><code>
+import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
 import time                  # Import time library for delays and timing
 
 TRIG = 5                     # Define GPIO pin 5 as the trigger pin
@@ -78,7 +80,9 @@ except KeyboardInterrupt:
     GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting</code></div>
 
         <h4>📊 Version 2: Averaged Readings</h4>
-        <div class="code-block"><code>import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
+        <div class="code-block">
+        <pre><code>
+          import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
           import time                    # Import time module for timing and delays
           
           # GPIO pins (BCM numbering)
