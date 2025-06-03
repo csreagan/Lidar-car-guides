@@ -445,6 +445,8 @@ ros2 topic echo /image_raw/compressed</code></pre>
     
 <details>
   <summary>🖥️ Configure Mecanum Drive Node with PS4 Controller</summary>
+<p><strong>How to Set Up a USB Camera on ROS 2 (Logitech Brio 100)</strong><br>
+  This guide will help you install and run a USB camera (like the Logitech Brio 100) using ROS 2 and Ubuntu. We’ll use two nodes: one to publish raw camera frames (<code>/image_raw</code>) and another to publish compressed video (<code>/image_raw/compressed</code>).</p>
 
   <p><strong>Create the package:</strong></p>
   <pre><code>ros2 pkg create --build-type ament_python ps4_mecanum --dependencies rclpy sensor_msgs</code></pre>
