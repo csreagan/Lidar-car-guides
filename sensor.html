@@ -66,7 +66,7 @@
             <li>Insert the SD card into your reader.</li>
             <li>Launch the Imager, select:
               <ul>
-                <li><strong>OS:</strong> Raspberry Pi OS (32-bit)</li>
+                <li><strong>OS:</strong> Raspberry Pi OS (64-bit)</li>
                 <li><strong>Storage:</strong> Your SD card</li>
               </ul>
             </li>
@@ -117,9 +117,8 @@
             <pre><code>sudo apt update
         sudo apt upgrade -y
         sudo reboot</code></pre>
-          </div>
-          <img src="media/pi-setup.jpg" alt="Raspberry Pi desktop interface" />
         </details>
+<<<<<<< HEAD
         
         <details>
           <details open>
@@ -192,155 +191,240 @@
             <p><strong>Pro Tip:</strong> You can use both! Use Connect for quick GUI tweaks, and Tailscale+SSH for serious development work.</p>
           </details>
         </section>
+=======
+          <details>
+              <summary>🔧 Part 3: Remote Access & Development Setup</summary>
+              <details>
+                <summary>📅 Step 1: Download and Install VS Code</summary>
+                <ol>
+                  <li>Go to <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> and download the version for your OS (Windows, macOS, or Linux).</li>
+                  <li>Install it using the standard installer.</li>
+                  <li>Launch VS Code and open the Extensions tab (left sidebar).</li>
+                  <li>Search for and install the extension called <strong>"Remote - SSH"</strong>.</li>
+                </ol>
+              </details>
+              <details>
+                <summary>🌐 Step 2: Set Up Remote Access Options</summary>
+                <h4>🖥️ Option A: Tailscale</h4>
+                <p><strong>Tailscale</strong> is a secure mesh VPN that connects your devices together into a private network using WireGuard.</p>
+          
+                <h5>💻 On Your Computer:</h5>
+                <ol>
+                  <li>Visit <a href="https://tailscale.com/download" target="_blank">tailscale.com/download</a> and install Tailscale.</li>
+                  <li>Sign in using GitHub, Google, or Microsoft account.</li>
+                  <li>Click <strong>"Enable Tailscale"</strong> to activate the virtual network.</li>
+                </ol>
+          
+                <h5>🍓 On Your Raspberry Pi:</h5>
+                <div class="code-block">
+                  <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscale up</code></pre>
+                </div>
+                <p>Log in via browser when prompted. The Pi will appear in your Tailscale dashboard with a private IP (e.g., <code>100.101.102.103</code>).</p>
+          
+                <h4>🌐 Option B: Raspberry Pi Connect</h4>
+                <p><strong>Raspberry Pi Connect</strong> offers browser-based GUI and terminal access. Ideal for light remote control.</p>
+                <ol>
+                  <li>Visit <a href="https://connect.raspberrypi.com/devices" target="_blank">connect.raspberrypi.com/devices</a>.</li>
+                  <li>Log into your Raspberry Pi account.</li>
+                  <li>Register your Pi using Raspberry Pi Imager or by installing the Connect package.</li>
+                  <li>Once linked, you can access your Pi's desktop or terminal directly in your browser.</li>
+                </ol>
+              </details>
+          
+              <details>
+                <summary>🔐 Step 3: Connect via VS Code (SSH)</summary>
+                <ol>
+                  <li>In VS Code, press <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>.</li>
+                  <li>Select <strong>Remote-SSH: Connect to Host</strong>.</li>
+                  <li>Enter the Pi's Tailscale IP like:
+                    <div class="code-block"><code>pi@100.101.102.103</code></div>
+                  </li>
+                  <li>Authenticate with your Pi's password.</li>
+                  <li>You're now working directly on the Pi through VS Code with full file system access.</li>
+                </ol>
+          
+                <h3>🤺 Which Should You Use?</h3>
+                <div class="tip-box">
+                  <strong>🔧 Use VS Code with Tailscale if you:</strong>
+                  <ul>
+                    <li>Need to write or edit code (Python, HTML, etc.)</li>
+                    <li>Want terminal + Git + live development tools</li>
+                    <li>Prefer using an IDE over a browser</li>
+                  </ul>
+                </div>
+                <div class="tip-box">
+                  <strong>🌐 Use Raspberry Pi Connect if you:</strong>
+                  <ul>
+                    <li>Need quick GUI access from any device</li>
+                    <li>Don't want to install VS Code or set up SSH</li>
+                    <li>Are supporting users who just need to check or reboot the Pi remotely</li>
+                  </ul>
+                </div>
+                <p><strong>Pro Tip:</strong> You can use both! Use Connect for quick GUI tweaks, and Tailscale+SSH for serious development work.</p>
+              </details>
+            </details>
+          </section>
+    
+>>>>>>> origin/main
 
-    <section class="card">
-      <details>
-        <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
-        <p>
-          The HC-SR04 is an ultrasonic distance sensor that uses sound waves to measure how far away an object is. It works by emitting a very short ultrasonic pulse (at 40 kHz) from its "TRIG" pin, which bounces off nearby objects and returns to the "ECHO" pin. The time it takes for the echo to return is directly proportional to the distance of the object.
-        </p>
-        
-        <p>
-          Internally, it performs what's called "Time of Flight" measurement — it records how long the sound takes to go out, bounce off an object, and come back. This time is then converted into distance using the formula:
-        </p>
-        
-        <div class="code-block"><code>distance (cm) = time (seconds) × 17150</code></div>
-        
-        <ul>
-          <li><strong>TRIG pin</strong> — Sends out a 10µs HIGH pulse to start the measurement.</li>
-          <li><strong>ECHO pin</strong> — Goes HIGH as soon as the echo is detected and LOW when it's done. The time this pin stays HIGH is the duration of the echo travel.</li>
-        </ul>
-        
-        <h4>🧠 When to Use an Ultrasonic Sensor</h4>
-        <p>
-          Ultrasonic sensors are great for non-contact distance measurement in environments where light sensors (like infrared) may fail. They’re commonly used in:
-        </p>
-        <ul>
-          <li>Obstacle detection and avoidance (robots, drones, cars)</li>
-          <li>Distance measurement in automation or industrial settings</li>
-          <li>Liquid level sensing in tanks</li>
-          <li>Basic object detection for prototyping (e.g., motion-triggered lights or counters)</li>
-        </ul>
-        
-        <p>
-          Use the HC-SR04 when you need a cost-effective and reliable way to measure distances between ~2 cm and 400 cm in indoor or semi-controlled environments. It performs best on flat, solid surfaces like walls, doors, or boxes.
-        </p>
-        <p>
-          📄 <a href="https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf" target="_blank">Download HC-SR04 Datasheet (PDF)</a>
-        </p>
-        
-        <h4>🔁 Version 1: Single Reading (No Averaging)</h4>
-        <div class="code-block">
-          <pre><code class="language-python">import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
-import time                  # Import time library for delays and timing
+          <section class="card">
+            <details>
+              <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
+          
+              <p>
+                The HC-SR04 is an ultrasonic distance sensor that uses sound waves to measure distance. It sends a 40 kHz pulse via the TRIG pin and listens for the echo using the ECHO pin.
+              </p>
+          
+              <p>
+                Distance is computed using the time delay of the echo using:
+              </p>
+              <div class="code-block"><code>distance (cm) = time (seconds) × 17150</code></div>
+          
+              <ul>
+                <li><strong>TRIG:</strong> Sends 10μs pulse to start measurement</li>
+                <li><strong>ECHO:</strong> Returns HIGH for the time it takes the sound to bounce back</li>
+              </ul>
+          
+              <h4>📉 Voltage Divider Requirement</h4>
+              <div class="tip-box">
+                <strong>Why a Voltage Divider?</strong><br>
+                The HC-SR04’s <strong>ECHO</strong> pin outputs 5V, but the Raspberry Pi GPIO expects 3.3V max.<br>
+                A voltage divider with two resistors safely drops the 5V to ~3.3V to protect the Pi.
+              </div>
+          
+              <p><strong>Voltage Divider Formula:</strong></p>
+              <div class="code-block"><code>Vout = Vin × (R2 / (R1 + R2))</code></div>
+              <ul>
+                <li><strong>Vin</strong> = 5V (ECHO signal)</li>
+                <li><strong>R1</strong> = 2kΩ (connected between ECHO and Pi input)</li>
+                <li><strong>R2</strong> = 1kΩ (connected between Pi input and GND)</li>
+              </ul>
+              <p>
+                <strong>Calculation:</strong><br>
+                Vout = 5V × (1k / (2k + 1k)) = 5V × (1/3) ≈ 1.67V
+              </p>
+              <p>
+                This math is backwards. To get 3.3V from 5V:<br>
+                Use R1 = 1kΩ, R2 = 2kΩ → Vout = 5V × (2 / (1 + 2)) = 5V × 0.666 = 3.33V ✅
+              </p>
+          
+              <details>
+                <summary>🧰 Breadboard Wiring Example</summary>
+                <div style="text-align: center;">
+                  <img src="media/ultrasonic-breadboard.png" alt="Ultrasonic sensor with voltage divider on breadboard" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
+                </div>
+                </details>
+                <details>
 
-TRIG = 5                     # Define GPIO pin 5 as the trigger pin
-ECHO = 6                     # Define GPIO pin 6 as the echo pin
-
-GPIO.setmode(GPIO.BCM)       # Use BCM pin numbering (GPIO numbers instead of board numbers)
-GPIO.setwarnings(False)      # Disable GPIO warnings (prevents duplicate warning messages)
-GPIO.setup(TRIG, GPIO.OUT)   # Set TRIG pin as output to send ultrasonic pulse
-GPIO.setup(ECHO, GPIO.IN)    # Set ECHO pin as input to receive echo signal
-
-def get_distance():
-    GPIO.output(TRIG, True)       # Send a high pulse (start signal)
-    time.sleep(0.00001)           # Wait for 10 microseconds (pulse duration)
-    GPIO.output(TRIG, False)      # Turn off the trigger (pulse end)
-
-    while GPIO.input(ECHO) == 0:  # Wait until echo signal goes high
-        pulse_start = time.time() # Record the start time
-
-    while GPIO.input(ECHO) == 1:  # Wait until echo signal goes low
-        pulse_end = time.time()   # Record the end time
-
-    # Calculate distance: (time × speed of sound) / 2
-    return round((pulse_end - pulse_start) * 17150, 2)  # Return distance in cm, rounded to 2 decimal places
-
-try:
-    while True:  # Infinite loop to continuously measure distance
-        print(f"Distance: {get_distance()} cm")  # Display measured distance
-        time.sleep(1)  # Wait 1 second before the next measurement
-except KeyboardInterrupt:
-    GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting
-  </code></pre>
-  </div>
-
-        <h4>📊 Version 2: Averaged Readings</h4>
-        <div class="code-block">
-        <pre><code>import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
-          import time                    # Import time module for timing and delays
+                  <summary>🔁 Version 1: Single Reading (No Averaging)</summary>
+                  <div class="code-block">
+                    <pre><code class="language-python">import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
+                import time                  # Import time library for delays and timing
+                
+                TRIG = 5                     # Define GPIO pin 5 as the trigger pin
+                ECHO = 6                     # Define GPIO pin 6 as the echo pin
+                
+                GPIO.setmode(GPIO.BCM)       # Use BCM pin numbering (GPIO numbers instead of board numbers)
+                GPIO.setwarnings(False)      # Disable GPIO warnings (prevents duplicate warning messages)
+                GPIO.setup(TRIG, GPIO.OUT)   # Set TRIG pin as output to send ultrasonic pulse
+                GPIO.setup(ECHO, GPIO.IN)    # Set ECHO pin as input to receive echo signal
+                
+                def get_distance():
+                    GPIO.output(TRIG, True)       # Send a high pulse (start signal)
+                    time.sleep(0.00001)           # Wait for 10 microseconds (pulse duration)
+                    GPIO.output(TRIG, False)      # Turn off the trigger (pulse end)
+                
+                    while GPIO.input(ECHO) == 0:  # Wait until echo signal goes high
+                        pulse_start = time.time() # Record the start time
+                
+                    while GPIO.input(ECHO) == 1:  # Wait until echo signal goes low
+                        pulse_end = time.time()   # Record the end time
+                
+                    # Calculate distance: (time × speed of sound) / 2
+                    return round((pulse_end - pulse_start) * 17150, 2)  # Return distance in cm, rounded to 2 decimal places
+                
+                try:
+                    while True:  # Infinite loop to continuously measure distance
+                        print(f"Distance: {get_distance()} cm")  # Display measured distance
+                        time.sleep(1)  # Wait 1 second before the next measurement
+                except KeyboardInterrupt:
+                    GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting</code></pre>
+                  </div>
+                </details>
+                
+                <details>
+                  <summary>📊 Version 2: Averaged Readings</summary>
+                  <div class="code-block">
+                    <pre><code class="language-python">import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
+                import time                    # Import time module for timing and delays
+                
+                # GPIO pins (BCM numbering)
+                TRIG = 23                      # TRIG pin connected to GPIO 23
+                ECHO = 24                      # ECHO pin connected to GPIO 24
+                
+                # Setup
+                GPIO.setmode(GPIO.BCM)         # Use Broadcom (BCM) pin numbering
+                GPIO.setwarnings(False)        # Disable GPIO warnings
+                GPIO.setup(TRIG, GPIO.OUT)     # Set TRIG pin as an output
+                GPIO.setup(ECHO, GPIO.IN)      # Set ECHO pin as an input
+                
+                def get_distance():
+                    """Get a single distance measurement from the ultrasonic sensor."""
+                    GPIO.output(TRIG, True)           # Send HIGH pulse to trigger the sensor
+                    time.sleep(0.00001)               # Wait 10 microseconds
+                    GPIO.output(TRIG, False)          # Set TRIG to LOW
+                
+                    timeout = time.time() + 1         # Timeout to prevent getting stuck in loop
+                    while GPIO.input(ECHO) == 0:      # Wait for ECHO to go HIGH
+                        if time.time() > timeout:     # Exit if timeout is reached
+                            return None
+                    pulse_start = time.time()         # Record start time of echo pulse
+                
+                    timeout = time.time() + 1         # Reset timeout
+                    while GPIO.input(ECHO) == 1:      # Wait for ECHO to go LOW
+                        if time.time() > timeout:     # Exit if timeout is reached
+                            return None
+                    pulse_end = time.time()           # Record end time of echo pulse
+                
+                    pulse_duration = pulse_end - pulse_start             # Calculate duration of the echo pulse
+                    distance = pulse_duration * 17150                    # Convert time to distance in cm
+                    return round(distance, 2)                            # Return rounded distance
+                
+                def get_average_distance(samples=5, delay=0.05):
+                    """Get average of multiple distance readings."""
+                    readings = []                                       # List to store valid readings
+                    for _ in range(samples):                            # Loop to take multiple readings
+                        dist = get_distance()                           # Take a single measurement
+                        if dist is not None:                            # Only store if valid
+                            readings.append(dist)
+                        time.sleep(delay)                               # Wait briefly between readings
+                
+                    if readings:                                        # If we got valid readings
+                        average = round(sum(readings) / len(readings), 2)  # Compute average
+                        return average
+                    else:
+                        return None                                     # Return None if all readings failed
+                
+                try:
+                    while True:                                         # Main loop
+                        avg_distance = get_average_distance(samples=5)  # Get average distance over 5 samples
+                        if avg_distance is not None:
+                            print(f"Average Distance: {avg_distance} cm")  # Print average distance
+                        else:
+                            print("Failed to read distance")               # Fallback if no valid reading
+                        time.sleep(1)                                     # Delay before next reading
+                
+                except KeyboardInterrupt:
+                    print("\nMeasurement stopped by user")               # Graceful shutdown message
+                    GPIO.cleanup()                                       # Reset GPIO pins to safe state</code></pre>
+                  </div>
+                </details>
+            <div class="tip-box">
+              <strong>💡 Tip:</strong> If you’re getting “0.0 cm” or “None”, double-check wiring and power — make sure VCC is 5V and GND is solid.
+            </div>
+          </section>
           
-          # GPIO pins (BCM numbering)
-          TRIG = 23                      # TRIG pin connected to GPIO 23
-          ECHO = 24                      # ECHO pin connected to GPIO 24
-          
-          # Setup
-          GPIO.setmode(GPIO.BCM)         # Use Broadcom (BCM) pin numbering
-          GPIO.setwarnings(False)        # Disable GPIO warnings
-          GPIO.setup(TRIG, GPIO.OUT)     # Set TRIG pin as an output
-          GPIO.setup(ECHO, GPIO.IN)      # Set ECHO pin as an input
-          
-          def get_distance():
-              """Get a single distance measurement from the ultrasonic sensor."""
-              GPIO.output(TRIG, True)           # Send HIGH pulse to trigger the sensor
-              time.sleep(0.00001)               # Wait 10 microseconds
-              GPIO.output(TRIG, False)          # Set TRIG to LOW
-          
-              timeout = time.time() + 1         # Timeout to prevent getting stuck in loop
-              while GPIO.input(ECHO) == 0:      # Wait for ECHO to go HIGH
-                  if time.time() > timeout:     # Exit if timeout is reached
-                      return None
-              pulse_start = time.time()         # Record start time of echo pulse
-          
-              timeout = time.time() + 1         # Reset timeout
-              while GPIO.input(ECHO) == 1:      # Wait for ECHO to go LOW
-                  if time.time() > timeout:     # Exit if timeout is reached
-                      return None
-              pulse_end = time.time()           # Record end time of echo pulse
-          
-              pulse_duration = pulse_end - pulse_start             # Calculate duration of the echo pulse
-              distance = pulse_duration * 17150                    # Convert time to distance in cm
-              return round(distance, 2)                            # Return rounded distance
-          
-          def get_average_distance(samples=5, delay=0.05):
-              """Get average of multiple distance readings."""
-              readings = []                                       # List to store valid readings
-              for _ in range(samples):                            # Loop to take multiple readings
-                  dist = get_distance()                           # Take a single measurement
-                  if dist is not None:                            # Only store if valid
-                      readings.append(dist)
-                  time.sleep(delay)                               # Wait briefly between readings
-          
-              if readings:                                        # If we got valid readings
-                  average = round(sum(readings) / len(readings), 2)  # Compute average
-                  return average
-              else:
-                  return None                                     # Return None if all readings failed
-          
-          try:
-              while True:                                         # Main loop
-                  avg_distance = get_average_distance(samples=5)  # Get average distance over 5 samples
-                  if avg_distance is not None:
-                      print(f"Average Distance: {avg_distance} cm")  # Print average distance
-                  else:
-                      print("Failed to read distance")               # Fallback if no valid reading
-                  time.sleep(1)                                     # Delay before next reading
-          
-          except KeyboardInterrupt:
-              print("\nMeasurement stopped by user")               # Graceful shutdown message
-              GPIO.cleanup()                                       # Reset GPIO pins to safe state
-            </code></pre>
-       </div>
-    <h4>✅ When to Use Each Version</h4>
-    <ul>
-      <li><strong>Version 1</strong>: For rapid readings, simple debugging, or low-latency needs.</li>
-      <li><strong>Version 2</strong>: For smoother output when sensor noise or jitter is noticeable.</li>
-    </ul>
-  </details>
-  <div class="tip-box">
-    <strong>💡 Tip:</strong> If you consistently get a distance of “0.0 cm” or “None”, double-check the wiring, and ensure the sensor has at least 5V and a good ground.
-  </div>
-  
 </section>
     <section class="card">
       <details>

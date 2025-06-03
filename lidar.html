@@ -18,113 +18,399 @@
     <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   </header>
 
-  <main>
-    <section class="card">
+      <section class="card">
+      <details>
+        <summary>OS Setup</summary>
+    
+        <h3>📦 Requirements</h3>
+        <ul>
+          <li>Raspberry Pi 4B (or 3B+)</li>
+          <li>MicroSD Card (32GB or more, Class 10 recommended)</li>
+          <li>MicroSD Card Reader</li>
+          <li>Power Supply (5V 3A)</li>
+          <li>HDMI Monitor, USB Keyboard and Mouse (for first-time setup)</li>
+        </ul>
+    
         <details>
-          <summary>🧠 Raspberry Pi 3+ ROS 2: Full Setup</summary>
-          <ol>
-            <li>Flash Ubuntu 22.04 to SD</li>
-            <li>Enable SSH, Wi-Fi, boot the Pi</li>
-            <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
-            <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
-            <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
-            <li>Install ROS 2 Humble, source in bashrc</li>
-            <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
-            <li>Install `colcon`, `joy`, `rpi.gpio`</li>
-            <li>Create mecanum drive package</li>
-            <li>Pair PS4 controller with `bluetoothctl`</li>
-            <li>Headless HDMI settings for Pi</li>
-          </ol>
-        </details>
-      </section>
+  <summary>🖥️ Step 1: Installing Ubuntu</summary>
 
-  <main>
-    <section class="card">
-        <details>
-          <summary>🧠 Raspberry Pi 1+ ROS 2: Full Setup</summary>
-          <ol>
-            <li>Flash Ubuntu 22.04 to SD</li>
-            <li>Enable SSH, Wi-Fi, boot the Pi</li>
-            <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
-            <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
-            <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
-            <li>Install ROS 2 Humble, source in bashrc</li>
-            <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
-            <li>Install `colcon`, `joy`, `rpi.gpio`</li>
-            <li>Create mecanum drive package</li>
-            <li>Pair PS4 controller with `bluetoothctl`</li>
-            <li>Headless HDMI settings for Pi</li>
-          </ol>
-        </details>
-      </section>
+  <p>This guide covers the complete setup process for your Raspberry Pi 4B (8GB), including Ubuntu installation, GUI, and VNC configuration.</p>
 
-        <main>
-    <section class="card">
-        <details>
-          <summary>🧠 Raspberry Pi 2+ ROS 2: Full Setup</summary>
-          <ol>
-            <li>Flash Ubuntu 22.04 to SD</li>
-            <li>Enable SSH, Wi-Fi, boot the Pi</li>
-            <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
-            <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
-            <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
-            <li>Install ROS 2 Humble, source in bashrc</li>
-            <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
-            <li>Install `colcon`, `joy`, `rpi.gpio`</li>
-            <li>Create mecanum drive package</li>
-            <li>Pair PS4 controller with `bluetoothctl`</li>
-            <li>Headless HDMI settings for Pi</li>
-          </ol>
-        </details>
-      </section>
+  <h4>1. Ubuntu 22.04.2 LTS Installation</h4>
+  <p>✅ Works with ROS2</p>
+
+  <p>🔽 Download Raspberry Pi Imager from:</p>
+  <pre><code>https://www.raspberrypi.com/software/</code></pre>
+
+  <p>⚡ Use it to flash the image to a 32GB+ microSD card:</p>
+  <pre><code>Choose OS → Other general-purpose OS → Ubuntu → Ubuntu Server 22.04.2 LTS (64-bit)</code></pre>
+
+  <p>📁 Choose your storage location and click <strong>Write</strong>.</p>
+  <p>📶 Optionally configure Wi-Fi by editing:</p>
+  <pre><code>network-config</code></pre>
+
+  <p>🔌 Insert the microSD into your Pi, power it on, and make sure it’s connected to a monitor to boot properly.</p>
+
+  <h4>2. System Update and GUI Installation</h4>
+  <p>🎨 GUI = graphical user interface</p>
+
+  <p>📦 Run system update:</p>
+  <pre><code>sudo apt update && sudo apt upgrade -y</code></pre>
+
+  <p>🔄 If prompted to update the kernel, choose 'yes' and keep default selections.</p>
+
+  <p>🧰 Install XFCE and LightDM:</p>
+  <pre><code>sudo apt install xfce4 lightdm -y</code></pre>
+
+  <p>🔁 Reboot:</p>
+  <pre><code>sudo reboot</code></pre>
+
+</details>
+
+        
+  <details>
+  <summary>⚙️ ROS 2 Setup</summary>
+
+  <h4>5. Install ROS 2 Humble</h4>
+  <p>ROS 2 Humble was chosen because it's a dedicated operating system framework designed for robotic control and communication.</p>
+
+  <p>🔄 Update the system and configure locale:</p>
+  <pre><code>sudo apt update && sudo apt upgrade -y
+sudo apt install locales -y
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8</code></pre>
+
+  <p>🌐 Add ROS 2 sources and install:</p>
+  <pre><code>sudo apt install curl gnupg lsb-release -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg</code></pre>
+
+  <p>📄 Add source list:</p>
+  <pre><code>echo "deb [signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null</code></pre>
+
+  <p>📦 Update again and install ROS 2 Humble Desktop:</p>
+  <pre><code>sudo apt update
+sudo apt install ros-humble-desktop -y</code></pre>
+
+  <p>🔁 Source ROS in your shell:</p>
+  <pre><code>echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+source ~/.bashrc</code></pre>
+
+  <p>🧪 Test installation:</p>
+  <pre><code>ros2 run demo_nodes_cpp talker</code></pre>
+
+  <p><em>(If the installation went correctly, you should see ROS output messages in the terminal.)</em></p>
+</details>
+
+
+
+<details>
+  <summary>⚙️ Creating ROS2 Environment</summary>
+
+  <p><strong>Create ROS 2 Workspace</strong></p>
+  <p>ROS 2 workspace serves as a dedicated directory for organizing and developing your robot’s software.</p>
+
+  <p>📦 Install colcon:</p>
+  <pre><code>sudo apt install python3-colcon-common-extensions -y</code></pre>
+  <!-- [Insert Screenshot] -->
+
+  <p>📁 Create and build workspace:</p>
+  <pre><code>mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+colcon build
+source install/setup.bash</code></pre>
+
+</details>
+
+
+          <details>
+              <summary>🔧 Part 3: Remote Access & Development Setup</summary>
+              <details>
+                <summary>📅 Step 1: Download and Install VS Code</summary>
+                <ol>
+                  <li>Go to <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> and download the version for your OS (Windows, macOS, or Linux).</li>
+                  <li>Install it using the standard installer.</li>
+                  <li>Launch VS Code and open the Extensions tab (left sidebar).</li>
+                  <li>Search for and install the extension called <strong>"Remote - SSH"</strong>.</li>
+                </ol>
+              </details>
+              <details>
+                <summary>🌐 Step 2: Set Up Remote Access Options</summary>
+                <h4>🖥️ Option A: Tailscale</h4>
+                <p><strong>Tailscale</strong> is a secure mesh VPN that connects your devices together into a private network using WireGuard.</p>
+          
+                <h5>💻 On Your Computer:</h5>
+                <ol>
+                  <li>Visit <a href="https://tailscale.com/download" target="_blank">tailscale.com/download</a> and install Tailscale.</li>
+                  <li>Sign in using GitHub, Google, or Microsoft account.</li>
+                  <li>Click <strong>"Enable Tailscale"</strong> to activate the virtual network.</li>
+                </ol>
+          
+                <h5>🍓 On Your Raspberry Pi:</h5>
+                <div class="code-block">
+                  <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscale up</code></pre>
+                </div>
+                <p>Log in via browser when prompted. The Pi will appear in your Tailscale dashboard with a private IP (e.g., <code>100.101.102.103</code>).</p>
+          
+                <h4>🌐 Option B: Setup VNC</h4>
+                <p><strong>VNC</strong> (Virtual Network Computing) is a remote desktop-sharing system that lets you control your Raspberry Pi's GUI from another device over a network.</p>
+                <ol>
+                  <li>Install VNC:
+                    <pre><code>sudo apt install x11vnc -y</code></pre>
+                   <!-- [Insert Screenshot] -->
+                  </li>
+
+                  <li>Optional: Set up auto-login:
+                    <pre><code>sudo nano /etc/lightdm/lightdm.conf</code></pre>
+                   Paste the following (replace <code>ubuntu</code> with your username):
+                   <pre><code>[Seat:*]
+                autologin-user=ubuntu
+                autologin-user-timeout=0
+                user-session=ubuntu
+                greeter-session=lightdm-gtk-greeter</code></pre>
+                    Save with <code>Ctrl+O</code>, <code>Enter</code>, then <code>Ctrl+X</code>.
+                   <!-- [Insert Screenshot] -->
+                 </li>
+
+                  <li>Start the VNC server:
+                   <pre><code>x11vnc -usepw -forever -display :0</code></pre>
+                   <!-- [Insert Screenshot] -->
+                  </li>
+
+                  <li>Connect from another device on the same Wi-Fi using the Pi’s IP address.
+                    <br>You can get it with:
+                    <pre><code>hostname -I</code></pre>
+                   You may need to add <code>:5900</code> or <code>:5901</code> to the IP.
+                   <br>If using a mobile hotspot, check the hotspot device list to find the Pi’s IP.
+                 </li>
+                </ol>
+              </details>
+          
+              <details>
+                <summary>🔐 Step 3: Connect via VS Code (SSH)</summary>
+                <ol>
+                  <li>In VS Code, press <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>.</li>
+                  <li>Select <strong>Remote-SSH: Connect to Host</strong>.</li>
+                  <li>Enter the Pi's Tailscale IP like:
+                    <div class="code-block"><code>pi@100.101.102.103</code></div>
+                  </li>
+                  <li>Authenticate with your Pi's password.</li>
+                  <li>You're now working directly on the Pi through VS Code with full file system access.</li>
+                </ol>
+          
+                <h3>🤺 Which Should You Use?</h3>
+                <div class="tip-box">
+                  <strong>🔧 Use VS Code with Tailscale if you:</strong>
+                  <ul>
+                    <li>Need to write or edit code (Python, HTML, etc.)</li>
+                    <li>Want terminal + Git + live development tools</li>
+                    <li>Prefer using an IDE over a browser</li>
+                  </ul>
+                </div>
+                <div class="tip-box">
+                  <strong>🌐 Use VNC if you:</strong>
+                  <ul>
+                    <li>You need full access to the Raspberry Pi desktop environment remotely.</li>
+                    <li>You want to interact with GUI apps as if sitting at the Pi.</li>
+                    <li>You're on the same local Wi-Fi network or know your Pi’s IP address.</li>
+                    <li>You prefer an open-source, customizable remote desktop solution.</li>
+
+                  </ul>
+                </div>
+                <p><strong>Pro Tip:</strong> You can use both! Use VNC for quick GUI tweaks, and Tailscale+SSH for serious development work.</p>
+              </details>
+            </section>
+
 
     <section class="card">
       <details>
-        <summary>📷 USB Camera Setup on ROS 2.0</summary>
-        <p>This guide will help you install and run a USB camera (like the Logitech Brio 100) using ROS 2 and Ubuntu.</p>
-        <ol>
-          <li><b>Plug in the USB Camera:</b><br>Check with <code>ls /dev/video*</code></li>
-          <li><b>Install ROS 2 Camera Packages:</b><br><code>sudo apt update</code><br><code>sudo apt install ros-humble-image-tools ros-humble-v4l2-camera</code></li>
-          <li><b>Launch Raw Image Publisher:</b><br><code>ros2 run v4l2_camera v4l2_camera_node</code></li>
-          <li><b>Check Topic:</b><br><code>ros2 topic list</code></li>
-          <li><b>Launch Compressed Publisher:</b><br><code>ros2 run image_transport republish raw in:=/image_raw compressed:=/image_raw/compressed</code></li>
-          <li><b>View Output:</b><br><code>ros2 topic echo /image_raw</code></li>
-          <li><b>View in RViz2:</b>
-            <ul>
-              <li><code>rviz2</code></li>
-              <li>Add <i>Image</i> display. Set topic to <code>/image_raw</code>.</li>
-            </ul>
-          </li>
-          <li><b>Install RViz2 if missing:</b><br><code>sudo apt install ros-humble-rviz2</code></li>
-          <li><b>Fix Permissions:</b><br><code>sudo chmod 777 /dev/video0</code></li>
-        </ol>
-      </details>
-    </section>
+        <summary>USB Camera & Lidar Setup</summary>
+    
+        <h3>📦 What You Need</h3>
+        <ul>
+          <li>Raspberry Pi 4B (or 3B+)</li>
+          <li>Flashed MicroSD card with Ubuntu and Ros2</li>
+          <li>Power Supply (5V 3A)</li>
+          <li>RP LiDAR C1</li>
+          <li>HDMI Monitor, USB Keyboard and Mouse OR SSH & VNC</li>
+        </ul>
+<details>
+  <summary>🖥️ Setup RP Lidar C1</summary>
 
-    <section class="card">
-      <details>
-        <summary>🛰️ What is LiDAR?</summary>
-        <p>LiDAR uses lasers to measure the distance of objects, like a radar but with light. It lets robots "see" walls, furniture, and people by detecting reflections of light pulses.</p>
-      </details>
-    </section>
+  <p><strong>What is LiDAR?</strong></p>
+  <p>
+    LiDAR stands for Light Detection and Ranging. It’s a special kind of sensor that uses laser beams to measure how far things are around it.
+    You can think of it like a superhero’s radar—it spins and shoots out tiny lasers, then checks how long it takes for them to bounce back.
+    That’s how it knows where walls, chairs, or even people are! Robots use LiDAR to “see” and move around safely without bumping into things.
+  </p>
 
-    <section class="card">
-      <details>
-        <summary>🌀 How to Set Up RPLIDAR C1 on ROS 2</summary>
-        <ol>
-          <li>Source environment:<br><code>source /opt/ros/humble/setup.bash</code></li>
-          <li>Create workspace:<br><code>mkdir -p ~/ws_lidar/src</code></li>
-          <li>Clone repo:<br><code>git clone https://github.com/Slamtec/sllidar_ros2.git</code></li>
-          <li>Build:<br><code>cd ~/ws_lidar && colcon build --symlink-install</code></li>
-          <li>Source overlay:<br><code>source install/setup.bash</code></li>
-          <li>Connect USB, check:<br><code>ls -la /dev | grep USB</code></li>
-          <li>Grant permissions:<br><code>sudo chmod 777 /dev/ttyUSB0</code></li>
-          <li>Launch:<br><code>ros2 launch sllidar_ros2 view_sllidar_c1_launch.py</code></li>
-          <li>Open RViz2:<br><code>rviz2</code></li>
-          <li>Set display: <code>Add → LaserScan</code>, topic: <code>/scan</code>, frame: <code>laser</code></li>
-        </ol>
-      </details>
-    </section>
+  <p><strong>How to Set Up RPLIDAR C1 on ROS 2 (Ubuntu)</strong><br>
+  Let’s install the LiDAR on a Raspberry Pi running Ubuntu and ROS 2 Humble. Follow these simple steps:</p>
+
+  <p><strong>Step 1: Set up your ROS 2 environment</strong></p>
+  <pre><code>source /opt/ros/humble/setup.bash</code></pre>
+
+  <p><strong>Step 2: Create a new workspace folder</strong><br>This is where you’ll store your LiDAR files:</p>
+  <pre><code>cd ~
+mkdir -p ~/ws_lidar/src
+cd ~/ws_lidar/src</code></pre>
+
+  <p><strong>Step 3: Download the LiDAR software</strong></p>
+  <pre><code>git clone https://github.com/Slamtec/sllidar_ros2.git</code></pre>
+
+  <p><strong>Step 4: Check if the folder was downloaded</strong></p>
+  <pre><code>ls -la</code></pre>
+  <p>You should see a folder named <code>sllidar_ros2</code>.</p>
+
+  <p><strong>Step 5: Build the workspace</strong></p>
+  <pre><code>cd ~/ws_lidar/
+colcon build --symlink-install</code></pre>
+  <p>If you see warnings (stderr), don’t worry! They're just messages—not errors.</p>
+
+  <p><strong>Step 6: Check if the build worked</strong></p>
+  <pre><code>ls -la</code></pre>
+  <p>Look for: <code>build</code>, <code>install</code>, <code>log</code>, and <code>src</code></p>
+
+  <p><strong>Step 7: Tell your system about the new software</strong></p>
+  <pre><code>source ~/ws_lidar/install/setup.bash</code></pre>
+
+  <p><strong>Step 8: Plug in your RPLIDAR via USB</strong></p>
+  <pre><code>ls -la /dev | grep USB</code></pre>
+  <p>Look for something like:</p>
+  <pre><code>crw-rw---- 1 root dialout ... ttyUSB0</code></pre>
+
+  <p><strong>Step 9: Give permission to access the LiDAR</strong></p>
+  <pre><code>sudo chmod 777 /dev/ttyUSB0</code></pre>
+  <p>Double check:</p>
+  <pre><code>ls -la /dev | grep USB</code></pre>
+  <p>Now it should say:</p>
+  <pre><code>crwxrwxrwx ...</code></pre>
+
+  <p><strong>Step 10: Launch the LiDAR!</strong></p>
+  <pre><code>ros2 launch sllidar_ros2 view_sllidar_c1_launch.py</code></pre>
+
+  <p><strong>Step 11: Open RViz2 to See the LiDAR Scan</strong></p>
+  <pre><code>rviz2</code></pre>
+  <p>RViz2 is like the robot’s eyes! It shows a live 2D scan of what the LiDAR "sees" around it.</p>
+
+  <p><strong>Step 12: Set the RViz2 Display Settings</strong><br>Once RViz2 opens, follow these steps:</p>
+  <ol>
+    <li>On the left panel, click <code>Add</code> → choose <code>LaserScan</code>.</li>
+    <li>Set the LaserScan Topic to: <code>/scan</code></li>
+    <li>Set the Fixed Frame (top left dropdown) to: <code>laser</code></li>
+  </ol>
+  <p>Now you should start seeing dots or lines representing objects around the LiDAR!</p>
+
+  <p><strong>Step 13: What if RViz2 is not installed?</strong><br>If your terminal says:</p>
+  <pre><code>Command 'rviz2' not found</code></pre>
+  <p>Then install it using this command:</p>
+  <pre><code>sudo apt update
+sudo apt install ros-humble-rviz2</code></pre>
+  <p>Once installed, try again:</p>
+  <pre><code>rviz2</code></pre>
+</details>
+
+        
+        <details>
+  <summary>⚙️ Logitech Brio 100 USB Camera Setup</summary>
+
+  <p><strong>How to Set Up a USB Camera on ROS 2 (Logitech Brio 100)</strong><br>
+  This guide will help you install and run a USB camera (like the Logitech Brio 100) using ROS 2 and Ubuntu. We’ll use two nodes: one to publish raw camera frames (<code>/image_raw</code>) and another to publish compressed video (<code>/image_raw/compressed</code>).</p>
+
+  <p><strong>Step 1: Plug in the USB Camera</strong><br>
+  Connect your USB camera (e.g., Logitech Brio 100) to the Raspberry Pi or your PC using a USB port.<br>
+  You can check if it’s connected by running:</p>
+  <pre><code>ls /dev/video*</code></pre>
+  <p>If you see <code>/dev/video0</code>, the camera is detected.</p>
+
+  <p><strong>Step 2: Install ROS 2 Camera Packages</strong><br>
+  Make sure these packages are installed:</p>
+  <pre><code>sudo apt update
+sudo apt install ros-humble-image-tools ros-humble-v4l2-camera</code></pre>
+
+  <p><strong>Step 3: Launch the Raw Image Publisher</strong><br>
+  Use the <code>v4l2_camera</code> node to start publishing camera frames to <code>/image_raw</code>:</p>
+  <pre><code>ros2 run v4l2_camera v4l2_camera_node</code></pre>
+  <p>By default, it will start broadcasting frames to <code>/image_raw</code>.</p>
+
+  <p><strong>Step 4: Check the Topic</strong><br>
+  To verify if the camera is streaming, run:</p>
+  <pre><code>ros2 topic list</code></pre>
+  <p>You should see <code>/image_raw</code> in the list.</p>
+
+  <p><strong>Step 5: Launch the Compressed Image Publisher</strong><br>
+  Use this command to publish compressed video to <code>/image_raw/compressed</code>:</p>
+  <pre><code>ros2 run image_transport republish raw in:=/image_raw compressed:=/image_raw/compressed</code></pre>
+
+  <p><strong>Step 6: Verify Output</strong><br>
+  To check if both raw and compressed image streams are working, use:</p>
+  <pre><code>ros2 topic echo /image_raw
+ros2 topic echo /image_raw/compressed</code></pre>
+
+  <p><strong>Step 7: View the Camera Feed</strong><br>
+  You can visualize the live camera feed in RViz2 by adding an <code>Image</code> display:</p>
+  <ol>
+    <li>Open RViz2:
+      <pre><code>rviz2</code></pre>
+    </li>
+    <li>Click <code>Add</code> and choose <code>Image</code>.</li>
+    <li>Set the topic to <code>/image_raw</code> or <code>/image_raw/compressed</code>.</li>
+    <li>Set the fixed frame to <code>camera_link</code> (or whichever TF frame is being used).</li>
+  </ol>
+
+  <p><strong>Step 8: Fixing Missing RViz2 or Errors</strong></p>
+  <p>If <code>rviz2</code> isn’t installed, install it using:</p>
+  <pre><code>sudo apt install ros-humble-rviz2</code></pre>
+
+  <p>If you get device or permission errors, make sure <code>/dev/video0</code> has the right permissions:</p>
+  <pre><code>sudo chmod 777 /dev/video0</code></pre>
+
+  <p><strong>Step 9: Common Errors and Fixes</strong><br>Here are some common errors you might run into and how to fix them:</p>
+  <ul>
+    <li><b>Error:</b> <code>rviz2: command not found</code><br>
+        <b>Fix:</b>
+      <pre><code>sudo apt install ros-humble-rviz2</code></pre>
+    </li>
+
+    <li><b>Error:</b> <code>Cannot open '/dev/video0'</code> or <code>Permission denied</code><br>
+        <b>Fix:</b>
+      <pre><code>sudo chmod 777 /dev/video0</code></pre>
+    </li>
+
+    <li><b>Error:</b> <code>No image received on topic /image_raw</code><br>
+        <b>Fixes:</b>
+      <ul>
+        <li>Make sure the camera is properly connected.</li>
+        <li>Ensure the camera node is running:<br><code>ros2 run v4l2_camera v4l2_camera_node</code></li>
+        <li>Check if <code>/image_raw</code> topic exists:<br><code>ros2 topic list</code></li>
+        <li>Use:<br><code>ros2 topic echo /image_raw</code> to see live data.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><strong>Step 10: View Camera Feed in RViz2</strong><br>To visualize the live video from your USB camera in RViz2:</p>
+  <ol>
+    <li>Launch RViz2:
+      <pre><code>rviz2</code></pre>
+    </li>
+    <li>In RViz2:
+      <ul>
+        <li>Click the <code>Add</code> button in the bottom left.</li>
+        <li>Choose <code>Image</code> from the list.</li>
+      </ul>
+    </li>
+    <li>In the Image settings:
+      <ul>
+        <li>Set the topic to:<br><code>/image_raw/compressed</code></li>
+      </ul>
+    </li>
+  </ol>
+
+  <p>Now you should see your camera stream inside RViz2!</p>
+</details>
+            </details>
+          </section>
+
 
     <section class="card">
       <details>
