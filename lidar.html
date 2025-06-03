@@ -18,6 +18,152 @@
     <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   </header>
 
+      <section class="card">
+      <details>
+        <summary>🍓 Raspberry Pi Setup</summary>
+    
+        <h3>📦 What You Need</h3>
+        <ul>
+          <li>Raspberry Pi 4B (or 3B+)</li>
+          <li>MicroSD Card (16GB or more, Class 10 recommended)</li>
+          <li>MicroSD Card Reader</li>
+          <li>Power Supply (5V 3A)</li>
+          <li>HDMI Monitor, USB Keyboard and Mouse (for first-time setup)</li>
+        </ul>
+    
+        <details>
+          <summary>🖥️ Step 1: Install Raspberry Pi OS</summary>
+          <ol>
+            <li>Download and install <a href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi Imager</a> on your PC.</li>
+            <li>Insert the SD card into your reader.</li>
+            <li>Launch the Imager, select:
+              <ul>
+                <li><strong>OS:</strong> Raspberry Pi OS (32-bit)</li>
+                <li><strong>Storage:</strong> Your SD card</li>
+              </ul>
+            </li>
+            <li>Click "Next", enable SSH (if offered), and set username/password.</li>
+            <li>Click "Write" and wait for it to finish.</li>
+          </ol>
+        
+          <h4>⚠️ OS Customization Warning</h4>
+          <p>After you click <strong>Next</strong> or <strong>Write</strong>, you may see a pop-up like this:</p>
+        
+          <div style="text-align: center;">
+            <img src="media/os-customisation-warning.png" alt="OS Customisation Prompt" style="max-width: 600px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
+          </div>
+        
+          <p>
+            When this screen appears, click the <strong style="color: crimson;">NO</strong> button.
+            <br />
+            Do <em>not</em> apply OS customization unless you're preconfiguring advanced settings.
+          </p>
+        
+          <div class="tip-box">
+            <strong>💡 Tip:</strong> Clicking "NO" ensures a clean Raspberry Pi OS install for first-time setup.
+          </div>
+        
+          <details>
+            <summary>🖼️ Raspberry Pi Imager Screenshots</summary>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+              <div>
+                <h4 style="text-align: center;">macOS</h4>
+                <img src="media/imager-mac.png" alt="Raspberry Pi Imager on macOS" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
+              </div>
+              <div>
+                <h4 style="text-align: center;">Windows</h4>
+                <img src="media/imager-win.png" alt="Raspberry Pi Imager on Windows" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
+              </div>
+            </div>
+          </details>
+        </details>
+        
+        <details>
+          <summary>⚙️ Step 2: First Boot Setup</summary>
+          <ol>
+            <li>Insert SD card into the Pi and power it on.</li>
+            <li>Follow the on-screen wizard to set up Wi-Fi and localization.</li>
+            <li>Open Terminal and run system updates:</li>
+          </ol>
+          <div class="code-block">
+            <pre><code>sudo apt update
+        sudo apt upgrade -y
+        sudo reboot</code></pre>
+        </details>
+          <details>
+              <summary>🔧 Part 3: Remote Access & Development Setup</summary>
+              <details>
+                <summary>📅 Step 1: Download and Install VS Code</summary>
+                <ol>
+                  <li>Go to <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> and download the version for your OS (Windows, macOS, or Linux).</li>
+                  <li>Install it using the standard installer.</li>
+                  <li>Launch VS Code and open the Extensions tab (left sidebar).</li>
+                  <li>Search for and install the extension called <strong>"Remote - SSH"</strong>.</li>
+                </ol>
+              </details>
+              <details>
+                <summary>🌐 Step 2: Set Up Remote Access Options</summary>
+                <h4>🖥️ Option A: Tailscale</h4>
+                <p><strong>Tailscale</strong> is a secure mesh VPN that connects your devices together into a private network using WireGuard.</p>
+          
+                <h5>💻 On Your Computer:</h5>
+                <ol>
+                  <li>Visit <a href="https://tailscale.com/download" target="_blank">tailscale.com/download</a> and install Tailscale.</li>
+                  <li>Sign in using GitHub, Google, or Microsoft account.</li>
+                  <li>Click <strong>"Enable Tailscale"</strong> to activate the virtual network.</li>
+                </ol>
+          
+                <h5>🍓 On Your Raspberry Pi:</h5>
+                <div class="code-block">
+                  <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscale up</code></pre>
+                </div>
+                <p>Log in via browser when prompted. The Pi will appear in your Tailscale dashboard with a private IP (e.g., <code>100.101.102.103</code>).</p>
+          
+                <h4>🌐 Option B: Raspberry Pi Connect</h4>
+                <p><strong>Raspberry Pi Connect</strong> offers browser-based GUI and terminal access. Ideal for light remote control.</p>
+                <ol>
+                  <li>Visit <a href="https://connect.raspberrypi.com/devices" target="_blank">connect.raspberrypi.com/devices</a>.</li>
+                  <li>Log into your Raspberry Pi account.</li>
+                  <li>Register your Pi using Raspberry Pi Imager or by installing the Connect package.</li>
+                  <li>Once linked, you can access your Pi's desktop or terminal directly in your browser.</li>
+                </ol>
+              </details>
+          
+              <details>
+                <summary>🔐 Step 3: Connect via VS Code (SSH)</summary>
+                <ol>
+                  <li>In VS Code, press <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>.</li>
+                  <li>Select <strong>Remote-SSH: Connect to Host</strong>.</li>
+                  <li>Enter the Pi's Tailscale IP like:
+                    <div class="code-block"><code>pi@100.101.102.103</code></div>
+                  </li>
+                  <li>Authenticate with your Pi's password.</li>
+                  <li>You're now working directly on the Pi through VS Code with full file system access.</li>
+                </ol>
+          
+                <h3>🤺 Which Should You Use?</h3>
+                <div class="tip-box">
+                  <strong>🔧 Use VS Code with Tailscale if you:</strong>
+                  <ul>
+                    <li>Need to write or edit code (Python, HTML, etc.)</li>
+                    <li>Want terminal + Git + live development tools</li>
+                    <li>Prefer using an IDE over a browser</li>
+                  </ul>
+                </div>
+                <div class="tip-box">
+                  <strong>🌐 Use Raspberry Pi Connect if you:</strong>
+                  <ul>
+                    <li>Need quick GUI access from any device</li>
+                    <li>Don't want to install VS Code or set up SSH</li>
+                    <li>Are supporting users who just need to check or reboot the Pi remotely</li>
+                  </ul>
+                </div>
+                <p><strong>Pro Tip:</strong> You can use both! Use Connect for quick GUI tweaks, and Tailscale+SSH for serious development work.</p>
+              </details>
+            </details>
+          </section>
+          
   <section class="card-container">
   <section class="card">
     <details>
