@@ -443,7 +443,7 @@ ros2 topic echo /image_raw/compressed</code></pre>
 </ul>
 
     
-   <details>
+<details>
   <summary>🖥️ Configure Mecanum Drive Node with PS4 Controller</summary>
 
   <p><strong>Create the package:</strong></p>
@@ -578,7 +578,27 @@ setup(
         ],
     },
 )</code></pre>
+
+  <p><strong>Build the package:</strong></p>
+  <pre><code>cd ~/ros2_ws
+colcon build
+source install/setup.bash</code></pre>
+
+  <p><strong>Run <code>joy</code> and mecanum nodes in two separate terminals:</strong></p>
+
+  <p>📟 Terminal 1:</p>
+  <pre><code>source ~/ros2_ws/install/setup.bash
+ros2 run joy joy_node</code></pre>
+
+  <p>📟 Terminal 2:</p>
+  <pre><code>source ~/ros2_ws/install/setup.bash
+ros2 run ps4_drive ps4_drive_node</code></pre>
+
+  <p>⚠️ If you see 'RPi' import errors:</p>
+  <pre><code>sudo apt install python3-rpi.gpio -y</code></pre>
 </details>
+
+
 
         
         <details>
