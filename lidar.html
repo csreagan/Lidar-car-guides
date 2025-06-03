@@ -18,45 +18,46 @@
     <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
   </header>
 
-  <main>
-    <section class="card">
-        <details>
-          <summary>🧠 Ubuntu and ROS2 Setup on Raspberry Pi</summary>
-          <ol>
-            <li>Flash Ubuntu 22.04 to SD</li>
-            <li>Enable SSH, Wi-Fi, boot the Pi</li>
-            <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
-            <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
-            <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
-            <li>Install ROS 2 Humble, source in bashrc</li>
-            <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
-            <li>Install `colcon`, `joy`, `rpi.gpio`</li>
-            <li>Create mecanum drive package</li>
-            <li>Pair PS4 controller with `bluetoothctl`</li>
-            <li>Headless HDMI settings for Pi</li>
-          </ol>
-        </details>
-    </section>
+<main>
+  <section class="card">
+    <details>
+      <summary>🤖 Ubuntu and ROS2 Setup on Raspberry Pi</summary>
+      <ol>
+        <li>Flash Ubuntu 22.04 to SD</li>
+        <li>Enable SSH, Wi-Fi, boot the Pi</li>
+        <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
+        <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
+        <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
+        <li>Install ROS 2 Humble, source in bashrc</li>
+        <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
+        <li>Install <code>colcon</code>, <code>joy</code>, <code>rpi.gpio</code></li>
+        <li>Create mecanum drive package</li>
+        <li>Pair PS4 controller with <code>bluetoothctl</code></li>
+        <li>Headless HDMI settings for Pi</li>
+      </ol>
 
-  
-    <section class="card">
-        <details>
-          <summary>🧠 Installing ROS2 on Ubuntu 22.04 Server</summary>
-          <ol>
-            <li>Flash Ubuntu 22.04 to SD</li>
-            <li>Enable SSH, Wi-Fi, boot the Pi</li>
-            <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
-            <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
-            <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
-            <li>Install ROS 2 Humble, source in bashrc</li>
-            <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
-            <li>Install `colcon`, `joy`, `rpi.gpio`</li>
-            <li>Create mecanum drive package</li>
-            <li>Pair PS4 controller with `bluetoothctl`</li>
-            <li>Headless HDMI settings for Pi</li>
-          </ol>
-        </details>
-    </section>
+      <!-- 🔽 NESTED DROPDOWN STARTS HERE -->
+      <details>
+        <summary>🤖 Installing ROS2 on Ubuntu 22.04 Server</summary>
+        <ol>
+          <li>Flash Ubuntu 22.04 to SD</li>
+          <li>Enable SSH, Wi-Fi, boot the Pi</li>
+          <li>Install GUI:<br><code>sudo apt install xfce4 lightdm -y</code></li>
+          <li>Install Tailscale:<br><code>curl -fsSL https://tailscale.com/install.sh | sh</code></li>
+          <li>Install VNC:<br><code>sudo apt install x11vnc -y</code></li>
+          <li>Install ROS 2 Humble, source in bashrc</li>
+          <li>Create ROS workspace:<br><code>mkdir -p ~/ros2_ws/src && colcon build</code></li>
+          <li>Install <code>colcon</code>, <code>joy</code>, <code>rpi.gpio</code></li>
+          <li>Create mecanum drive package</li>
+          <li>Pair PS4 controller with <code>bluetoothctl</code></li>
+          <li>Headless HDMI settings for Pi</li>
+        </ol>
+      </details>
+      <!-- 🔼 NESTED DROPDOWN ENDS HERE -->
+
+    </details>
+  </section>
+</main>
 
     <section class="card">
   <details>
