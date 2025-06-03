@@ -599,20 +599,38 @@ ros2 run ps4_drive ps4_drive_node</code></pre>
 </details>
 
 
-
         
-        <details>
-          <summary>⚙️ Step 2: First Boot Setup</summary>
-          <ol>
-            <li>Insert SD card into the Pi and power it on.</li>
-            <li>Follow the on-screen wizard to set up Wi-Fi and localization.</li>
-            <li>Open Terminal and run system updates:</li>
-          </ol>
-          <div class="code-block">
-            <pre><code>sudo apt update
-        sudo apt upgrade -y
-        sudo reboot</code></pre>
-        </details>
+<details>
+  <summary>⚙️ Connect and Pair PS4 Controller</summary>
+
+  <p>ROS 2 was used because it is a dedicated operating system framework designed for robot operation.</p>
+
+  <p><strong>🔄 Reset Bluetooth:</strong></p>
+  <pre><code>sudo rfkill unblock bluetooth
+sudo systemctl restart bluetooth
+bluetoothctl</code></pre>
+
+  <p><strong>📡 Inside <code>bluetoothctl</code>, type the following commands one by one:</strong></p>
+  <pre><code>power on
+agent on
+default-agent
+scan on</code></pre>
+
+  <p>🎮 Hold <strong>PS + Share</strong> on the controller until it blinks rapidly.<br>
+  Then pair, trust, and connect (replace &lt;MAC&gt; with the controller's address):</p>
+  <pre><code>pair &lt;MAC&gt;
+trust &lt;MAC&gt;
+connect &lt;MAC&gt;</code></pre>
+
+  <p><strong>✅ Confirm controller is connected:</strong></p>
+  <pre><code>ls /dev/input/</code></pre>
+  <p>You should see <code>js0</code>.</p>
+
+  <pre><code>jstest /dev/input/js0</code></pre>
+</details>
+
+
+
           <details>
               <summary>🔧 Part 3: Remote Access & Development Setup</summary>
               <details>
