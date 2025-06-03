@@ -59,20 +59,38 @@
           <li>HDMI Monitor, USB Keyboard and Mouse (for first-time setup)</li>
         </ul>
     
-        <h3>🖥️ Step 1: Install Raspberry Pi OS</h3>
-        <ol>
-          <li>Download and install <a href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi Imager</a> on your PC.</li>
-          <li>Insert the SD card into your reader.</li>
-          <li>Launch the Imager, select:
-            <ul>
-              <li><strong>OS:</strong> Raspberry Pi OS (32-bit)</li>
-              <li><strong>Storage:</strong> Your SD card</li>
-            </ul>
-          </li>
-          <li>Click "Next", enable SSH (if offered), and set username/password.</li>
-          <li>Click "Write" and wait for it to finish.</li>
-        </ol>
-        <section class="card">
+        <details>
+          <summary>🖥️ Step 1: Install Raspberry Pi OS</summary>
+          <ol>
+            <li>Download and install <a href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi Imager</a> on your PC.</li>
+            <li>Insert the SD card into your reader.</li>
+            <li>Launch the Imager, select:
+              <ul>
+                <li><strong>OS:</strong> Raspberry Pi OS (32-bit)</li>
+                <li><strong>Storage:</strong> Your SD card</li>
+              </ul>
+            </li>
+            <li>Click "Next", enable SSH (if offered), and set username/password.</li>
+            <li>Click "Write" and wait for it to finish.</li>
+          </ol>
+        
+          <h4>⚠️ OS Customization Warning</h4>
+          <p>After you click <strong>Next</strong> or <strong>Write</strong>, you may see a pop-up like this:</p>
+        
+          <div style="text-align: center;">
+            <img src="media/os-customisation-warning.png" alt="OS Customisation Prompt" style="max-width: 600px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
+          </div>
+        
+          <p>
+            When this screen appears, click the <strong style="color: crimson;">NO</strong> button.
+            <br />
+            Do <em>not</em> apply OS customization unless you're preconfiguring advanced settings.
+          </p>
+        
+          <div class="tip-box">
+            <strong>💡 Tip:</strong> Clicking "NO" ensures a clean Raspberry Pi OS install for first-time setup.
+          </div>
+        
           <details>
             <summary>🖼️ Raspberry Pi Imager Screenshots</summary>
             <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
@@ -86,63 +104,39 @@
               </div>
             </div>
           </details>
-        </section>
-        <h4>⚠️ OS Customization Warning</h4>
-<p>
-  After you click <strong>Next</strong> or <strong>Write</strong> in Raspberry Pi Imager, 
-  you may see a pop-up like this:
-</p>
-
-<div style="text-align: center;">
-  <img src="media/os-customisation-warning.png" alt="OS Customisation Prompt" style="max-width: 600px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
-</div>
-
-<p>
-  When this screen appears, click the <strong style="color: crimson;">NO</strong> button.
-  <br />
-  Do <em>not</em> apply OS customization unless you're preconfiguring advanced settings.
-</p>
-
-<div class="tip-box">
-  <strong>💡 Tip:</strong> Clicking "NO" ensures a clean Raspberry Pi OS install for first-time setup.
-</div>
-
-        \
+        </details>
         
+        <details>
+          <summary>⚙️ Step 2: First Boot Setup</summary>
+          <ol>
+            <li>Insert SD card into the Pi and power it on.</li>
+            <li>Follow the on-screen wizard to set up Wi-Fi and localization.</li>
+            <li>Open Terminal and run system updates:</li>
+          </ol>
+          <div class="code-block">
+            <pre><code>sudo apt update
+        sudo apt upgrade -y
+        sudo reboot</code></pre>
+          </div>
+          <img src="media/pi-setup.jpg" alt="Raspberry Pi desktop interface" />
+        </details>
         
-
-        <h3>⚙️ Step 2: First Boot Setup</h3>
-        <ol>
-          <li>Insert SD card into the Pi and power it on.</li>
-          <li>Follow the on-screen wizard to set up Wi-Fi and localization.</li>
-          <li>Open Terminal and run system updates:</li>
-        </ol>
-    
-        <div class="code-block">
-          <pre><code>sudo apt update
-    sudo apt upgrade -y
-    sudo reboot</code></pre>
-        </div>
-    
-        <img src="media/pi-setup.jpg" alt="Raspberry Pi desktop interface" />
-    
-        <h3>🌐 Step 3: Remote Access with Tailscale (Optional)</h3>
-        <p>If you want to access your Pi from any device securely:</p>
-        <ol>
-          <li>Run the following in Terminal:</li>
-        </ol>
-        <div class="code-block">
-          <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
-    sudo tailscale up</code></pre>
-        </div>
-        <p>Log in via browser when prompted. Now you can SSH into the Pi from anywhere on your network.</p>
-    
-        <img src="media/tailscale-login.jpg" alt="Tailscale login browser screen" />
-    
-        <div class="tip-box">
-          <strong>💡 Tip:</strong> You can also use <strong>Raspberry Pi Connect</strong> (in Imager) for browser-based remote access.
-        </div>
-      </details>
+        <details>
+          <summary>🌐 Step 3: Remote Access with Tailscale</summary>
+          <p>If you want to access your Pi from any device securely:</p>
+          <ol>
+            <li>Run the following in Terminal:</li>
+          </ol>
+          <div class="code-block">
+            <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
+        sudo tailscale up</code></pre>
+          </div>
+          <p>Log in via browser when prompted. Now you can SSH into the Pi from anywhere on your network.</p>
+          <img src="media/tailscale-login.jpg" alt="Tailscale login browser screen" />
+          <div class="tip-box">
+            <strong>💡 Tip:</strong> You can also use <strong>Raspberry Pi Connect</strong> for browser-based remote access.
+          </div>
+        </details>        
     </section>
     
 
