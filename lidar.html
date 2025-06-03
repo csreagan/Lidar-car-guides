@@ -304,9 +304,12 @@ ros2 topic echo /image_raw/compressed</code></pre>
   </details>
 </section>
 
+
+
+
     <section class="card">
       <details>
-        <summary>Camera & Lidar Setup</summary>
+        <summary>USB Camera & Lidar Setup</summary>
     
         <h3>📦 What You Need</h3>
         <ul>
@@ -317,6 +320,8 @@ ros2 topic echo /image_raw/compressed</code></pre>
           <li>HDMI Monitor, USB Keyboard and Mouse OR SSH & VNC</li>
         </ul>
     
+
+
 <details>
   <summary>🖥️ Setup RP Lidar C1</summary>
 
@@ -395,17 +400,103 @@ sudo apt install ros-humble-rviz2</code></pre>
 
         
         <details>
-          <summary>⚙️ Step 2: First Boot Setup</summary>
-          <ol>
-            <li>Insert SD card into the Pi and power it on.</li>
-            <li>Follow the on-screen wizard to set up Wi-Fi and localization.</li>
-            <li>Open Terminal and run system updates:</li>
-          </ol>
-          <div class="code-block">
-            <pre><code>sudo apt update
-        sudo apt upgrade -y
-        sudo reboot</code></pre>
-        </details>
+  <summary>⚙️ Logitech Brio 100 USB Camera Setup</summary>
+
+  <p><strong>How to Set Up a USB Camera on ROS 2 (Logitech Brio 100)</strong><br>
+  This guide will help you install and run a USB camera (like the Logitech Brio 100) using ROS 2 and Ubuntu. We’ll use two nodes: one to publish raw camera frames (<code>/image_raw</code>) and another to publish compressed video (<code>/image_raw/compressed</code>).</p>
+
+  <p><strong>Step 1: Plug in the USB Camera</strong><br>
+  Connect your USB camera (e.g., Logitech Brio 100) to the Raspberry Pi or your PC using a USB port.<br>
+  You can check if it’s connected by running:</p>
+  <pre><code>ls /dev/video*</code></pre>
+  <p>If you see <code>/dev/video0</code>, the camera is detected.</p>
+
+  <p><strong>Step 2: Install ROS 2 Camera Packages</strong><br>
+  Make sure these packages are installed:</p>
+  <pre><code>sudo apt update
+sudo apt install ros-humble-image-tools ros-humble-v4l2-camera</code></pre>
+
+  <p><strong>Step 3: Launch the Raw Image Publisher</strong><br>
+  Use the <code>v4l2_camera</code> node to start publishing camera frames to <code>/image_raw</code>:</p>
+  <pre><code>ros2 run v4l2_camera v4l2_camera_node</code></pre>
+  <p>By default, it will start broadcasting frames to <code>/image_raw</code>.</p>
+
+  <p><strong>Step 4: Check the Topic</strong><br>
+  To verify if the camera is streaming, run:</p>
+  <pre><code>ros2 topic list</code></pre>
+  <p>You should see <code>/image_raw</code> in the list.</p>
+
+  <p><strong>Step 5: Launch the Compressed Image Publisher</strong><br>
+  Use this command to publish compressed video to <code>/image_raw/compressed</code>:</p>
+  <pre><code>ros2 run image_transport republish raw in:=/image_raw compressed:=/image_raw/compressed</code></pre>
+
+  <p><strong>Step 6: Verify Output</strong><br>
+  To check if both raw and compressed image streams are working, use:</p>
+  <pre><code>ros2 topic echo /image_raw
+ros2 topic echo /image_raw/compressed</code></pre>
+
+  <p><strong>Step 7: View the Camera Feed</strong><br>
+  You can visualize the live camera feed in RViz2 by adding an <code>Image</code> display:</p>
+  <ol>
+    <li>Open RViz2:
+      <pre><code>rviz2</code></pre>
+    </li>
+    <li>Click <code>Add</code> and choose <code>Image</code>.</li>
+    <li>Set the topic to <code>/image_raw</code> or <code>/image_raw/compressed</code>.</li>
+    <li>Set the fixed frame to <code>camera_link</code> (or whichever TF frame is being used).</li>
+  </ol>
+
+  <p><strong>Step 8: Fixing Missing RViz2 or Errors</strong></p>
+  <p>If <code>rviz2</code> isn’t installed, install it using:</p>
+  <pre><code>sudo apt install ros-humble-rviz2</code></pre>
+
+  <p>If you get device or permission errors, make sure <code>/dev/video0</code> has the right permissions:</p>
+  <pre><code>sudo chmod 777 /dev/video0</code></pre>
+
+  <p><strong>Step 9: Common Errors and Fixes</strong><br>Here are some common errors you might run into and how to fix them:</p>
+  <ul>
+    <li><b>Error:</b> <code>rviz2: command not found</code><br>
+        <b>Fix:</b>
+      <pre><code>sudo apt install ros-humble-rviz2</code></pre>
+    </li>
+
+    <li><b>Error:</b> <code>Cannot open '/dev/video0'</code> or <code>Permission denied</code><br>
+        <b>Fix:</b>
+      <pre><code>sudo chmod 777 /dev/video0</code></pre>
+    </li>
+
+    <li><b>Error:</b> <code>No image received on topic /image_raw</code><br>
+        <b>Fixes:</b>
+      <ul>
+        <li>Make sure the camera is properly connected.</li>
+        <li>Ensure the camera node is running:<br><code>ros2 run v4l2_camera v4l2_camera_node</code></li>
+        <li>Check if <code>/image_raw</code> topic exists:<br><code>ros2 topic list</code></li>
+        <li>Use:<br><code>ros2 topic echo /image_raw</code> to see live data.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><strong>Step 10: View Camera Feed in RViz2</strong><br>To visualize the live video from your USB camera in RViz2:</p>
+  <ol>
+    <li>Launch RViz2:
+      <pre><code>rviz2</code></pre>
+    </li>
+    <li>In RViz2:
+      <ul>
+        <li>Click the <code>Add</code> button in the bottom left.</li>
+        <li>Choose <code>Image</code> from the list.</li>
+      </ul>
+    </li>
+    <li>In the Image settings:
+      <ul>
+        <li>Set the topic to:<br><code>/image_raw/compressed</code></li>
+      </ul>
+    </li>
+  </ol>
+
+  <p>Now you should see your camera stream inside RViz2!</p>
+</details>
+
           <details>
               <summary>🔧 Part 3: Remote Access & Development Setup</summary>
               <details>
