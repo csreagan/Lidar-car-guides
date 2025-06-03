@@ -133,37 +133,37 @@ source ~/.bashrc</code></pre>
                 <p>Log in via browser when prompted. The Pi will appear in your Tailscale dashboard with a private IP (e.g., <code>100.101.102.103</code>).</p>
           
                 <h4>🌐 Option B: Setup VNC</h4>
-<p><strong>VNC</strong> (Virtual Network Computing) is a remote desktop-sharing system that lets you control your Raspberry Pi's GUI from another device over a network.</p>
-<ol>
-  <li>Install VNC:
-    <pre><code>sudo apt install x11vnc -y</code></pre>
-    <!-- [Insert Screenshot] -->
-  </li>
+                <p><strong>VNC</strong> (Virtual Network Computing) is a remote desktop-sharing system that lets you control your Raspberry Pi's GUI from another device over a network.</p>
+                <ol>
+                  <li>Install VNC:
+                    <pre><code>sudo apt install x11vnc -y</code></pre>
+                   <!-- [Insert Screenshot] -->
+                  </li>
 
-  <li>Optional: Set up auto-login:
-    <pre><code>sudo nano /etc/lightdm/lightdm.conf</code></pre>
-    Paste the following (replace <code>ubuntu</code> with your username):
-    <pre><code>[Seat:*]
-autologin-user=ubuntu
-autologin-user-timeout=0
-user-session=ubuntu
-greeter-session=lightdm-gtk-greeter</code></pre>
-    Save with <code>Ctrl+O</code>, <code>Enter</code>, then <code>Ctrl+X</code>.
-    <!-- [Insert Screenshot] -->
-  </li>
+                  <li>Optional: Set up auto-login:
+                    <pre><code>sudo nano /etc/lightdm/lightdm.conf</code></pre>
+                   Paste the following (replace <code>ubuntu</code> with your username):
+                   <pre><code>[Seat:*]
+                autologin-user=ubuntu
+                autologin-user-timeout=0
+                user-session=ubuntu
+                greeter-session=lightdm-gtk-greeter</code></pre>
+                    Save with <code>Ctrl+O</code>, <code>Enter</code>, then <code>Ctrl+X</code>.
+                   <!-- [Insert Screenshot] -->
+                 </li>
 
-  <li>Start the VNC server:
-    <pre><code>x11vnc -usepw -forever -display :0</code></pre>
-    <!-- [Insert Screenshot] -->
-  </li>
+                  <li>Start the VNC server:
+                   <pre><code>x11vnc -usepw -forever -display :0</code></pre>
+                   <!-- [Insert Screenshot] -->
+                  </li>
 
-  <li>Connect from another device on the same Wi-Fi using the Pi’s IP address.
-    <br>You can get it with:
-    <pre><code>hostname -I</code></pre>
-    You may need to add <code>:5900</code> or <code>:5901</code> to the IP.
-    <br>If using a mobile hotspot, check the hotspot device list to find the Pi’s IP.
-  </li>
-</ol>
+                  <li>Connect from another device on the same Wi-Fi using the Pi’s IP address.
+                    <br>You can get it with:
+                    <pre><code>hostname -I</code></pre>
+                   You may need to add <code>:5900</code> or <code>:5901</code> to the IP.
+                   <br>If using a mobile hotspot, check the hotspot device list to find the Pi’s IP.
+                 </li>
+                </ol>
 
           
               <details>
