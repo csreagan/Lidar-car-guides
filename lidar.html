@@ -84,69 +84,64 @@
 <section class="card">
   <details>
     <summary>🛰️ Lidar Setup</summary>
+
     <p><strong>What is LiDAR?</strong></p>
-    <p>LiDAR stands for Light Detection and Ranging. It’s a special kind of sensor that uses laser beams to measure how far things are around it. You can think of it like a superhero’s radar—it spins and shoots out tiny lasers, then checks how long it takes for them to bounce back. That’s how it knows where walls, chairs, or even people are! Robots use LiDAR to “see” and move around safely without bumping into things.</p>
+    <p>
+      LiDAR stands for Light Detection and Ranging. It’s a special kind of sensor that uses laser beams to measure how far things are around it.
+      You can think of it like a superhero’s radar—it spins and shoots out tiny lasers, then checks how long it takes for them to bounce back.
+      That’s how it knows where walls, chairs, or even people are! Robots use LiDAR to “see” and move around safely without bumping into things.
+    </p>
 
-    <p><strong>How to Set Up RPLIDAR C1 on ROS 2 (Ubuntu)</strong><br>Let’s install the LiDAR on a Raspberry Pi running Ubuntu and ROS 2 Humble. Follow these simple steps:</p>
+    <p><strong>How to Set Up RPLIDAR C1 on ROS 2 (Ubuntu)</strong><br>
+    Let’s install the LiDAR on a Raspberry Pi running Ubuntu and ROS 2 Humble. Follow these simple steps:</p>
 
-    <p><strong>Step 1: Set up your ROS 2 environment</strong><br>
-    Open your terminal and type:<br>
-    <code>source /opt/ros/humble/setup.bash</code></p>
+    <p><strong>Step 1: Set up your ROS 2 environment</strong></p>
+    <pre><code>source /opt/ros/humble/setup.bash</code></pre>
 
-    <p><strong>Step 2: Create a new workspace folder</strong><br>
-    This is where you’ll store your LiDAR files:<br>
-    <code>cd ~<br>mkdir -p ~/ws_lidar/src<br>cd ~/ws_lidar/src</code></p>
+    <p><strong>Step 2: Create a new workspace folder</strong><br>This is where you’ll store your LiDAR files:</p>
+    <pre><code>cd ~
+mkdir -p ~/ws_lidar/src
+cd ~/ws_lidar/src</code></pre>
 
-    <p><strong>Step 3: Download the LiDAR software</strong><br>
-    Get the code from the internet (GitHub):<br>
-    <code>git clone https://github.com/Slamtec/sllidar_ros2.git</code></p>
+    <p><strong>Step 3: Download the LiDAR software</strong></p>
+    <pre><code>git clone https://github.com/Slamtec/sllidar_ros2.git</code></pre>
 
-    <p><strong>Step 4: Check if the folder was downloaded</strong><br>
-    Type:<br>
-    <code>ls -la</code><br>
-    You should see a folder named <code>sllidar_ros2</code>.</p>
+    <p><strong>Step 4: Check if the folder was downloaded</strong></p>
+    <pre><code>ls -la</code></pre>
+    <p>You should see a folder named <code>sllidar_ros2</code>.</p>
 
-    <p><strong>Step 5: Build the workspace</strong><br>
-    Now build the software:<br>
-    <code>cd ~/ws_lidar/<br>colcon build --symlink-install</code><br>
-    If you see warnings (stderr), don’t worry! They're just messages—not errors.</p>
+    <p><strong>Step 5: Build the workspace</strong></p>
+    <pre><code>cd ~/ws_lidar/
+colcon build --symlink-install</code></pre>
+    <p>If you see warnings (stderr), don’t worry! They're just messages—not errors.</p>
 
-    <p><strong>Step 6: Check if the build worked</strong><br>
-    Make sure these folders show up:<br>
-    <code>ls -la</code><br>
-    Look for: <code>build</code>, <code>install</code>, <code>log</code>, and <code>src</code></p>
+    <p><strong>Step 6: Check if the build worked</strong></p>
+    <pre><code>ls -la</code></pre>
+    <p>Look for: <code>build</code>, <code>install</code>, <code>log</code>, and <code>src</code></p>
 
-    <p><strong>Step 7: Tell your system about the new software</strong><br>
-    So it knows how to find your LiDAR code:<br>
-    <code>source ~/ws_lidar/install/setup.bash</code></p>
+    <p><strong>Step 7: Tell your system about the new software</strong></p>
+    <pre><code>source ~/ws_lidar/install/setup.bash</code></pre>
 
-    <p><strong>Step 8: Plug in your RPLIDAR via USB</strong><br>
-    Now we need to check if the computer sees the LiDAR. Type:<br>
-    <code>ls -la /dev | grep USB</code><br>
-    Look for something like:<br>
-    <code>crw-rw---- 1 root dialout ... ttyUSB0</code><br>
-    This means your LiDAR is connected to port <code>ttyUSB0</code>.</p>
+    <p><strong>Step 8: Plug in your RPLIDAR via USB</strong></p>
+    <pre><code>ls -la /dev | grep USB</code></pre>
+    <p>Look for something like:</p>
+    <pre><code>crw-rw---- 1 root dialout ... ttyUSB0</code></pre>
 
-    <p><strong>Step 9: Give permission to access the LiDAR</strong><br>
-    So we can talk to it without admin problems:<br>
-    <code>sudo chmod 777 /dev/ttyUSB0</code><br>
-    Double check:<br>
-    <code>ls -la /dev | grep USB</code><br>
-    Now it should say:<br>
-    <code>crwxrwxrwx ...</code></p>
+    <p><strong>Step 9: Give permission to access the LiDAR</strong></p>
+    <pre><code>sudo chmod 777 /dev/ttyUSB0</code></pre>
+    <p>Double check:</p>
+    <pre><code>ls -la /dev | grep USB</code></pre>
+    <p>Now it should say:</p>
+    <pre><code>crwxrwxrwx ...</code></pre>
 
-    <p><strong>Step 10: Launch the LiDAR!</strong><br>
-    Run this command to start seeing laser data:<br>
-    <code>ros2 launch sllidar_ros2 view_sllidar_c1_launch.py</code><br>
-    That’s it! You’ve successfully installed and launched your LiDAR on ROS 2!</p>
+    <p><strong>Step 10: Launch the LiDAR!</strong></p>
+    <pre><code>ros2 launch sllidar_ros2 view_sllidar_c1_launch.py</code></pre>
 
-    <p><strong>Step 11: Open RViz2 to See the LiDAR Scan</strong><br>
-    Once your LiDAR is running, open a new terminal (don’t close the LiDAR one!) and type:<br>
-    <code>rviz2</code><br>
-    RViz2 is like the robot’s eyes! It shows a live 2D scan of what the LiDAR "sees" around it.</p>
+    <p><strong>Step 11: Open RViz2 to See the LiDAR Scan</strong></p>
+    <pre><code>rviz2</code></pre>
+    <p>RViz2 is like the robot’s eyes! It shows a live 2D scan of what the LiDAR "sees" around it.</p>
 
-    <p><strong>Step 12: Set the RViz2 Display Settings</strong><br>
-    Once RViz2 opens, follow these steps:</p>
+    <p><strong>Step 12: Set the RViz2 Display Settings</strong><br>Once RViz2 opens, follow these steps:</p>
     <ol>
       <li>On the left panel, click <code>Add</code> → choose <code>LaserScan</code>.</li>
       <li>Set the LaserScan Topic to: <code>/scan</code></li>
@@ -154,14 +149,14 @@
     </ol>
     <p>Now you should start seeing dots or lines representing objects around the LiDAR!</p>
 
-    <p><strong>Step 13: What if RViz2 is not installed?</strong><br>
-    If your terminal says:<br>
-    <code>Command 'rviz2' not found</code><br>
-    then RViz2 is not installed yet.<br><br>
-    Install it using this command:<br>
-    <code>sudo apt update<br>sudo apt install ros-humble-rviz2</code><br>
-    Once installed, try again:<br>
-    <code>rviz2</code></p>
+    <p><strong>Step 13: What if RViz2 is not installed?</strong><br>If your terminal says:</p>
+    <pre><code>Command 'rviz2' not found</code></pre>
+    <p>Then install it using this command:</p>
+    <pre><code>sudo apt update
+sudo apt install ros-humble-rviz2</code></pre>
+    <p>Once installed, try again:</p>
+    <pre><code>rviz2</code></pre>
+
   </details>
 </section>
 
