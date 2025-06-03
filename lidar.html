@@ -443,138 +443,431 @@ ros2 topic echo /image_raw/compressed</code></pre>
 </ul>
 
     
-        <details>
-          <summary>🖥️ Step 1: Install Raspberry Pi OS</summary>
-          <ol>
-            <li>Download and install <a href="https://www.raspberrypi.com/software/" target="_blank">Raspberry Pi Imager</a> on your PC.</li>
-            <li>Insert the SD card into your reader.</li>
-            <li>Launch the Imager, select:
-              <ul>
-                <li><strong>OS:</strong> Raspberry Pi OS (32-bit)</li>
-                <li><strong>Storage:</strong> Your SD card</li>
-              </ul>
-            </li>
-            <li>Click "Next", enable SSH (if offered), and set username/password.</li>
-            <li>Click "Write" and wait for it to finish.</li>
-          </ol>
+<details>
+  <summary>🖥️ Configure Mecanum Drive Node with PS4 Controller</summary>
+<p><strong>This is where you create a NODE that is dedicated to the software that will be controlling the movement of your wheels </strong><br>
+  
+  <p><strong>Create the package:</strong></p>
+  <pre><code>ros2 pkg create --build-type ament_python ps4_mecanum --dependencies rclpy sensor_msgs</code></pre>
+
+  <p><strong>Add <code>mecanum_drive_node.py</code> with your motor control logic:</strong></p>
+  <pre><code>gedit ~/ros2_ws/src/ps4_mecanum/ps4_mecanum/mecanum_drive_node.py</code></pre>
+
+  <pre><code>import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Joy
+import RPi.GPIO as GPIO
+
+PWM_FREQ = 1000  # Hz
+
+# GPIO pins for each motor (adjust as needed)
+MOTOR_PINS = {
+    "FL": {"fwd": 17, "bwd": 18},
+    "FR": {"fwd": 22, "bwd": 23},
+    "RL": {"fwd": 24, "bwd": 25},
+    "RR": {"fwd": 5,  "bwd": 6},
+}
+
+class MecanumDrive(Node):
+    def __init__(self):
+        super().__init__('mecanum_drive_node')
+        self.subscription = self.create_subscription(Joy, 'joy', self.joy_callback, 10)
+        GPIO.setmode(GPIO.BCM)
+        self.pwm = {}
+
+        for label, pins in MOTOR_PINS.items():
+            GPIO.setup(pins["fwd"], GPIO.OUT)
+            GPIO.setup(pins["bwd"], GPIO.OUT)
+            self.pwm[label] = {
+                "fwd": GPIO.PWM(pins["fwd"], PWM_FREQ),
+                "bwd": GPIO.PWM(pins["bwd"], PWM_FREQ)
+            }
+            self.pwm[label]["fwd"].start(0)
+            self.pwm[label]["bwd"].start(0)
+
+        self.get_logger().info("? Mecanum Drive Node Initialized")
+
+    def set_motor(self, label, value):
+        value = max(min(value, 100), -100)
+        if value > 0:
+            self.pwm[label]["fwd"].ChangeDutyCycle(value)
+            self.pwm[label]["bwd"].ChangeDutyCycle(0)
+        elif value < 0:
+            self.pwm[label]["fwd"].ChangeDutyCycle(0)
+            self.pwm[label]["bwd"].ChangeDutyCycle(-value)
+        else:
+            self.pwm[label]["fwd"].ChangeDutyCycle(0)
+            self.pwm[label]["bwd"].ChangeDutyCycle(0)
+
+    def joy_callback(self, msg):
+        try:
+            x = float(msg.axes[0])
+            y = -float(msg.axes[1])
+            rot = float(msg.axes[2])
+
+            fl = y + x + rot
+            fr = y - x - rot
+            rl = y - x + rot
+            rr = y + x - rot
+
+            max_val = max(abs(fl), abs(fr), abs(rl), abs(rr), 1)
+            fl = int((fl / max_val) * 100)
+            fr = int((fr / max_val) * 100)
+            rl = int((rl / max_val) * 100)
+            rr = int((rr / max_val) * 100)
+
+            self.set_motor("FL", fl)
+            self.set_motor("FR", fr)
+            self.set_motor("RL", rl)
+            self.set_motor("RR", rr)
+
+        except Exception as e:
+            self.get_logger().error(f"Joy callback failed: {e}")
+
+    def destroy_node(self):
+        for motor in self.pwm.values():
+            motor["fwd"].stop()
+            motor["bwd"].stop()
+        GPIO.cleanup()
+        super().destroy_node()
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = MecanumDrive()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()</code></pre>
+
+  <p><strong>Edit <code>setup.py</code> to include correct entry points:</strong></p>
+  <pre><code>touch ~/ros2_ws/src/ps4_mecanum/ps4_mecanum/__init__.py</code></pre>
+
+  <p><strong>Navigate to the package folder and create the node file:</strong></p>
+  <pre><code>cd ~/ros2_ws/src/ps4_mecanum/ps4_mecanum
+gedit mecanum_drive_node.py</code></pre>
+
+  <p><strong>Update <code>setup.py</code>:</strong></p>
+  <pre><code>from setuptools import find_packages, setup
+
+package_name = 'ps4_mecanum'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=find_packages(exclude=['test']),
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='hugo',
+    maintainer_email='hugo@todo.todo',
+    description='TODO: Package description',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'mecanum_drive_node = ps4_mecanum.mecanum_drive_node:main',
+        ],
+    },
+)</code></pre>
+
+  <p><strong>Build the package:</strong></p>
+  <pre><code>cd ~/ros2_ws
+colcon build
+source install/setup.bash</code></pre>
+
+  <p><strong>Run <code>joy</code> and mecanum nodes in two separate terminals:</strong></p>
+
+  <p>📟 Terminal 1:</p>
+  <pre><code>source ~/ros2_ws/install/setup.bash
+ros2 run joy joy_node</code></pre>
+
+  <p>📟 Terminal 2:</p>
+  <pre><code>source ~/ros2_ws/install/setup.bash
+ros2 run ps4_drive ps4_drive_node</code></pre>
+
+  <p>⚠️ If you see 'RPi' import errors:</p>
+  <pre><code>sudo apt install python3-rpi.gpio -y</code></pre>
+</details>
+
+
         
-          <h4>⚠️ OS Customization Warning</h4>
-          <p>After you click <strong>Next</strong> or <strong>Write</strong>, you may see a pop-up like this:</p>
-        
-          <div style="text-align: center;">
-            <img src="media/os-customisation-warning.png" alt="OS Customisation Prompt" style="max-width: 600px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
-          </div>
-        
-          <p>
-            When this screen appears, click the <strong style="color: crimson;">NO</strong> button.
-            <br />
-            Do <em>not</em> apply OS customization unless you're preconfiguring advanced settings.
-          </p>
-        
-          <div class="tip-box">
-            <strong>💡 Tip:</strong> Clicking "NO" ensures a clean Raspberry Pi OS install for first-time setup.
-          </div>
-        
-          <details>
-            <summary>🖼️ Raspberry Pi Imager Screenshots</summary>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
-              <div>
-                <h4 style="text-align: center;">macOS</h4>
-                <img src="media/imager-mac.png" alt="Raspberry Pi Imager on macOS" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
-              </div>
-              <div>
-                <h4 style="text-align: center;">Windows</h4>
-                <img src="media/imager-win.png" alt="Raspberry Pi Imager on Windows" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);" />
-              </div>
-            </div>
-          </details>
-        </details>
-        
-        <details>
-          <summary>⚙️ Step 2: First Boot Setup</summary>
-          <ol>
-            <li>Insert SD card into the Pi and power it on.</li>
-            <li>Follow the on-screen wizard to set up Wi-Fi and localization.</li>
-            <li>Open Terminal and run system updates:</li>
-          </ol>
-          <div class="code-block">
-            <pre><code>sudo apt update
-        sudo apt upgrade -y
-        sudo reboot</code></pre>
-        </details>
-          <details>
-              <summary>🔧 Part 3: Remote Access & Development Setup</summary>
-              <details>
-                <summary>📅 Step 1: Download and Install VS Code</summary>
-                <ol>
-                  <li>Go to <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> and download the version for your OS (Windows, macOS, or Linux).</li>
-                  <li>Install it using the standard installer.</li>
-                  <li>Launch VS Code and open the Extensions tab (left sidebar).</li>
-                  <li>Search for and install the extension called <strong>"Remote - SSH"</strong>.</li>
-                </ol>
-              </details>
-              <details>
-                <summary>🌐 Step 2: Set Up Remote Access Options</summary>
-                <h4>🖥️ Option A: Tailscale</h4>
-                <p><strong>Tailscale</strong> is a secure mesh VPN that connects your devices together into a private network using WireGuard.</p>
-          
-                <h5>💻 On Your Computer:</h5>
-                <ol>
-                  <li>Visit <a href="https://tailscale.com/download" target="_blank">tailscale.com/download</a> and install Tailscale.</li>
-                  <li>Sign in using GitHub, Google, or Microsoft account.</li>
-                  <li>Click <strong>"Enable Tailscale"</strong> to activate the virtual network.</li>
-                </ol>
-          
-                <h5>🍓 On Your Raspberry Pi:</h5>
-                <div class="code-block">
-                  <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
-          sudo tailscale up</code></pre>
-                </div>
-                <p>Log in via browser when prompted. The Pi will appear in your Tailscale dashboard with a private IP (e.g., <code>100.101.102.103</code>).</p>
-          
-                <h4>🌐 Option B: Raspberry Pi Connect</h4>
-                <p><strong>Raspberry Pi Connect</strong> offers browser-based GUI and terminal access. Ideal for light remote control.</p>
-                <ol>
-                  <li>Visit <a href="https://connect.raspberrypi.com/devices" target="_blank">connect.raspberrypi.com/devices</a>.</li>
-                  <li>Log into your Raspberry Pi account.</li>
-                  <li>Register your Pi using Raspberry Pi Imager or by installing the Connect package.</li>
-                  <li>Once linked, you can access your Pi's desktop or terminal directly in your browser.</li>
-                </ol>
-              </details>
-          
-              <details>
-                <summary>🔐 Step 3: Connect via VS Code (SSH)</summary>
-                <ol>
-                  <li>In VS Code, press <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>.</li>
-                  <li>Select <strong>Remote-SSH: Connect to Host</strong>.</li>
-                  <li>Enter the Pi's Tailscale IP like:
-                    <div class="code-block"><code>pi@100.101.102.103</code></div>
-                  </li>
-                  <li>Authenticate with your Pi's password.</li>
-                  <li>You're now working directly on the Pi through VS Code with full file system access.</li>
-                </ol>
-          
-                <h3>🤺 Which Should You Use?</h3>
-                <div class="tip-box">
-                  <strong>🔧 Use VS Code with Tailscale if you:</strong>
-                  <ul>
-                    <li>Need to write or edit code (Python, HTML, etc.)</li>
-                    <li>Want terminal + Git + live development tools</li>
-                    <li>Prefer using an IDE over a browser</li>
-                  </ul>
-                </div>
-                <div class="tip-box">
-                  <strong>🌐 Use Raspberry Pi Connect if you:</strong>
-                  <ul>
-                    <li>Need quick GUI access from any device</li>
-                    <li>Don't want to install VS Code or set up SSH</li>
-                    <li>Are supporting users who just need to check or reboot the Pi remotely</li>
-                  </ul>
-                </div>
-                <p><strong>Pro Tip:</strong> You can use both! Use Connect for quick GUI tweaks, and Tailscale+SSH for serious development work.</p>
-              </details>
+<details>
+  <summary>⚙️ Connect and Pair PS4 Controller</summary>
+
+  <p>ROS 2 was used because it is a dedicated operating system framework designed for robot operation.</p>
+
+  <p><strong>🔄 Reset Bluetooth:</strong></p>
+  <pre><code>sudo rfkill unblock bluetooth
+sudo systemctl restart bluetooth
+bluetoothctl</code></pre>
+
+  <p><strong>📡 Inside <code>bluetoothctl</code>, type the following commands one by one:</strong></p>
+  <pre><code>power on
+agent on
+default-agent
+scan on</code></pre>
+
+  <p>🎮 Hold <strong>PS + Share</strong> on the controller until it blinks rapidly.<br>
+  Then pair, trust, and connect (replace &lt;MAC&gt; with the controller's address):</p>
+  <pre><code>pair &lt;MAC&gt;
+trust &lt;MAC&gt;
+connect &lt;MAC&gt;</code></pre>
+
+  <p><strong>✅ Confirm controller is connected:</strong></p>
+  <pre><code>ls /dev/input/</code></pre>
+  <p>You should see <code>js0</code>.</p>
+
+  <pre><code>jstest /dev/input/js0</code></pre>
+</details>
             </details>
           </section>
+
+
+<section class="card">
+  <details>
+    <summary>🤖 Obstacle Avoidance with LiDAR and Mecanum Wheels</summary>
+
+              <!-- Video 1: Autonomous Navigation -->
+          <div class="video-block">
+            <h3>🚘 Autonomous Navigation Mode</h3>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/TEothjIMlyU"
+              title="Autonomous Navigation Mode" frameborder="0" allowfullscreen></iframe>
+          </div>
+
+    <h4>🎯 Goal</h4>
+    <p>Build a robot that:</p>
+    <ul>
+      <li>Detects obstacles using an RPLiDAR A1 sensor.</li>
+      <li>Knows the direction of the obstacle (front-left, front-right, back, left, right).</li>
+      <li>Decides how to avoid them by moving forward, turning, or crab-walking using mecanum wheels.</li>
+    </ul>
+
+    <h4>🧰 What You Need</h4>
+    <ul>
+      <li>Raspberry Pi 4 with Ubuntu 22.04 64-bit</li>
+      <li>ROS 2 Humble installed</li>
+      <li>RPLiDAR A1 connected and publishing <code>/scan</code> topic</li>
+      <li>Adafruit Motor HAT (controls 4 DC motors)</li>
+      <li>Mecanum wheel chassis with 4 motors wired to Motor HAT</li>
+      <li>Python libraries: <code>adafruit-circuitpython-motorkit</code>, <code>rclpy</code>, <code>sensor_msgs</code></li>
+    </ul>
+
+    <h4>🚀 Step 1: Create a New ROS 2 Package</h4>
+    <pre><code>cd ~/ws_lidar/src
+ros2 pkg create --build-type ament_python obstacle_avoidance</code></pre>
+
+    <h4>🛠️ Step 2: Create the Control Script</h4>
+    <pre><code>cd ~/ws_lidar/src/obstacle_avoidance/obstacle_avoidance
+touch obstacle_avoidance_controller.py
+chmod +x obstacle_avoidance_controller.py
+nano obstacle_avoidance_controller.py</code></pre>
+
+<p>Paste the following code into <code>obstacle_avoidance_controller.py</code>:</p>
+<pre><code>import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import LaserScan
+from adafruit_motorkit import MotorKit
+import termios, tty, sys, select, time, math
+
+class ObstacleAvoidanceNode(Node):
+    def __init__(self):
+        super().__init__('obstacle_avoidance_controller')
+
+        self.kit = MotorKit()
+        self.motor_fl = self.kit.motor2
+        self.motor_fr = self.kit.motor3
+        self.motor_bl = self.kit.motor4
+        self.motor_br = self.kit.motor1
+
+        self.thrust = 0.5
+        self.active = True
+
+        self.create_subscription(LaserScan, '/scan', self.lidar_callback, 10)
+        self.get_logger().info('Obstacle avoidance started')
+
+        self.timer = self.create_timer(0.1, self.keyboard_check)
+
+    def get_distance(self, msg, angle_deg):
+        angle_rad = math.radians(angle_deg)
+        index = int((angle_rad - msg.angle_min) / msg.angle_increment)
+        if 0 <= index < len(msg.ranges):
+            return msg.ranges[index]
+        return float('inf')
+
+    def lidar_callback(self, msg):
+        if not self.active:
+            self.stop_all()
+            return
+
+        front_right_angles = [-170, -160, -150, -140]
+        front_left_angles = [170, 160, 150, 140, 180]
+        back_angles = [0, 10, 20, 30, 40, -10, -20, -30, -40]
+        left_angles = [90, 75, 105]
+        right_angles = [-90, -75, -105]
+
+        for angle in front_right_angles:
+            dist = self.get_distance(msg, angle)
+            self.get_logger().info(f'Front-Right {angle}°: {dist:.2f} m')
+            if dist < 0.5:
+                self.get_logger().info(f'Obstacle on Front-Right! Reverse + Turn LEFT...')
+                self.move(-1.0, 0.0, 0.0, duration=0.5)
+                self.move(0.0, 0.0, -1.0, duration=0.6)
+                self.move(1.0, 0.0, 0.0)
+                return
+
+        for angle in front_left_angles:
+            dist = self.get_distance(msg, angle)
+            self.get_logger().info(f'Front-Left {angle}°: {dist:.2f} m')
+            if dist < 0.5:
+                self.get_logger().info(f'Obstacle on Front-Left! Reverse + Turn RIGHT...')
+                self.move(-1.0, 0.0, 0.0, duration=0.5)
+                self.move(0.0, 0.0, 1.0, duration=0.6)
+                self.move(1.0, 0.0, 0.0)
+                return
+
+        for angle in back_angles:
+            dist = self.get_distance(msg, angle)
+            self.get_logger().info(f'Back {angle}°: {dist:.2f} m')
+            if dist < 0.15:
+                self.get_logger().info(f'Obstacle in back! Forward + Turn RIGHT...')
+                self.move(1.0, 0.0, 0.0, duration=0.5)
+                self.move(0.0, 0.0, 1.0, duration=0.6)
+                return
+
+        for angle in left_angles:
+            dist = self.get_distance(msg, angle)
+            self.get_logger().info(f'Left {angle}°: {dist:.2f} m')
+            if dist < 0.12:
+                self.get_logger().info(f'Obstacle on LEFT! Crabwalk RIGHT...')
+                self.move(0.0, 1.0, 0.0, duration=1.3)
+                self.move(1.0, 0.0, 0.0)
+                return
+
+        for angle in right_angles:
+            dist = self.get_distance(msg, angle)
+            self.get_logger().info(f'Right {angle}°: {dist:.2f} m')
+            if dist < 0.12:
+                self.get_logger().info(f'Obstacle on RIGHT! Crabwalk LEFT...')
+                self.move(0.0, -1.0, 0.0, duration=1.3)
+                self.move(1.0, 0.0, 0.0)
+                return
+
+        self.move(1.0, 0.0, 0.0)
+
+    def move(self, forward, strafe, rotate, duration=None):
+        fl = forward + strafe + rotate
+        fr = forward - strafe - rotate
+        bl = forward - strafe + rotate
+        br = forward + strafe - rotate
+        max_val = max(abs(fl), abs(fr), abs(bl), abs(br), 1.0)
+
+        fl = self.thrust * (fl / max_val)
+        fr = self.thrust * (fr / max_val)
+        bl = self.thrust * (bl / max_val)
+        br = self.thrust * (br / max_val)
+
+        self.motor_fl.throttle = self._safe(fl)
+        self.motor_fr.throttle = self._safe(fr)
+        self.motor_bl.throttle = self._safe(bl)
+        self.motor_br.throttle = self._safe(br)
+
+        if duration:
+            time.sleep(duration)
+            self.stop_all()
+
+    def _safe(self, value):
+        return max(-1.0, min(1.0, value))
+
+    def stop_all(self):
+        for m in [self.motor_fl, self.motor_fr, self.motor_bl, self.motor_br]:
+            m.throttle = 0.0
+
+    def keyboard_check(self):
+        if self.kbhit():
+            c = sys.stdin.read(1)
+            if c == '\x1b':
+                sys.stdin.read(1)
+                arrow = sys.stdin.read(1)
+                if arrow == 'A':
+                    self.thrust = min(1.0, self.thrust + 0.1)
+                    self.get_logger().info(f"Thrust increased: {self.thrust:.1f}")
+                elif arrow == 'B':
+                    self.thrust = max(0.5, self.thrust - 0.1)
+                    self.get_logger().info(f"Thrust decreased: {self.thrust:.1f}")
+            elif c == 's':
+                self.active = True
+                self.get_logger().info("Robot activated")
+            elif c == ' ':
+                self.active = False
+                self.get_logger().info("Robot paused")
+
+    def kbhit(self):
+        dr, _, _ = select.select([sys.stdin], [], [], 0)
+        return dr != []
+
+def main(args=None):
+    rclpy.init(args=args)
+    settings = termios.tcgetattr(sys.stdin)
+    tty.setcbreak(sys.stdin.fileno())
+
+    node = ObstacleAvoidanceNode()
+    try:
+        rclpy.spin(node)
+    finally:
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+        node.stop_all()
+        node.destroy_node()
+        rclpy.shutdown()
+</code></pre>
+
+
+    <h4>🧾 Step 3: Set Up <code>setup.py</code></h4>
+    <pre><code>cd ~/ws_lidar/src/obstacle_avoidance
+nano setup.py</code></pre>
+
+    <p>Update the <code>entry_points</code> section:</p>
+    <pre><code>entry_points={
+    'console_scripts': [
+        'obstacle_avoidance_controller = obstacle_avoidance.obstacle_avoidance_controller:main',
+    ],
+},</code></pre>
+
+    <h4>🔧 Step 4: Build and Source Workspace</h4>
+    <pre><code>cd ~/ws_lidar
+colcon build
+source install/setup.bash</code></pre>
+
+    <h4>▶️ Step 5: Run Your Obstacle Avoidance Node</h4>
+    <pre><code>ros2 run obstacle_avoidance obstacle_avoidance_controller</code></pre>
+
+    <h4>🎮 Keyboard Controls</h4>
+    <table>
+      <thead>
+        <tr><th>Key</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>↑</td><td>Increase thrust</td></tr>
+        <tr><td>↓</td><td>Decrease thrust</td></tr>
+        <tr><td><code>s</code></td><td>Start movement</td></tr>
+        <tr><td><code>space</code></td><td>Pause movement</td></tr>
+        <tr><td><code>Ctrl+C</code></td><td>Stop all motors cleanly</td></tr>
+      </tbody>
+    </table>
+  </details>
+</section>
+
+
+
 
     <section class="card">
         <details>
