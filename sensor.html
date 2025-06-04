@@ -181,7 +181,7 @@
         
           </section>
           <section class="card">
-            <details open>
+            <details>
               <summary>🐍 Python Setup + Virtual Environment (General Use)</summary>
           
               <h3>💡 Why Use a Virtual Environment?</h3>
@@ -238,15 +238,24 @@
               <details>
                 <summary>▶️ Step 4: Save and Run Python Code</summary>
                 <ol>
-                  <li>Use the VS Code file explorer to create a new file like <code>main.py</code> in <code>~/my_project</code>.</li>
-                  <li>Write your Python code and save it.</li>
-                  <li>In the terminal, make sure you're in the project folder and the virtual environment is activated:</li>
-                  <div class="code-block">
-                    <pre><code>cd ~/my_project
+                  <li>In VS Code, go to the Explorer panel and click the folder <code>my_project</code>.</li>
+                  <li>Right-click and choose <strong>New File</strong>. Name it <code>main.py</code>.</li>
+                  <li>Write your Python code inside <code>main.py</code> and press <kbd>Ctrl + S</kbd> (or <kbd>Cmd + S</kbd> on Mac) to save.</li>
+                  <li>
+                    Saving a script in the virtual environment folder is <strong>not required</strong> and not recommended. 
+                    Instead, just make sure you <strong>activate the virtual environment</strong> before running your script.
+                  </li>
+                  <li>In the terminal, run:
+                    <div class="code-block">
+                      <pre><code>cd ~/my_project
           source venv/bin/activate
           python main.py</code></pre>
-                  </div>
+                    </div>
+                  </li>
                 </ol>
+                <div class="tip-box">
+                  <strong>💡 Tip:</strong> The Python file can live anywhere in your project folder. The virtual environment handles the Python context — no need to store code inside <code>venv/</code>.
+                </div>
               </details>
           
               <details>
@@ -287,6 +296,7 @@
               </div>
             </details>
           </section>
+          
           
           <section class="card">
             <details>
