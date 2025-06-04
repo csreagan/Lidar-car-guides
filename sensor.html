@@ -726,6 +726,124 @@ cv2.destroyAllWindows()</code></pre>
 </details>
 </section>
 
+<section class="card">
+  <details open>
+    <summary>📦 LCD + Ultrasonic Sensor + Camera Stream (Combo Build)</summary>
+    <p>
+      This integrated setup displays real-time distance measurements from an HC-SR04 ultrasonic sensor on a 1602 LCD and simultaneously shows a live video feed using the ArduCam IMX708 with the <code>picamera2</code> library.
+    </p>
+
+    <h4>🔌 Wiring Overview</h4>
+    <ul>
+      <li><strong>Ultrasonic TRIG →</strong> GPIO 5</li>
+      <li><strong>Ultrasonic ECHO →</strong> GPIO 6</li>
+      <li><strong>LCD RS →</strong> GPIO 25</li>
+      <li><strong>LCD E →</strong> GPIO 24</li>
+      <li><strong>LCD D4-D7 →</strong> GPIO 23, 17, 18, 22</li>
+    </ul>
+
+    <h4>💻 Full Python Code</h4>
+    <details>
+      <summary>📜 View Python Script</summary>
+      <div class="code-block">
+        <pre><code class="language-python"># === IMPORT LIBRARIES ===
+import RPi.GPIO as GPIO        # Controls Raspberry Pi GPIO pins
+import time                    # Used for time delays and timestamps
+from RPLCD import CharLCD      # Controls 1602 LCD with HD44780 driver
+from picamera2 import Picamera2  # Interface for Raspberry Pi camera (libcamera-based)
+import cv2                     # OpenCV for displaying video frames
+
+# === GPIO PIN ASSIGNMENTS ===
+TRIG = 5   # TRIG pin of ultrasonic sensor connected to GPIO 5
+ECHO = 6   # ECHO pin of ultrasonic sensor connected to GPIO 6
+
+# === GPIO INITIALIZATION ===
+GPIO.setmode(GPIO.BCM)        # Use BCM numbering scheme
+GPIO.setwarnings(False)       # Disable GPIO warnings
+GPIO.setup(TRIG, GPIO.OUT)    # Set TRIG as an output pin
+GPIO.setup(ECHO, GPIO.IN)     # Set ECHO as an input pin
+
+# === LCD SETUP ===
+lcd = CharLCD(
+    cols=16, rows=2,           # LCD dimensions: 16 characters × 2 lines
+    pin_rs=25,                 # Register Select pin
+    pin_e=24,                  # Enable pin
+    pins_data=[23, 17, 18, 22],# Data pins D4–D7
+    numbering_mode=GPIO.BCM    # Match BCM mode for consistency
+)
+
+# === CAMERA SETUP ===
+picam2 = Picamera2()           # Initialize Picamera2 object
+picam2.configure(picam2.create_preview_configuration(
+    main={"size": (640, 480), "format": "RGB888"}))  # 640x480 resolution, RGB format
+picam2.start()                 # Start camera stream
+
+# === FUNCTION TO MEASURE DISTANCE ===
+def get_distance():
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)
+    GPIO.output(TRIG, False)
+
+    while GPIO.input(ECHO) == 0:
+        pulse_start = time.time()
+
+    while GPIO.input(ECHO) == 1:
+        pulse_end = time.time()
+
+    pulse_duration = pulse_end - pulse_start
+    distance = pulse_duration * 17150  # Convert to cm
+    return round(distance, 2)
+
+# === MAIN PROGRAM LOOP ===
+try:
+    while True:
+        distance = get_distance()
+        lcd.clear()
+        time.sleep(0.1)
+        lcd.write_string(f"Dist: {distance:.2f} cm")
+
+        frame = picam2.capture_array()
+        cv2.imshow("Live Camera", frame)
+
+        if cv2.waitKey(1) == ord('q'):
+            break
+
+        time.sleep(0.5)
+
+except KeyboardInterrupt:
+    pass
+
+# === CLEANUP ON EXIT ===
+lcd.clear()
+GPIO.cleanup()
+picam2.stop()
+cv2.destroyAllWindows()</code></pre>
+      </div>
+    </details>
+
+    <h4>💡 Expansion Ideas</h4>
+    <ul>
+      <li><strong>📸 Auto-Capture:</strong> Take photo if object is close
+        <pre><code class="language-python">if distance < 10:
+    picam2.capture_file("photo.jpg")
+    lcd.write_string("Photo Taken!")</code></pre>
+      </li>
+      <li><strong>🎥 Motion Triggered Video:</strong> Start recording if distance changes sharply
+        <pre><code class="language-python">if abs(last_distance - distance) > 15:
+    # Trigger recording</code></pre>
+      </li>
+      <li><strong>🌐 IoT Logging:</strong> Send data to server or MQTT
+        <pre><code class="language-python">requests.post("http://your-server/api", json={"distance": distance})</code></pre>
+      </li>
+      <li><strong>🔘 Pushbutton Snapshot:</strong> Add GPIO button to take snapshot
+        <pre><code class="language-python">if GPIO.input(BUTTON_PIN) == GPIO.LOW:
+    picam2.capture_file("manual.jpg")</code></pre>
+      </li>
+    </ul>
+  </details>
+</section>
+
+
 
   <aside style="position: absolute; right: 10px; top: 100px; width: 220px;">
     <h3>🔌 GPIO Reference</h3>
