@@ -343,118 +343,136 @@
                 <div style="text-align: center;">
                   <img src="media/ultrasonic-breadboard.png" alt="Ultrasonic sensor with voltage divider on breadboard" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
                 </div>
-                </details>
-                <details>
-
-                  <summary>🔁 Version 1: Single Reading (No Averaging)</summary>
+              </details>
+          
+              <details>
+                <summary>🔁 Version 1: Single Reading (No Averaging)</summary>
+                <p><strong>Note:</strong> Make sure to activate your virtual environment before running:</p>
+                <div class="code-block"><pre><code>source ~/my_project/venv/bin/activate</code></pre></div>
+                <div class="code-block">
+                  <pre><code class="language-python">import RPi.GPIO as GPIO
+          import time
+          
+          TRIG = 5  # Change this to match your wiring
+          ECHO = 6  # Change this to match your wiring
+          
+          GPIO.setmode(GPIO.BCM)
+          GPIO.setwarnings(False)
+          GPIO.setup(TRIG, GPIO.OUT)
+          GPIO.setup(ECHO, GPIO.IN)
+          
+          def get_distance():
+              GPIO.output(TRIG, True)
+              time.sleep(0.00001)
+              GPIO.output(TRIG, False)
+          
+              while GPIO.input(ECHO) == 0:
+                  pulse_start = time.time()
+          
+              while GPIO.input(ECHO) == 1:
+                  pulse_end = time.time()
+          
+              return round((pulse_end - pulse_start) * 17150, 2)
+          
+          try:
+              while True:
+                  print(f"Distance: {get_distance()} cm")
+                  time.sleep(1)
+          except KeyboardInterrupt:
+              GPIO.cleanup()</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>📊 Version 2: Averaged Readings</summary>
+                <p><strong>Note:</strong> Make sure to activate your virtual environment before running:</p>
+                <div class="code-block"><pre><code>source ~/my_project/venv/bin/activate</code></pre></div>
+                <p><strong>GPIO Pins used:</strong> TRIG = 23, ECHO = 24. Update these as needed to match your setup.</p>
+                <div class="code-block">
+                  <pre><code class="language-python">import RPi.GPIO as GPIO
+          import time
+          
+          TRIG = 23  # Adjust as needed
+          ECHO = 24  # Adjust as needed
+          
+          GPIO.setmode(GPIO.BCM)
+          GPIO.setwarnings(False)
+          GPIO.setup(TRIG, GPIO.OUT)
+          GPIO.setup(ECHO, GPIO.IN)
+          
+          def get_distance():
+              GPIO.output(TRIG, True)
+              time.sleep(0.00001)
+              GPIO.output(TRIG, False)
+          
+              timeout = time.time() + 1
+              while GPIO.input(ECHO) == 0:
+                  if time.time() > timeout:
+                      return None
+              pulse_start = time.time()
+          
+              timeout = time.time() + 1
+              while GPIO.input(ECHO) == 1:
+                  if time.time() > timeout:
+                      return None
+              pulse_end = time.time()
+          
+              pulse_duration = pulse_end - pulse_start
+              distance = pulse_duration * 17150
+              return round(distance, 2)
+          
+          def get_average_distance(samples=5, delay=0.05):
+              readings = []
+              for _ in range(samples):
+                  dist = get_distance()
+                  if dist is not None:
+                      readings.append(dist)
+                  time.sleep(delay)
+              if readings:
+                  return round(sum(readings) / len(readings), 2)
+              else:
+                  return None
+          
+          try:
+              while True:
+                  avg_distance = get_average_distance(samples=5)
+                  if avg_distance is not None:
+                      print(f"Average Distance: {avg_distance} cm")
+                  else:
+                      print("Failed to read distance")
+                  time.sleep(1)
+          except KeyboardInterrupt:
+              print("\nMeasurement stopped by user")
+              GPIO.cleanup()</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>💻 Running from VS Code Terminal</summary>
+                <ol>
+                  <li>Make sure your file (e.g., <code>ultrasonic.py</code>) is saved in <code>~/my_project</code> or a similar folder.</li>
+                  <li>In the VS Code terminal (SSH connected to Pi):</li>
                   <div class="code-block">
-                    <pre><code class="language-python">import RPi.GPIO as GPIO      # Import GPIO library to control Raspberry Pi pins
-                import time                  # Import time library for delays and timing
-                
-                TRIG = 5                     # Define GPIO pin 5 as the trigger pin
-                ECHO = 6                     # Define GPIO pin 6 as the echo pin
-                
-                GPIO.setmode(GPIO.BCM)       # Use BCM pin numbering (GPIO numbers instead of board numbers)
-                GPIO.setwarnings(False)      # Disable GPIO warnings (prevents duplicate warning messages)
-                GPIO.setup(TRIG, GPIO.OUT)   # Set TRIG pin as output to send ultrasonic pulse
-                GPIO.setup(ECHO, GPIO.IN)    # Set ECHO pin as input to receive echo signal
-                
-                def get_distance():
-                    GPIO.output(TRIG, True)       # Send a high pulse (start signal)
-                    time.sleep(0.00001)           # Wait for 10 microseconds (pulse duration)
-                    GPIO.output(TRIG, False)      # Turn off the trigger (pulse end)
-                
-                    while GPIO.input(ECHO) == 0:  # Wait until echo signal goes high
-                        pulse_start = time.time() # Record the start time
-                
-                    while GPIO.input(ECHO) == 1:  # Wait until echo signal goes low
-                        pulse_end = time.time()   # Record the end time
-                
-                    # Calculate distance: (time × speed of sound) / 2
-                    return round((pulse_end - pulse_start) * 17150, 2)  # Return distance in cm, rounded to 2 decimal places
-                
-                try:
-                    while True:  # Infinite loop to continuously measure distance
-                        print(f"Distance: {get_distance()} cm")  # Display measured distance
-                        time.sleep(1)  # Wait 1 second before the next measurement
-                except KeyboardInterrupt:
-                    GPIO.cleanup()  # Reset all GPIO pins to safe state when exiting</code></pre>
+                    <pre><code>cd ~/my_project
+          source venv/bin/activate
+          python ultrasonic.py</code></pre>
                   </div>
-                </details>
-                
-                <details>
-                  <summary>📊 Version 2: Averaged Readings</summary>
-                  <div class="code-block">
-                    <pre><code class="language-python">import RPi.GPIO as GPIO        # Import library to control Raspberry Pi GPIO pins
-                import time                    # Import time module for timing and delays
-                
-                # GPIO pins (BCM numbering)
-                TRIG = 23                      # TRIG pin connected to GPIO 23
-                ECHO = 24                      # ECHO pin connected to GPIO 24
-                
-                # Setup
-                GPIO.setmode(GPIO.BCM)         # Use Broadcom (BCM) pin numbering
-                GPIO.setwarnings(False)        # Disable GPIO warnings
-                GPIO.setup(TRIG, GPIO.OUT)     # Set TRIG pin as an output
-                GPIO.setup(ECHO, GPIO.IN)      # Set ECHO pin as an input
-                
-                def get_distance():
-                    """Get a single distance measurement from the ultrasonic sensor."""
-                    GPIO.output(TRIG, True)           # Send HIGH pulse to trigger the sensor
-                    time.sleep(0.00001)               # Wait 10 microseconds
-                    GPIO.output(TRIG, False)          # Set TRIG to LOW
-                
-                    timeout = time.time() + 1         # Timeout to prevent getting stuck in loop
-                    while GPIO.input(ECHO) == 0:      # Wait for ECHO to go HIGH
-                        if time.time() > timeout:     # Exit if timeout is reached
-                            return None
-                    pulse_start = time.time()         # Record start time of echo pulse
-                
-                    timeout = time.time() + 1         # Reset timeout
-                    while GPIO.input(ECHO) == 1:      # Wait for ECHO to go LOW
-                        if time.time() > timeout:     # Exit if timeout is reached
-                            return None
-                    pulse_end = time.time()           # Record end time of echo pulse
-                
-                    pulse_duration = pulse_end - pulse_start             # Calculate duration of the echo pulse
-                    distance = pulse_duration * 17150                    # Convert time to distance in cm
-                    return round(distance, 2)                            # Return rounded distance
-                
-                def get_average_distance(samples=5, delay=0.05):
-                    """Get average of multiple distance readings."""
-                    readings = []                                       # List to store valid readings
-                    for _ in range(samples):                            # Loop to take multiple readings
-                        dist = get_distance()                           # Take a single measurement
-                        if dist is not None:                            # Only store if valid
-                            readings.append(dist)
-                        time.sleep(delay)                               # Wait briefly between readings
-                
-                    if readings:                                        # If we got valid readings
-                        average = round(sum(readings) / len(readings), 2)  # Compute average
-                        return average
-                    else:
-                        return None                                     # Return None if all readings failed
-                
-                try:
-                    while True:                                         # Main loop
-                        avg_distance = get_average_distance(samples=5)  # Get average distance over 5 samples
-                        if avg_distance is not None:
-                            print(f"Average Distance: {avg_distance} cm")  # Print average distance
-                        else:
-                            print("Failed to read distance")               # Fallback if no valid reading
-                        time.sleep(1)                                     # Delay before next reading
-                
-                except KeyboardInterrupt:
-                    print("\nMeasurement stopped by user")               # Graceful shutdown message
-                    GPIO.cleanup()                                       # Reset GPIO pins to safe state</code></pre>
-                  </div>
-                </details>
-            <div class="tip-box">
-              <strong>💡 Tip:</strong> If you’re getting “0.0 cm” or “None”, double-check wiring and power — make sure VCC is 5V and GND is solid.
-            </div>
+                  <li>Use <code>deactivate</code> when you're done.</li>
+                </ol>
+              </details>
+          
+              <div class="tip-box">
+                <strong>💡 Tip:</strong> If you're getting "0.0 cm" or "None", double-check wiring and power. Make sure:
+                <ul>
+                  <li>VCC is connected to 5V</li>
+                  <li>GND is properly grounded</li>
+                  <li>GPIO pins match what your code expects</li>
+                  <li>Your virtual environment is activated before running</li>
+                </ul>
+              </div>
+            </details>
           </section>
           
-</section>
     <section class="card">
       <details>
         <summary>📺 LCD Display (1602)</summary>
