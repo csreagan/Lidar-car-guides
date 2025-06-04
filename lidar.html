@@ -22,7 +22,7 @@
       <details>
         <summary>OS Setup</summary>
     
-        <h3>📦 Requirements</h3>
+        <h3>Requirements</h3>
         <ul>
           <li>Raspberry Pi 4B (or 3B+)</li>
           <li>MicroSD Card (32GB or more, Class 10 recommended)</li>
@@ -32,70 +32,70 @@
         </ul>
     
         <details>
-  <summary>🖥️ Step 1: Installing Ubuntu</summary>
+  <summary>Step 1: Installing Ubuntu</summary>
 
   <p>This guide covers the complete setup process for your Raspberry Pi 4B (8GB), including Ubuntu installation, GUI, and VNC configuration.</p>
 
   <h4>1. Ubuntu 22.04.2 LTS Installation</h4>
-  <p>✅ Works with ROS2</p>
+  <p>Works with ROS2</p>
 
-  <p>🔽 Download Raspberry Pi Imager from:</p>
+  <p>Download Raspberry Pi Imager from:</p>
   <pre><code>https://www.raspberrypi.com/software/</code></pre>
 
-  <p>⚡ Use it to flash the image to a 32GB+ microSD card:</p>
+  <p>Use it to flash the image to a 32GB+ microSD card:</p>
   <pre><code>Choose OS → Other general-purpose OS → Ubuntu → Ubuntu Server 22.04.2 LTS (64-bit)</code></pre>
 
-  <p>📁 Choose your storage location and click <strong>Write</strong>.</p>
-  <p>📶 Optionally configure Wi-Fi by editing:</p>
+  <p>Choose your storage location and click <strong>Write</strong>.</p>
+  <p>Optionally configure Wi-Fi by editing:</p>
   <pre><code>network-config</code></pre>
 
-  <p>🔌 Insert the microSD into your Pi, power it on, and make sure it’s connected to a monitor to boot properly.</p>
+  <p>Insert the microSD into your Pi, power it on, and make sure it’s connected to a monitor to boot properly.</p>
 
   <h4>2. System Update and GUI Installation</h4>
-  <p>🎨 GUI = graphical user interface</p>
+  <p>GUI = graphical user interface</p>
 
-  <p>📦 Run system update:</p>
+  <p>Run system update:</p>
   <pre><code>sudo apt update && sudo apt upgrade -y</code></pre>
 
-  <p>🔄 If prompted to update the kernel, choose 'yes' and keep default selections.</p>
+  <p>If prompted to update the kernel, choose 'yes' and keep default selections.</p>
 
-  <p>🧰 Install XFCE and LightDM:</p>
+  <p>Install XFCE and LightDM:</p>
   <pre><code>sudo apt install xfce4 lightdm -y</code></pre>
 
-  <p>🔁 Reboot:</p>
+  <p>Reboot:</p>
   <pre><code>sudo reboot</code></pre>
 
 </details>
 
         
   <details>
-  <summary>⚙️ ROS 2 Setup</summary>
+  <summary>Step 2: ROS 2 Setup</summary>
 
   <h4>5. Install ROS 2 Humble</h4>
   <p>ROS 2 Humble was chosen because it's a dedicated operating system framework designed for robotic control and communication.</p>
 
-  <p>🔄 Update the system and configure locale:</p>
+  <p>Update the system and configure locale:</p>
   <pre><code>sudo apt update && sudo apt upgrade -y
 sudo apt install locales -y
 sudo locale-gen en_US en_US.UTF-8
 sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8</code></pre>
 
-  <p>🌐 Add ROS 2 sources and install:</p>
+  <p>Add ROS 2 sources and install:</p>
   <pre><code>sudo apt install curl gnupg lsb-release -y
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg</code></pre>
 
-  <p>📄 Add source list:</p>
+  <p>Add source list:</p>
   <pre><code>echo "deb [signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null</code></pre>
 
-  <p>📦 Update again and install ROS 2 Humble Desktop:</p>
+  <p>Update again and install ROS 2 Humble Desktop:</p>
   <pre><code>sudo apt update
 sudo apt install ros-humble-desktop -y</code></pre>
 
-  <p>🔁 Source ROS in your shell:</p>
+  <p>Source ROS in your shell:</p>
   <pre><code>echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 source ~/.bashrc</code></pre>
 
-  <p>🧪 Test installation:</p>
+  <p>Test installation:</p>
   <pre><code>ros2 run demo_nodes_cpp talker</code></pre>
 
   <p><em>(If the installation went correctly, you should see ROS output messages in the terminal.)</em></p>
@@ -104,16 +104,16 @@ source ~/.bashrc</code></pre>
 
 
 <details>
-  <summary>⚙️ Creating ROS2 Environment</summary>
+  <summary>Step 3: Creating ROS2 Environment</summary>
 
   <p><strong>Create ROS 2 Workspace</strong></p>
   <p>ROS 2 workspace serves as a dedicated directory for organizing and developing your robot’s software.</p>
 
-  <p>📦 Install colcon:</p>
+  <p>Install colcon:</p>
   <pre><code>sudo apt install python3-colcon-common-extensions -y</code></pre>
   <!-- [Insert Screenshot] -->
 
-  <p>📁 Create and build workspace:</p>
+  <p>Create and build workspace:</p>
   <pre><code>mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws
 colcon build
@@ -123,9 +123,9 @@ source install/setup.bash</code></pre>
 
 
           <details>
-              <summary>🔧 Part 3: Remote Access & Development Setup</summary>
+              <summary>Step 4: Remote Access & Development Setup</summary>
               <details>
-                <summary>📅 Step 1: Download and Install VS Code</summary>
+                <summary>Step 1: Download and Install VS Code</summary>
                 <ol>
                   <li>Go to <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a> and download the version for your OS (Windows, macOS, or Linux).</li>
                   <li>Install it using the standard installer.</li>
@@ -134,25 +134,25 @@ source install/setup.bash</code></pre>
                 </ol>
               </details>
               <details>
-                <summary>🌐 Step 2: Set Up Remote Access Options</summary>
-                <h4>🖥️ Option A: Tailscale</h4>
+                <summary>Step 2: Set Up Remote Access Options</summary>
+                <h4>Option A: Tailscale</h4>
                 <p><strong>Tailscale</strong> is a secure mesh VPN that connects your devices together into a private network using WireGuard.</p>
           
-                <h5>💻 On Your Computer:</h5>
+                <h5>On Your Computer:</h5>
                 <ol>
                   <li>Visit <a href="https://tailscale.com/download" target="_blank">tailscale.com/download</a> and install Tailscale.</li>
                   <li>Sign in using GitHub, Google, or Microsoft account.</li>
                   <li>Click <strong>"Enable Tailscale"</strong> to activate the virtual network.</li>
                 </ol>
           
-                <h5>🍓 On Your Raspberry Pi:</h5>
+                <h5>On Your Raspberry Pi:</h5>
                 <div class="code-block">
                   <pre><code>curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscale up</code></pre>
                 </div>
                 <p>Log in via browser when prompted. The Pi will appear in your Tailscale dashboard with a private IP (e.g., <code>100.101.102.103</code>).</p>
           
-                <h4>🌐 Option B: Setup VNC</h4>
+                <h4>Option B: Setup VNC</h4>
                 <p><strong>VNC</strong> (Virtual Network Computing) is a remote desktop-sharing system that lets you control your Raspberry Pi's GUI from another device over a network.</p>
                 <ol>
                   <li>Install VNC:
@@ -187,7 +187,7 @@ source install/setup.bash</code></pre>
               </details>
           
               <details>
-                <summary>🔐 Step 3: Connect via VS Code (SSH)</summary>
+                <summary>Step 3: Connect via VS Code (SSH)</summary>
                 <ol>
                   <li>In VS Code, press <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>.</li>
                   <li>Select <strong>Remote-SSH: Connect to Host</strong>.</li>
@@ -226,7 +226,7 @@ source install/setup.bash</code></pre>
       <details>
         <summary>USB Camera & Lidar Setup</summary>
     
-        <h3>📦 What You Need</h3>
+        <h3>What You Need</h3>
         <ul>
           <li>Raspberry Pi 4B (or 3B+)</li>
           <li>Flashed MicroSD card with Ubuntu and Ros2</li>
@@ -312,7 +312,7 @@ sudo apt install ros-humble-rviz2</code></pre>
 
         
         <details>
-  <summary>⚙️ Logitech Brio 100 USB Camera Setup</summary>
+  <summary>Logitech Brio 100 USB Camera Setup</summary>
 
   <p><strong>How to Set Up a USB Camera on ROS 2 (Logitech Brio 100)</strong><br>
   This guide will help you install and run a USB camera (like the Logitech Brio 100) using ROS 2 and Ubuntu. We’ll use two nodes: one to publish raw camera frames (<code>/image_raw</code>) and another to publish compressed video (<code>/image_raw/compressed</code>).</p>
@@ -422,7 +422,7 @@ ros2 topic echo /image_raw/compressed</code></pre>
   <li>The Cokoino 4WD Motor HAT uses two DRV8833 motor drivers to control four DC motors.</li>
   <li>It accepts a 7V–12.6V input on VIN (we used 18650 9900mAh batteries 3.7V actual ~4V each).</li>
   <li>It steps down voltage to 5V to safely power the Raspberry Pi via GPIO header.</li>
-  <li>⚠️ Ensure the battery supplies enough current for the Pi, camera, LiDAR, and all motors.</li>
+  <li>Ensure the battery supplies enough current for the Pi, camera, LiDAR, and all motors.</li>
   <li><strong>Power and GPIO Overview:</strong>
     <ul>
       <li>VIN: 7V–12.6V input</li>
@@ -587,31 +587,31 @@ source install/setup.bash</code></pre>
 
   <p><strong>Run <code>joy</code> and mecanum nodes in two separate terminals:</strong></p>
 
-  <p>📟 Terminal 1:</p>
+  <p>Terminal 1:</p>
   <pre><code>source ~/ros2_ws/install/setup.bash
 ros2 run joy joy_node</code></pre>
 
-  <p>📟 Terminal 2:</p>
+  <p>Terminal 2:</p>
   <pre><code>source ~/ros2_ws/install/setup.bash
 ros2 run ps4_drive ps4_drive_node</code></pre>
 
-  <p>⚠️ If you see 'RPi' import errors:</p>
+  <p>If you see 'RPi' import errors:</p>
   <pre><code>sudo apt install python3-rpi.gpio -y</code></pre>
 </details>
 
 
         
 <details>
-  <summary>⚙️ Connect and Pair PS4 Controller</summary>
+  <summary>Connect and Pair PS4 Controller</summary>
 
   <p>ROS 2 was used because it is a dedicated operating system framework designed for robot operation.</p>
 
-  <p><strong>🔄 Reset Bluetooth:</strong></p>
+  <p><strong>Reset Bluetooth:</strong></p>
   <pre><code>sudo rfkill unblock bluetooth
 sudo systemctl restart bluetooth
 bluetoothctl</code></pre>
 
-  <p><strong>📡 Inside <code>bluetoothctl</code>, type the following commands one by one:</strong></p>
+  <p><strong>Inside <code>bluetoothctl</code>, type the following commands one by one:</strong></p>
   <pre><code>power on
 agent on
 default-agent
@@ -623,7 +623,7 @@ scan on</code></pre>
 trust &lt;MAC&gt;
 connect &lt;MAC&gt;</code></pre>
 
-  <p><strong>✅ Confirm controller is connected:</strong></p>
+  <p><strong>Confirm controller is connected:</strong></p>
   <pre><code>ls /dev/input/</code></pre>
   <p>You should see <code>js0</code>.</p>
 
@@ -635,16 +635,16 @@ connect &lt;MAC&gt;</code></pre>
 
 <section class="card">
   <details>
-    <summary>🤖 Obstacle Avoidance with LiDAR and Mecanum Wheels</summary>
+    <summary>Obstacle Avoidance with LiDAR and Mecanum Wheels</summary>
 
               <!-- Video 1: Autonomous Navigation -->
           <div class="video-block">
-            <h3>🚘 Autonomous Navigation Mode</h3>
+            <h3>Obstracle Avoidance</h3>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/TEothjIMlyU"
-              title="Autonomous Navigation Mode" frameborder="0" allowfullscreen></iframe>
+              title="Obstracle Avoidance" frameborder="0" allowfullscreen></iframe>
           </div>
 
-    <h4>🎯 Goal</h4>
+    <h4>Goal</h4>
     <p>Build a robot that:</p>
     <ul>
       <li>Detects obstacles using an RPLiDAR A1 sensor.</li>
@@ -652,7 +652,7 @@ connect &lt;MAC&gt;</code></pre>
       <li>Decides how to avoid them by moving forward, turning, or crab-walking using mecanum wheels.</li>
     </ul>
 
-    <h4>🧰 What You Need</h4>
+    <h4>What You Need</h4>
     <ul>
       <li>Raspberry Pi 4 with Ubuntu 22.04 64-bit</li>
       <li>ROS 2 Humble installed</li>
@@ -662,11 +662,11 @@ connect &lt;MAC&gt;</code></pre>
       <li>Python libraries: <code>adafruit-circuitpython-motorkit</code>, <code>rclpy</code>, <code>sensor_msgs</code></li>
     </ul>
 
-    <h4>🚀 Step 1: Create a New ROS 2 Package</h4>
+    <h4>Step 1: Create a New ROS 2 Package</h4>
     <pre><code>cd ~/ws_lidar/src
 ros2 pkg create --build-type ament_python obstacle_avoidance</code></pre>
 
-    <h4>🛠️ Step 2: Create the Control Script</h4>
+    <h4>Step 2: Create the Control Script</h4>
     <pre><code>cd ~/ws_lidar/src/obstacle_avoidance/obstacle_avoidance
 touch obstacle_avoidance_controller.py
 chmod +x obstacle_avoidance_controller.py
@@ -831,7 +831,7 @@ def main(args=None):
 </code></pre>
 
 
-    <h4>🧾 Step 3: Set Up <code>setup.py</code></h4>
+    <h4>Step 3: Set Up <code>setup.py</code></h4>
     <pre><code>cd ~/ws_lidar/src/obstacle_avoidance
 nano setup.py</code></pre>
 
@@ -842,15 +842,15 @@ nano setup.py</code></pre>
     ],
 },</code></pre>
 
-    <h4>🔧 Step 4: Build and Source Workspace</h4>
+    <h4>Step 4: Build and Source Workspace</h4>
     <pre><code>cd ~/ws_lidar
 colcon build
 source install/setup.bash</code></pre>
 
-    <h4>▶️ Step 5: Run Your Obstacle Avoidance Node</h4>
+    <h4>Step 5: Run Your Obstacle Avoidance Node</h4>
     <pre><code>ros2 run obstacle_avoidance obstacle_avoidance_controller</code></pre>
 
-    <h4>🎮 Keyboard Controls</h4>
+    <h4>Keyboard Controls</h4>
     <table>
       <thead>
         <tr><th>Key</th><th>Action</th></tr>
@@ -871,44 +871,44 @@ source install/setup.bash</code></pre>
 
     <section class="card">
         <details>
-          <summary>📎 Download Project Files (Word Format)</summary>
+          <summary>Download Project Files (Word Format)</summary>
           <p>You can download the full setup guides and step-by-step documentation as Word files using the links below:</p>
           <ul>
             <li>
-              <a href="files/Lidar.docx" download>📄 LiDAR Setup Guide (DOCX)</a>
+              <a href="files/Lidar.docx" download>LiDAR Setup Guide (DOCX)</a>
             </li>
             <li>
-              <a href="files/Logitech Cam.docx" download>📷 USB Camera Setup Guide (DOCX)</a>
+              <a href="files/Logitech Cam.docx" download>USB Camera Setup Guide (DOCX)</a>
             </li>
             <li>
-              <a href="files/Step by step guide(1).docx" download>📝 Complete Step-by-Step Guide (DOCX)</a>
+              <a href="files/Step by step guide(1).docx" download>Complete Step-by-Step Guide (DOCX)</a>
             </li>
           </ul>
-          <p>📌 You can print these out and scan the QR code (see below) to come back to the website any time!</p>
+          <p>You can print these out and scan the QR code (see below) to come back to the website any time!</p>
         </details>
       </section>
       <section class="card">
-        <h2>🎬 Video Demonstrations</h2>
+        <h2>Video Demonstrations</h2>
         <p>Watch the LiDAR Car system in action, including manual control, autonomous mode, and full system movement.</p>
       
         <div class="video-container">
           <!-- Video 1: Autonomous Navigation -->
           <div class="video-block">
-            <h3>🚘 Autonomous Navigation Mode</h3>
+            <h3>Autonomous Navigation Mode</h3>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/TEothjIMlyU"
               title="Autonomous Navigation Mode" frameborder="0" allowfullscreen></iframe>
           </div>
       
           <!-- Video 2: Keyboard Manual Control -->
           <div class="video-block">
-            <h3>⌨️ Keyboard-Controlled Driving</h3>
+            <h3>Keyboard-Controlled Driving</h3>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/9ZjfeJcFqJo"
               title="Keyboard Control Driving" frameborder="0" allowfullscreen></iframe>
           </div>
       
           <!-- Video 3: LiDAR Car Movement Demo -->
           <div class="video-block">
-            <h3>🛞 LiDAR Car Movement Demo</h3>
+            <h3>LiDAR Car Movement Demo</h3>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/f-S7wbVViuI"
               title="LiDAR Car Movement" frameborder="0" allowfullscreen></iframe>
           </div>
@@ -916,7 +916,7 @@ source install/setup.bash</code></pre>
       </section>      
 
       <section class="qr-section">
-        <h3>📱 Quick Access</h3>
+        <h3>Quick Access</h3>
         <p>Scan this QR code to return to the LiDAR Car Project website.</p>
         <img src="media/QRcode.jpg" alt="QR code to project website" class="qr-code" />
       </section>
