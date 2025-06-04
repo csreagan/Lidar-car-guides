@@ -473,45 +473,164 @@
             </details>
           </section>
           
-    <section class="card">
-      <details>
-        <summary>📺 LCD Display (1602)</summary>
-        <ul>
-          <li>RS → GPIO 25</li>
-          <li>E → GPIO 24</li>
-          <li>D4–D7 → GPIO 23, 17, 18, 22</li>
-        </ul>
-        <div class="code-block"><code>import time
-import RPi.GPIO as GPIO
-from RPLCD import CharLCD
-
-# GPIO setup
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-# LCD pin config (using 4-bit mode)
-lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
-              pins_data=[23, 17, 18, 22],
-              numbering_mode=GPIO.BCM)
-
-try:
-    lcd.clear()
-    lcd.write_string("LCD is working!")
-    time.sleep(2)
-
-    counter = 0
-    while True:
-        lcd.clear()
-        lcd.write_string(f"Count: {counter}")
-        counter += 1
-        time.sleep(1)
-
-except KeyboardInterrupt:
-    lcd.clear()
-    GPIO.cleanup()</code></div>
-      </details>
-    </section>
-
+          <section class="card">
+            <details>
+              <summary>📺 LCD Display (1602)</summary>
+              <p>
+                The 1602 LCD is a basic alphanumeric display that shows up to 16 characters per line across 2 lines. It is ideal for Raspberry Pi projects where you want to display text like sensor readings, statuses, or debug messages without needing a full monitor.
+              </p>
+          
+              <p><strong>How It Works:</strong> This display uses the HD44780 driver, which supports both 4-bit and 8-bit parallel communication. Using 4-bit mode reduces the GPIO pins required on the Raspberry Pi.
+              </p>
+          
+              <ul>
+                <li><strong>RS (Register Select):</strong> Chooses between command mode (e.g., clear screen) and character mode (writing text).</li>
+                <li><strong>E (Enable):</strong> A rising edge on this pin tells the LCD to read RS and data lines.</li>
+                <li><strong>D4–D7:</strong> 4-bit data bus used to send characters or instructions.</li>
+              </ul>
+          
+              <h4>🔌 Wiring Overview</h4>
+              <ul>
+                <li><strong>RS →</strong> GPIO 25</li>
+                <li><strong>E →</strong> GPIO 24</li>
+                <li><strong>D4–D7 →</strong> GPIO 23, 17, 18, 22</li>
+                <li><strong>RW →</strong> GND (Write-only)</li>
+                <li><strong>VSS/VDD →</strong> GND / 5V</li>
+                <li><strong>VO →</strong> Middle pin of a 10kΩ potentiometer to control contrast</li>
+                <li><strong>A/K →</strong> 5V / GND for backlight</li>
+              </ul>
+          
+              <div class="tip-box">
+                <strong>Why Use It?</strong>
+                <ul>
+                  <li>Displays info without needing a monitor</li>
+                  <li>Very low power and inexpensive</li>
+                  <li>Useful for portable or embedded projects</li>
+                </ul>
+              </div>
+          
+              <details>
+                <summary>💻 Basic LCD Test Code</summary>
+                <div class="code-block">
+                  <pre><code class="language-python"># Import time for delays and RPi.GPIO for pin control
+          import time
+          import RPi.GPIO as GPIO
+          from RPLCD import CharLCD
+          
+          # Set pin mode to BCM (Broadcom chip-specific pin numbering)
+          GPIO.setmode(GPIO.BCM)
+          GPIO.setwarnings(False)  # Prevent warning messages from previous runs
+          
+          # Initialize LCD with 4-bit mode using RPLCD library
+          lcd = CharLCD(
+              cols=16,                # 16 characters wide
+              rows=2,                 # 2 rows tall
+              pin_rs=25,              # Register Select pin connected to GPIO 25
+              pin_e=24,               # Enable pin connected to GPIO 24
+              pins_data=[23, 17, 18, 22],  # Data pins D4–D7
+              numbering_mode=GPIO.BCM # Use BCM pin numbering
+          )
+          
+          try:
+              lcd.clear()  # Clear any existing text
+              lcd.write_string("LCD is working!")  # Initial test message
+              time.sleep(2)
+          
+              counter = 0
+              while True:
+                  lcd.clear()  # Clear previous message
+                  lcd.write_string(f"Count: {counter}")  # Display counter value
+                  counter += 1
+                  time.sleep(1)  # Wait 1 second before updating
+          
+          except KeyboardInterrupt:
+              lcd.clear()  # Clear LCD on exit
+              GPIO.cleanup()  # Clean up GPIO states</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>📡 Display Ultrasonic Distance</summary>
+                <div class="code-block">
+                  <pre><code class="language-python">import RPi.GPIO as GPIO
+          import time
+          from RPLCD import CharLCD
+          
+          # Setup for ultrasonic sensor
+          TRIG = 5  # GPIO pin connected to TRIG of sensor
+          ECHO = 6  # GPIO pin connected to ECHO of sensor
+          
+          GPIO.setmode(GPIO.BCM)
+          GPIO.setwarnings(False)
+          GPIO.setup(TRIG, GPIO.OUT)
+          GPIO.setup(ECHO, GPIO.IN)
+          
+          # Setup LCD display
+          lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
+                        pins_data=[23, 17, 18, 22], numbering_mode=GPIO.BCM)
+          
+          def get_distance():
+              GPIO.output(TRIG, True)  # Start ultrasonic pulse
+              time.sleep(0.00001)      # 10 microsecond pulse
+              GPIO.output(TRIG, False)
+          
+              while GPIO.input(ECHO) == 0:
+                  pulse_start = time.time()
+          
+              while GPIO.input(ECHO) == 1:
+                  pulse_end = time.time()
+          
+              pulse_duration = pulse_end - pulse_start
+              distance = pulse_duration * 17150  # Speed of sound constant
+              return round(distance, 2)
+          
+          try:
+              while True:
+                  distance = get_distance()
+                  lcd.clear()
+                  lcd.write_string(f"Dist: {distance} cm")
+                  time.sleep(1)
+          except KeyboardInterrupt:
+              lcd.clear()
+              GPIO.cleanup()</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>✍️ Custom Message Display</summary>
+                <div class="code-block">
+                  <pre><code class="language-python">from RPLCD import CharLCD
+          import RPi.GPIO as GPIO
+          import time
+          
+          # Setup for LCD
+          GPIO.setmode(GPIO.BCM)
+          lcd = CharLCD(cols=16, rows=2, pin_rs=25, pin_e=24,
+                        pins_data=[23, 17, 18, 22], numbering_mode=GPIO.BCM)
+          
+          try:
+              lcd.clear()
+              lcd.write_string("Hello, World!")  # First message
+              time.sleep(3)
+          
+              lcd.clear()
+              lcd.write_string("Welcome to your\nProject Demo!")  # Second message with newline
+              time.sleep(5)
+          
+          except KeyboardInterrupt:
+              lcd.clear()
+              GPIO.cleanup()</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>🧰 Breadboard Wiring Example</summary>
+                <div style="text-align: center;">
+                  <img src="media/lcd-breadboard.png" alt="LCD 1602 with Raspberry Pi wiring diagram" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
+                </div>
+              </details>
+            </details>
+          </section>
     <section class="card">
       <details>
         <summary>📷 ArduCam with Picamera2</summary>
@@ -536,7 +655,7 @@ cv2.destroyAllWindows()</code></div>
     </section>
   </main>
 
-  <aside style="position: absolute; right: 10px; top: 100px; width: 220px;">
+  <aside style="position: absolute; right: 10px; top: 100px; width: 300px;">
     <h3>🔌 GPIO Reference</h3>
     <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" style="width: 100%; border-radius: 8px;" />
   </aside>
