@@ -412,39 +412,46 @@ ros2 topic echo /image_raw/compressed</code></pre>
           </section>
 
 
-        <section class="card">
-      <details>
-        <summary>Control Car Using PS4 Controller</summary>
-    
-<h3>Information on the Motor Hat and information on a Power Source</h3>
+<section class="card">
+  <details>
+    <summary>Control Car Using PS4 Controller</summary>
 
-<ul>
-  <li>The Cokoino 4WD Motor HAT uses two DRV8833 motor drivers to control four DC motors.</li>
-  <li>It accepts a 7V–12.6V input on VIN (we used 18650 9900mAh batteries 3.7V actual ~4V each).</li>
-  <li>It steps down voltage to 5V to safely power the Raspberry Pi via GPIO header.</li>
-  <li>Ensure the battery supplies enough current for the Pi, camera, LiDAR, and all motors.</li>
-  <li><strong>Power and GPIO Overview:</strong>
+    <!-- Video 3: LiDAR Car Movement Demo -->
+    <div class="video-block">
+      <h3>LiDAR Car Movement Demo</h3>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/f-S7wbVViuI"
+        title="LiDAR Car Movement" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <h3>Information on the Motor Hat and information on a Power Source</h3>
+
     <ul>
-      <li>VIN: 7V–12.6V input</li>
-      <li>5V: Output to Pi</li>
-      <li>IN1–IN4 and ENA/ENB: Control GPIO</li>
-      <li>PWM: Controlled via RPi.GPIO</li>
+      <li>The Cokoino 4WD Motor HAT uses two DRV8833 motor drivers to control four DC motors.</li>
+      <li>It accepts a 7V–12.6V input on VIN (we used 18650 9900mAh batteries 3.7V actual ~4V each).</li>
+      <li>It steps down voltage to 5V to safely power the Raspberry Pi via GPIO header.</li>
+      <li>Ensure the battery supplies enough current for the Pi, camera, LiDAR, and all motors.</li>
+      <li><strong>Power and GPIO Overview:</strong>
+        <ul>
+          <li>VIN: 7V–12.6V input</li>
+          <li>5V: Output to Pi</li>
+          <li>IN1–IN4 and ENA/ENB: Control GPIO</li>
+          <li>PWM: Controlled via RPi.GPIO</li>
+        </ul>
+      </li>
+      <li><strong>Motor wiring:</strong>
+        <ul>
+          <li>Motor 1 = Front Left</li>
+          <li>Motor 2 = Front Right</li>
+          <li>Motor 3 = Rear Left</li>
+          <li>Motor 4 = Rear Right</li>
+        </ul>
+      </li>
+      <li>Each driver uses two GPIOs per motor for direction, and PWM for speed control.</li>
     </ul>
-  </li>
-  <li><strong>Motor wiring:</strong>
-    <ul>
-      <li>Motor 1 = Front Left</li>
-      <li>Motor 2 = Front Right</li>
-      <li>Motor 3 = Rear Left</li>
-      <li>Motor 4 = Rear Right</li>
-    </ul>
-  </li>
-  <li>Each driver uses two GPIOs per motor for direction, and PWM for speed control.</li>
-</ul>
 
     
 <details>
-  <summary>🖥️ Configure Mecanum Drive Node with PS4 Controller</summary>
+  <summary>Configure Mecanum Drive Node with PS4 Controller</summary>
 <p><strong>This is where you create a NODE that is dedicated to the software that will be controlling the movement of your wheels </strong><br>
   
   <p><strong>Create the package:</strong></p>
