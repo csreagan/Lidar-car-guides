@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn to Code</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>🧠 Learn to Code: Python Resources</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="parts.html">Parts List</a>
+      <a href="sensor.html">Sensor Setup</a>
+      <a href="lidar.html">LiDAR Car</a>
+      <a href="learn.html">Learn to Code</a>
+    </nav>
+    <button class="toggle-dark-btn" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+  </header>
+
+  <main>
+    <section class="card">
+      <details>
+        <summary>🐍 What is Python?</summary>
+        <p><strong>Python</strong> is a high-level, easy-to-read programming language known for its simplicity and versatility. It was created by Guido van Rossum and first released in 1991.</p>
+      </details>
+
+      <details>
+        <summary>📍 Where is Python Used?</summary>
+        <ul>
+          <li><strong>Web Development</strong> – using frameworks like Flask and Django</li>
+          <li><strong>Data Science & AI</strong> – with libraries such as NumPy, pandas, TensorFlow, and PyTorch</li>
+          <li><strong>Embedded Systems & IoT</strong> – including Raspberry Pi projects like this one</li>
+          <li><strong>Automation</strong> – for scripting, file management, and repetitive task automation</li>
+          <li><strong>Game Development</strong> – simple games using Pygame or complex simulations</li>
+          <li><strong>Education</strong> – Python is the most recommended language for beginners due to its readability</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>🕒 When Should You Use Python?</summary>
+        <p>You should use Python when you want to:</p>
+        <ul>
+          <li>Prototype something quickly</li>
+          <li>Work with large datasets or machine learning models</li>
+          <li>Write scripts for automation</li>
+          <li>Develop a web app or REST API</li>
+          <li>Create beginner-friendly code for learning or teaching</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>⚙️ How Does Python Work?</summary>
+        <p>Python code is interpreted line-by-line using the Python interpreter. You can run Python scripts directly from the command line, use them inside IDEs (like VS Code), or embed them into other systems (like a Raspberry Pi). Python uses indentation to define code blocks, making it clean and readable.</p>
+      </details>
+
+      <details>
+        <summary>💻 Popular IDEs for Python</summary>
+        <ul>
+          <li><strong>VS Code</strong> – Lightweight and fast. Install Python extension, then run code in integrated terminal. Great for general-purpose development.
+            <br><a href="https://code.visualstudio.com/" target="_blank">Download VS Code</a></li>
+          <li><strong>PyCharm</strong> – Full-featured Python IDE from JetBrains. Great for large projects. Offers intelligent code suggestions, debugging tools, and version control.
+            <br><a href="https://www.jetbrains.com/pycharm/download/" target="_blank">Download PyCharm</a></li>
+          <li><strong>Spyder</strong> – Scientific Python IDE, similar to MATLAB. Ideal for data science and engineering.
+            <br><a href="https://www.spyder-ide.org/" target="_blank">Download Spyder</a></li>
+        </ul>
+        <h4>Setup Instructions (all platforms)</h4>
+        <ol>
+          <li>Download and install the IDE for your platform (Windows/macOS/Linux)</li>
+          <li>Install Python from <a href="https://www.python.org/downloads/" target="_blank">python.org</a></li>
+          <li>Verify installation using:
+            <pre><code>python --version</code></pre></li>
+          <li>Open your IDE, create a new file named <code>main.py</code>, and write your code!</li>
+        </ol>
+
+        <h4>IDE Differences</h4>
+        <ul>
+          <li><strong>VS Code</strong> – Minimalist, needs extensions, very flexible. ✅ Free</li>
+          <li><strong>PyCharm</strong> – Full Python suite, best for large codebases. 🆓 Community, 💰 Pro</li>
+          <li><strong>Spyder</strong> – Best for scientists, built-in plotting and variable explorer. ✅ Free</li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="card">
+        <details>
+          <summary>📘 Beginner-Friendly Courses & Tutorials</summary>
+          <ul>
+            <li><a href="https://www.coursera.org/learn/python" target="_blank">Coursera: Python for Everybody</a> – 🆓 Free to audit, 💰 Certificate optional</li>
+            <li><a href="https://www.w3schools.com/python/" target="_blank">W3Schools Python Tutorial</a> – 🆓 Free</li>
+            <li><a href="https://www.freecodecamp.org/news/learning-python-from-zero-to-hero-120ea540b567/" target="_blank">freeCodeCamp: Zero to Hero</a> – 🆓 Free</li>
+            <li><a href="https://learn.microsoft.com/en-us/shows/intro-to-python-development/" target="_blank">Microsoft Learn</a> – 🆓 Free</li>
+            <li><a href="https://www.python.org/about/gettingstarted/" target="_blank">Python.org Getting Started</a> – 🆓 Free</li>
+            <li><a href="https://www.youtube.com/watch?v=K5KVEU3aaeQ" target="_blank">YouTube: Bro Code Crash Course</a> – 🆓 Free</li>
+            <li><a href="https://www.codecademy.com/learn/learn-python-3" target="_blank">Codecademy</a> – 🆓 Free basics, 💰 Pro content</li>
+            <li><a href="https://www.codedex.io/home" target="_blank">Codédex</a> – 🆓 Free trial, 💰 Subscription model</li>
+          </ul>
+        </details>
+      
+        <details>
+          <summary>🧪 Interactive Coding Platforms</summary>
+          <ul>
+            <li><a href="https://replit.com/" target="_blank">Replit</a> – 🆓 Free basic use, 💰 Pro features</li>
+            <li><a href="https://colab.research.google.com/" target="_blank">Google Colab</a> – 🆓 Free, 💰 Pro tier for more power</li>
+            <li><a href="https://trinket.io/" target="_blank">Trinket.io</a> – 🆓 Free starter tier, 💰 Classroom/premium upgrades</li>
+          </ul>
+        </details>
+      
+        <details>
+          <summary>📚 Books & Reading</summary>
+          <ul>
+            <li><a href="https://automatetheboringstuff.com/" target="_blank">Automate the Boring Stuff</a> – 🆓 Read online free</li>
+            <li><a href="https://nostarch.com/pythoncrashcourse2e" target="_blank">Python Crash Course</a> – 💰 Paid book</li>
+          </ul>
+        </details>
+      
+        <details>
+          <summary>⚔️ Practice Projects & Challenges</summary>
+          <ul>
+            <li><a href="https://www.hackerrank.com/domains/tutorials/10-days-of-python" target="_blank">HackerRank</a> – 🆓 Free</li>
+            <li><a href="https://leetcode.com/problemset/all/?language=Python" target="_blank">LeetCode</a> – 🆓 Free tier, 💰 Premium challenges</li>
+            <li><a href="https://projecteuler.net/" target="_blank">Project Euler</a> – 🆓 Free</li>
+          </ul>
+        </details>
+      </section>      
+
+    <section class="qr-section">
+      <h3>📱 Quick Access</h3>
+      <p>Scan this QR code to return to the Learn to Code page later.</p>
+      <img src="media/QRcode.jpg" alt="QR Code for Learn Page" class="qr-code" />
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Connor Reagan, Hugo Acevedo, Dhruveen Sheth</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
