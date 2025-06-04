@@ -634,15 +634,59 @@
     <section class="card">
       <details>
         <summary>📷 ArduCam with Picamera2</summary>
-        <div class="code-block"><code>sudo apt install -y libcamera-dev libopencv-dev</code></div>
-        <div class="code-block"><code>from picamera2 import Picamera2
+<p>
+  The ArduCam IMX708 camera module connects to the Raspberry Pi using the CSI port and works with the <code>libcamera</code> stack and the <code>picamera2</code> library. It supports high-resolution video capture and is the same sensor used in the official Raspberry Pi Camera Module 3.
+</p>
+
+<p><strong>Why Use ArduCam IMX708 + Picamera2?</strong></p>
+<ul>
+  <li>Delivers high-resolution images and video up to 4608×2592</li>
+  <li>Efficient CSI connection means high-speed streaming</li>
+  <li>Compatible with libcamera and OpenCV for real-time computer vision</li>
+</ul>
+
+<h4>🛠️ Hardware Setup Instructions</h4>
+<ol>
+  <li>Power off the Raspberry Pi completely.</li>
+  <li>Insert the ribbon cable into the CSI port near the HDMI ports. Make sure the metal contacts face the HDMI side and that the clip is securely latched.</li>
+  <li>Power on the Pi.</li>
+</ol>
+
+<h4>⚙️ Enable the Camera</h4>
+<ol>
+  <li>Run <code>sudo nano /boot/firmware/config.txt</code></li>
+  <li>Scroll to the bottom and add these two lines:
+    <div class="code-block"><code>camera_auto_detect=0
+dtoverlay=imx708</code></div>
+  </li>
+  <li>Save with <code>Ctrl + O</code>, then <code>Enter</code>, then <code>Ctrl + X</code>.</li>
+  <li>Reboot: <code>sudo reboot</code></li>
+</ol>
+
+<h4>✅ Test the Camera</h4>
+<pre class="code-block"><code>libcamera-hello --list-cameras</code></pre>
+<p>You should see:</p>
+<div class="code-block"><code>Available cameras
+-----------------
+0 : imx708 [4608x2592 10-bit RGGB] (...)</code></div>
+
+<h4>📦 Install Dependencies</h4>
+<div class="code-block"><code>sudo apt install -y python3-picamera2 python3-opencv</code></div>
+
+<h4>💻 Running the Camera with Python</h4>
+<details>
+  <summary>Live Preview Script</summary>
+  <div class="code-block">
+    <pre><code class="language-python">from picamera2 import Picamera2
 import cv2
 
+# Initialize camera
 picam2 = Picamera2()
 picam2.configure(picam2.create_preview_configuration(
     main={"size": (640, 480), "format": "RGB888"}))
 picam2.start()
 
+# Show video preview in a window
 while True:
     frame = picam2.capture_array()
     cv2.imshow("Camera", frame)
@@ -650,12 +694,40 @@ while True:
         break
 
 picam2.stop()
-cv2.destroyAllWindows()</code></div>
-      </details>
-    </section>
-  </main>
+cv2.destroyAllWindows()</code></pre>
+  </div>
+</details>
 
-  <aside style="position: absolute; right: 10px; top: 100px; width: 300px;">
+<h4>🔐 Note: Use Raspberry Pi Connect or VS Code Remote</h4>
+<p>
+  Because the camera output opens a graphical window, you will need to be physically connected to a monitor or use <strong>Raspberry Pi Connect</strong> (official remote desktop by Raspberry Pi) or <strong>VNC Viewer</strong> to view the camera preview if you’re working remotely.
+</p>
+
+<details>
+  <summary>🧰 ArduCam CSI Cable Setup Image</summary>
+  <div style="text-align: center;">
+    <img src="media/arducam-csi-connection.png" alt="ArduCam connected to Raspberry Pi CSI port" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
+  </div>
+</details>
+
+<details>
+  <summary>🧰 Wiring and Setup Notes</summary>
+  <p>
+    Make sure your camera is properly seated in the CSI port of the Raspberry Pi and enabled using <code>sudo raspi-config</code> under <strong>Interface Options</strong> → <strong>Camera</strong>.
+  </p>
+  <ul>
+    <li>Connect ArduCam to the <strong>CSI port</strong> near the HDMI ports</li>
+    <li>Use the <strong>ribbon cable</strong> to connect and clamp it securely</li>
+    <li>Ensure the camera is detected with <code>libcamera-hello</code></li>
+  </ul>
+  <div style="text-align: center;">
+    <img src="media/arducam-csi-connection.png" alt="ArduCam connected to Raspberry Pi CSI port" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
+  </div>
+</details>
+</section>
+
+
+  <aside style="position: absolute; right: 10px; top: 100px; width: 220px;">
     <h3>🔌 GPIO Reference</h3>
     <img src="media/gpio-diagram.png" alt="GPIO Pinout Reference" style="width: 100%; border-radius: 8px;" />
   </aside>
