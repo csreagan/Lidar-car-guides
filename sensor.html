@@ -180,7 +180,114 @@
         </details>
         
           </section>
-
+          <section class="card">
+            <details open>
+              <summary>🐍 Python Setup + Virtual Environment (General Use)</summary>
+          
+              <h3>💡 Why Use a Virtual Environment?</h3>
+              <p>
+                On Raspberry Pi OS (especially Bookworm and newer), the system Python is protected. If you try to install packages directly using <code>pip3</code>, you may get this error:
+              </p>
+              <div class="code-block">
+                <pre><code>error: externally-managed-environment</code></pre>
+              </div>
+              <p>
+                A virtual environment is an isolated Python environment that lets you install and manage packages like <code>RPLCD</code>, <code>numpy</code>, or <code>flask</code> without interfering with the system Python or requiring <code>sudo</code>.
+              </p>
+          
+              <details>
+                <summary>⚙️ Step 1: Install Required Tools</summary>
+                <p>Run the following commands in your VS Code terminal (connected to your Pi via SSH):</p>
+                <div class="code-block">
+                  <pre><code>sudo apt update
+          sudo apt install -y python3-full python3-pip python3-venv</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>🧪 Step 2: Create a Virtual Environment</summary>
+                <ol>
+                  <li>Open the VS Code terminal connected to your Pi.</li>
+                  <li>Create and enter a project folder:</li>
+                  <div class="code-block">
+                    <pre><code>mkdir -p ~/my_project
+          cd ~/my_project</code></pre>
+                  </div>
+                  <li>Create a virtual environment named <code>venv</code>:</li>
+                  <div class="code-block">
+                    <pre><code>python3 -m venv venv</code></pre>
+                  </div>
+                  <li>Activate the virtual environment:</li>
+                  <div class="code-block">
+                    <pre><code>source venv/bin/activate</code></pre>
+                  </div>
+                  <li>Your terminal prompt should now show <code>(venv)</code></li>
+                </ol>
+              </details>
+          
+              <details>
+                <summary>📦 Step 3: Install Python Packages</summary>
+                <p>You can now safely install any Python package:</p>
+                <div class="code-block">
+                  <pre><code>pip install RPLCD
+          pip install numpy
+          pip install flask</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>▶️ Step 4: Save and Run Python Code</summary>
+                <ol>
+                  <li>Use the VS Code file explorer to create a new file like <code>main.py</code> in <code>~/my_project</code>.</li>
+                  <li>Write your Python code and save it.</li>
+                  <li>In the terminal, make sure you're in the project folder and the virtual environment is activated:</li>
+                  <div class="code-block">
+                    <pre><code>cd ~/my_project
+          source venv/bin/activate
+          python main.py</code></pre>
+                  </div>
+                </ol>
+              </details>
+          
+              <details>
+                <summary>🚪 Step 5: Leave and Re-enter the Virtual Environment</summary>
+                <h4>To leave:</h4>
+                <div class="code-block">
+                  <pre><code>deactivate</code></pre>
+                </div>
+                <h4>To re-enter later:</h4>
+                <div class="code-block">
+                  <pre><code>cd ~/my_project
+          source venv/bin/activate</code></pre>
+                </div>
+              </details>
+          
+              <details>
+                <summary>🧽 Terminal Quick Tips</summary>
+                <ul>
+                  <li><strong>Navigate to folder:</strong> <code>cd ~/my_project</code></li>
+                  <li><strong>Create folder:</strong> <code>mkdir folder_name</code></li>
+                  <li><strong>Activate venv:</strong> <code>source venv/bin/activate</code></li>
+                  <li><strong>Deactivate venv:</strong> <code>deactivate</code></li>
+                  <li><strong>Run script:</strong> <code>python filename.py</code></li>
+                </ul>
+              </details>
+          
+              <div class="tip-box">
+                <strong>💡 Tip:</strong> To share your setup, use a <code>requirements.txt</code> file:
+                <div class="code-block">
+                  <pre><code>RPLCD
+          RPi.GPIO
+          flask</code></pre>
+                </div>
+                Then install with:
+                <div class="code-block">
+                  <pre><code>pip install -r requirements.txt</code></pre>
+                </div>
+              </div>
+            </details>
+          </section>
+          
           <section class="card">
             <details>
               <summary>📏 Ultrasonic Sensor (HC-SR04)</summary>
